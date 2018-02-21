@@ -46,21 +46,6 @@
     <ClCompile Include="CellRendering.cpp">
       <Filter>Source Files\Main Game Classes</Filter>
     </ClCompile>
-    <ClCompile Include="AgentManager.cpp">
-      <Filter>Source Files\AI Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="AgentBehaviour.cpp">
-      <Filter>Source Files\AI Classes\BehaviourTree</Filter>
-    </ClCompile>
-    <ClCompile Include="AgentInteraction.cpp">
-      <Filter>Source Files\AI Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkClient.cpp">
-      <Filter>Source Files\Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>Source Files\Networking</Filter>
-    </ClCompile>
     <ClCompile Include="PerlinNoise.cpp">
       <Filter>Source Files\Level Classes\PCG</Filter>
     </ClCompile>
@@ -90,9 +75,6 @@
     </ClCompile>
     <ClCompile Include="SimplexNoise.cpp">
       <Filter>Source Files\Level Classes\PCG</Filter>
-    </ClCompile>
-    <ClCompile Include="Agent.cpp">
-      <Filter>Source Files\Character</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files\Main Game Classes</Filter>
@@ -168,24 +150,6 @@
     <ClInclude Include="CellRendering.h">
       <Filter>Headers\Main Game Classes</Filter>
     </ClInclude>
-    <ClInclude Include="AgentManager.h">
-      <Filter>Headers\AI Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="AgentBehaviour.h">
-      <Filter>Headers\AI Classes\BehaviourTree</Filter>
-    </ClInclude>
-    <ClInclude Include="BehaviourTree.h">
-      <Filter>Headers\AI Classes\BehaviourTree</Filter>
-    </ClInclude>
-    <ClInclude Include="AgentInteraction.h">
-      <Filter>Headers\AI Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkClient.h">
-      <Filter>Headers\Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManager.h">
-      <Filter>Headers\Networking</Filter>
-    </ClInclude>
     <ClInclude Include="PerlinNoise.h">
       <Filter>Headers\Level Classes\PCG</Filter>
     </ClInclude>
@@ -215,9 +179,6 @@
     </ClInclude>
     <ClInclude Include="SimplexNoise.h">
       <Filter>Headers\Level Classes\PCG</Filter>
-    </ClInclude>
-    <ClInclude Include="Agent.h">
-      <Filter>Headers\Character</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Headers\Main Game Classes</Filter>
@@ -287,27 +248,6 @@
     </Filter>
     <Filter Include="Source Files\Items">
       <UniqueIdentifier>{79959b5a-2da3-4857-b606-f7000ed433ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\AI Classes">
-      <UniqueIdentifier>{b01eded0-b789-4e14-afee-baa8dc6f46dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\AI Classes">
-      <UniqueIdentifier>{0072aba4-18bc-42ba-8ec0-c5d7603daa9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\AI Classes\BehaviourTree">
-      <UniqueIdentifier>{db0a5e59-1c0b-4930-aed7-3cc1b7af3814}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\AI Classes\BehaviourTree">
-      <UniqueIdentifier>{ff694f21-84df-4b18-8560-6797e343383a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\AI Classes\BehaviourTree\Tasks">
-      <UniqueIdentifier>{573f0559-96f8-4d31-9fc6-3f991cdb622e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Networking">
-      <UniqueIdentifier>{85a19bb9-0bf2-45c4-b2f5-cd63a15e1a3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Networking">
-      <UniqueIdentifier>{bd94d9cf-f265-4562-a158-91d0f2a7751c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers\Level Classes\PCG">
       <UniqueIdentifier>{a5aab3f2-8326-4ac0-9d87-4354c26bcb25}</UniqueIdentifier>

@@ -2,7 +2,6 @@
 #include "Level.h"
 #include "Camera.h"
 #include "Character.h"
-#include "Agent.h"
 #include "Player.h"
 
 class CellRendering
@@ -16,8 +15,6 @@ public:
 	void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
 
 	void CellRendering::AlterTextures(Level& level);
-
-	void CellRendering::RenderAgents(Agent& agent, SDL_Renderer* renderer, Level& level, Camera& camera);
 
 	void CellRendering::RenderPlayer(SDL_Renderer* renderer, Player& player, Level& level, Camera& camera);
 

@@ -10,9 +10,7 @@
 #include "ToolBar.h"
 #include "Items.h"
 #include "CellRendering.h"
-#include "Agent.h"
-#include "NetworkManager.h"
-#include "NetworkClient.h"
+
 #include "PerlinNoise.h"
 #include "ProceduralTerrain.h"
 #include "Camera.h"
@@ -44,11 +42,10 @@ public:
 	Level level;
 	GameSettings gameSettings;
 	Map mapLoader;
-	AgentManager agentManager;
+
 	Cell cell;
 	ToolBar toolbar;
 	CellRendering cellrenderer;
-	NetworkManager networkManager;
 	ProceduralTerrain terrainGen;
 	Camera camera;
 	UserInput input;
@@ -79,6 +76,8 @@ private:
 
 	Texture backgroundTexture;
 	Texture mousePointer;
+
+	std::vector<std::shared_ptr<Player>> allPlayers;
 	
 
 	//! Some colours for text output

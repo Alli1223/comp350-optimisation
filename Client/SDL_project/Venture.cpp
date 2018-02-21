@@ -157,46 +157,15 @@ void Venture::run()
 
 	int cellSize = level.getCellSize();
 
-	// If the client wants to connect to loopback address or external server
-	if (networkManager.isServerLocal)
-		networkManager.setServerIP(networkManager.InternalIPAddress);
-	else
-		networkManager.setServerIP(networkManager.ExternalIPAddress);
-
 	// Create a unique playername
 	std::string playerName = std::to_string(SDL_GetTicks());
-	if (gameSettings.useNetworking)
-	{
-		networkManager.Connect();
-		// Or Get player name
-		if (networkManager.clientCanEnterName)
-		{
-			std::cout << "ENTER YOUR NAME: " << std::endl;
-			std::cin >> playerName;
-			std::cout << "NAME: " << playerName << std::endl;
-		}
-
-		// Send initial message with player name
-		networkManager.sendTCPMessage(playerName + "\n");
-		networkManager.RecieveMessage();
-		networkManager.setPlayerName(playerName);
-		std::cout << "PlayerName: " << playerName << std::endl;
-
 
 		player.characterType = "Player";
 		player.setSpeed(1);
 		player.setID(playerName);
 		player.setX(0);
 		player.setY(0);
-	}
-	else
-	{
-		player.characterType = "Player";
-		player.setSpeed(1);
-		player.setID(playerName);
-		player.setX(0);
-		player.setY(0);
-	}
+	
 	toolbar.createToolbar(player, gameSettings);
 
 	player.inventory.setCapacity(56);
@@ -265,12 +234,10 @@ void Venture::run()
 		gameSettings.mouseCellPos.x = mouseX / level.getCellSize() + camera.getX() / level.getCellSize();
 		gameSettings.mouseCellPos.y = mouseY / level.getCellSize() + camera.getY() / level.getCellSize();
 
-		// Do all the networking
-		if (gameSettings.useNetworking)
-			networkManager.NetworkUpdate(level, player, agentManager);
+
 		
 		// Handle the input
-		input.HandleUserInput(renderer, level, player, agentManager, networkManager, camera, gameSettings, toolbar);
+		input.HandleUserInput(renderer, level, player, camera, gameSettings, toolbar);
 
 		
 		//Player pos for camera lerp
@@ -291,7 +258,7 @@ void Venture::run()
 
 
 		// Renders all the cells and players
-		cellrenderer.RenderObjects(level, renderer, camera, player, networkManager.allPlayers);
+		cellrenderer.RenderObjects(level, renderer, camera, player, allPlayers);
 
 		// Renders UI
 		player.InventoryPanel.RenderInventory(renderer, player.inventory);
@@ -314,11 +281,4 @@ void Venture::run()
 		gameSettings.saveLevelData(level);
 	if(gameSettings.savePlayerOnExit)
 		gameSettings.savePlayerSettings(player);
-	
-	if (gameSettings.useNetworking)
-	{
-		// Send quit message and close socket when game ends
-		networkManager.sendTCPMessage("QUIT\n");
-		networkManager.socket->close();
-	}
 }
