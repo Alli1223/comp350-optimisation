@@ -5,3 +5,22 @@ game code complete book 4th editiion
 bit flags or enums instead of boools
 inline get and set functions
 move code that calls other functions frequently close to each other in the same cpp file
+
+
+External librarays removed: 
+
+Not required:
+http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio.html
+
+Required:
+https://www.libsdl.org/
+https://www.libsdl.org/projects/SDL_image/
+https://www.libsdl.org/projects/SDL_ttf/ - used for button text
+
+
+
+SDL2 iamge
+
+optional:
+https://github.com/nlohmann/json - Used for saving game data
+

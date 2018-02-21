@@ -46,7 +46,7 @@ public:
 	bool useNetworking = false;
 
 	//! Whether the game will save the game when it closes
-	bool saveLevelOnExit = true;
+	bool saveLevelOnExit = false;
 	bool savePlayerOnExit = true;
 	//! Whether the game is running or not
 	bool running = true;
