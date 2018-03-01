@@ -29,7 +29,7 @@ void InventoryUI::RenderInventory(SDL_Renderer* renderer, Inventory& inventory)
 		{
 			backgroundTexture.alterTransparency(150);
 			backgroundTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
-			
+
 		}
 		// Render icons then selection texture over
 		const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -48,10 +48,9 @@ void InventoryUI::RenderInventory(SDL_Renderer* renderer, Inventory& inventory)
 					if (SDL_GetMouseState(&mX, &mY) & SDL_BUTTON(SDL_BUTTON_LEFT) && state[SDL_SCANCODE_LSHIFT])
 					{
 
-			
+
 					}
 				}
-			
 		}
 	}
 }

@@ -97,8 +97,8 @@ void ProceduralTerrain::populateTerrain(std::shared_ptr<Chunk>& chunk)
 		}
 	}
 	//Cant spawn random items because that will cause de-sync between clients
-	//spawnRandomTrees(chunk);
-	//spawnRandomVegetation(chunk);
+	spawnRandomTrees(chunk);
+	spawnRandomVegetation(chunk);
 }
 
 //TODO: Put all constant values in the headder
