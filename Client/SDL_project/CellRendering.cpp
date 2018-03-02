@@ -9,6 +9,7 @@ terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png
 	terrainAtlas.setTileSize(128);
 	atlasTwoTest.setTileSize(16);
 	atlasTwoTest.setAtlasType(1);
+	atlasTwoTest.setTileWidth(56);
 }
 
 //! Destructor
@@ -83,11 +84,6 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 			xPos -= camera.getX();
 			yPos -= camera.getY();
 
-			//terrainAtlas.renderAtlas(renderer, xPos, yPos, cellSize, cellSize, 1);
-
-			//int light = chunk->tiles[x][y]->cellLightness;
-			//LongGrass3.alterTextureColour(darkness + light, darkness + light, darkness + light);
-
 			if (chunk->tiles[x][y]->isWater)
 			{
 				// Code for ripples
@@ -103,39 +99,39 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 
 				// Base Ground Textures rendered in decending order (Top layered textures at bottom of list)
 				if (chunk->tiles[x][y]->isGrass)
-					AddToBatchRendering(grassID, xPos, yPos, cellSize);
+					AddToBatchRendering(899, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isSand)
-					AddToBatchRendering(sandID, xPos, yPos, cellSize);
-				/*
+					AddToBatchRendering(8, xPos, yPos, cellSize);
+				
 				if (chunk->tiles[x][y]->isFlower1)
-					Flower1Texture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(409, xPos, yPos, cellSize);;
 				if (chunk->tiles[x][y]->isDirt)
-					DirtTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(6, xPos, yPos, cellSize);
 
 
 
 				if (chunk->tiles[x][y]->isStoneWall)
-					StoneWallTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(18, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isFlower1)
-					Flower1Texture.render(renderer, xPos, yPos, cellSize / 3, cellSize / 2);
+					AddToBatchRendering(395, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isFlower2)
-					Flower2Texture.render(renderer, xPos, yPos, cellSize / 3, cellSize / 2);
+					AddToBatchRendering(395, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isBerryPlant)
-					BerryPlantTexture.render(renderer, xPos, yPos, cellSize / 2, cellSize / 1.5);
+					AddToBatchRendering(34, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isBush)
-					BushTexture.render(renderer, xPos, yPos, cellSize / 2, cellSize / 1.5);
+					AddToBatchRendering(36, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isLongGrass)
-					LongGrass1.render(renderer, xPos - cellSize, yPos, cellSize * 2, cellSize);
+					AddToBatchRendering(sandID, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isLongGrass2)
-					LongGrass2.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(sandID, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isSnow)
-					SnowTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(sandID, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isRock)
-					rockTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(sandID, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isWood)
-					WoodTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(78, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isStone)
-					StoneTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(58, xPos, yPos, cellSize);
 					
 
 				if (chunk->tiles[x][y]->isWheat)
@@ -158,25 +154,8 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 				}
 
 				if (chunk->tiles[x][y]->isTree)
-				{
-					// Above player
-
-					tree t;
-					if (chunk->tiles[x][y]->treeType == Cell::TreeType::oakTree)
-						t.isOak = true;
-					if (chunk->tiles[x][y]->treeType == Cell::TreeType::fernTree)
-						t.isFern = true;
-					if (chunk->tiles[x][y]->treeType == Cell::TreeType::pineTree)
-						t.isPine = true;
-					t.pos = glm::vec2(xPos, yPos - cellSize * 3 + cellSize);
-					t.treeSize = glm::vec2(cellSize * 3, cellSize * 6);
-					if (chunk->tiles[x][y]->getY() > player.getY() / level.getCellSize())
-						treesBelow.push_back(t);
-					else
-						treesAbove.push_back(t);
-
-				}
-				*/
+					AddToBatchRendering(144, xPos, yPos, cellSize);
+				
 
 
 				if (chunk->tiles[x][y]->isWoodFence)
