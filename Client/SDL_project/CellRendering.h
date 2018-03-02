@@ -57,54 +57,6 @@ private:
 	const std::string playerStatsTextureLocation = "Resources\\Sprites\\GUI\\PlayerStats\\";
 
 	// Textures for game objects
-	//! For cells that are a room
-	Texture roomCell;
-	//! For cells that are transparent
-	Texture emptyCell;
-	//! For door cells
-	
-	//! Is the textures for the terrain
-	Texture Grass1Texture;
-	Texture Grass2Texture;
-	Texture OakTreeTexture;
-	Texture FernTreeTexture;
-	Texture PineTreeTexture;
-
-	Texture TreePixelTexture;
-	Texture TreeTwoTexture;
-	Texture TreeThreeTexture;
-	Texture DirtTexture;
-	Texture Flower1Texture;
-	Texture Flower2Texture;
-	Texture BerryPlantTexture;
-	Texture BushTexture;
-	Texture LongGrass1;
-	Texture LongGrass2;
-	Texture LongGrass3;
-	Texture rockTexture;
-	Texture WheatStageOne;
-	Texture WheatStageTwo;
-	Texture WheatStageThree;
-	Texture WheatStageFour;
-
-
-	Texture WaterTexture;
-	Texture WaterTexture2;
-	Texture SandTexture;
-	Texture StoneWallTexture;
-	Texture StoneTexture;
-	Texture SnowTexture;
-	Texture WoodTexture;
-
-	Texture WoodFenceSide;
-	Texture WoodFenceUP;
-	Texture WoodFenceCenter;
-
-	//! Character Textures
-	Texture characterTex;
-
-	//! Are the textures for the NPC
-	Texture npcDown;
 
 	//! Are the textures for the statusbars
 	Texture healthBarTexture;
@@ -113,15 +65,16 @@ private:
 	Texture oxygenBarTexture;
 
 
+	char grassID = 22;
+	char sandID = 17;
+	char waterID = 192;
+	char water2ID = 190;
+
 	Texture terrainAtlas;
-
-	int grassID = 22;
-	int sandID = 17;
-
 
 	struct textureID
 	{
-		int index;
+		char index;
 		int x, y;
 		int width, height;
 	};
