@@ -4,9 +4,11 @@
 //! Constructor that initalises all the texture file locations
 CellRendering::CellRendering() : 
 healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"), hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png"),
-terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png")
-
+terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png"), atlasTwoTest(TerrainSpriteTextureLocation + "SpriteSheets\\roguelikeSheet_transparent.png")
 {
+	terrainAtlas.setTileSize(128);
+	atlasTwoTest.setTileSize(16);
+	atlasTwoTest.setAtlasType(1);
 }
 
 //! Destructor
@@ -213,7 +215,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	// Batch render all the textures
 	for each(auto &texture in allTextures)
 	{
-		terrainAtlas.renderAtlas(renderer, texture.x, texture.y, texture.width, texture.height, texture.index);
+		atlasTwoTest.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height );
 	}
 	allTextures.erase(allTextures.begin(), allTextures.end());
 	

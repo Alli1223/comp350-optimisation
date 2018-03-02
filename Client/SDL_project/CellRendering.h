@@ -64,17 +64,19 @@ private:
 	Texture tiredBarTexture;
 	Texture oxygenBarTexture;
 
-
-	char grassID = 22;
-	char sandID = 17;
-	char waterID = 192;
-	char water2ID = 190;
+	//TODO: load json file containing the array of different texture IDs
+	int grassID = 5;
+	int sandID = 8;
+	int waterID = 0;
+	int water2ID = 1;
 
 	Texture terrainAtlas;
+	Texture atlasTwoTest;
+
 
 	struct textureID
 	{
-		char index;
+		int index;
 		int x, y;
 		int width, height;
 	};

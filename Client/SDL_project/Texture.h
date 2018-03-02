@@ -30,8 +30,19 @@ public:
 	void alterTransparency(int transparencyLevel);
 	//! Alters the r,g,b colours of the texture
 	void alterTextureColour(int r, int g, int b);
-
+	//! Set Atlas type -- Type 0 = 128px / no border -- Type 1 = 16bit / 1px border
+	char setAtlasType(char type) { return atlasType = type; }
+	//! Set Atlas tile size
+	int setTileSize(int size ) { return atlasTileSize = size; }
+	//! Set Atlas tile width number
+	int setTileWidth(int width) { return atlasTileWidth = width; }
 private:
+	//! The width of tile sets
+	int atlasTileWidth = 16;
+	//! Atlas tile size
+	int atlasTileSize = 16;
+	//! Atlas type -- Type 0 = 128px / no border -- Type 1 = 16bit / 1px border
+	char atlasType;
 	//! The image location
 	std::string fileName;
 	//! Pointer to the SDL Texture

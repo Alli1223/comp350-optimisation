@@ -84,20 +84,9 @@ void Texture::renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int d
 	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
 }
 
-void Texture::renderAtlas(SDL_Renderer* renderer, int x, int y, int width, int height, int index)
+void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int width, int height)
 {
-	// Did this while very tired
-	int sourceX = 0;
-	int sourceY = 0;
-	int spriteSize = 128;
-
-	while ( index > 16)
-	{
-		sourceY += spriteSize;
-		index -= 16;
-	}
-	sourceX = index * spriteSize;
-
+	
 	if (!texture)
 	{
 		texture = IMG_LoadTexture(renderer, fileName.c_str());
@@ -107,16 +96,53 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int x, int y, int width, int h
 			throw InitialisationError("IMG_LoadTexture failed");
 		}
 	}
+	if (atlasType == 0)
+	{
+		// Did this while very tired
+		int sourceX = index;
+		int sourceY = 0;
+		while (index > atlasTileWidth)
+		{
+			sourceY += atlasTileSize;
+			index -= atlasTileWidth;
+		}
+		sourceX = index * atlasTileSize;
 
-	SDL_Rect srcrect = { sourceX, sourceY, spriteSize, spriteSize };
+		SDL_Rect dest;
+		dest.x = x - width / 2;
+		dest.y = y - height / 2;
+		dest.w = width;
+		dest.h = height;
+		
+		SDL_Rect srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
+		SDL_RenderCopy(renderer, texture, &srcrect, &dest);
+	}
+	// With borders
+	else if (atlasType == 1)
+	{
+		// Did this while very tired
+		int sourceX = index;
+		int sourceY = 0;
+		while (index > atlasTileWidth)
+		{
+			sourceY += atlasTileSize + 1;
+			index -= atlasTileWidth;
+		}
+		sourceX = index * atlasTileSize + index;
 
-	SDL_Rect dest;
-	dest.x = x - width / 2;
-	dest.y = y - height / 2;
-	dest.w = width;
-	dest.h = height;
+		SDL_Rect dest;
+		dest.x = x - width / 2;
+		dest.y = y - height / 2;
+		dest.w = width;
+		dest.h = height;
 
-	SDL_RenderCopy(renderer, texture, &srcrect, &dest);
+		SDL_Rect srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
+		SDL_RenderCopy(renderer, texture, &srcrect, &dest);
+	}
+		
+	
+
+	//SDL_RenderCopy(renderer, texture, &srcrect, &dest);
 }
 
 void Texture::alterTransparency(int transparencyLevel)
