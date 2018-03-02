@@ -9,40 +9,22 @@ class CellRendering
 public:
 	CellRendering();
 	~CellRendering();
-
+	//! Render all game objects
 	void RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, std::vector<std::shared_ptr<Player>>& allPlayers);
-
+	//! Render a chunk of the level
 	void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
-
+	//! Alter textures, i.e. transparency
 	void CellRendering::AlterTextures(Level& level);
-
+	//! Render player
 	void CellRendering::RenderPlayer(SDL_Renderer* renderer, Player& player, Level& level, Camera& camera);
-
-	void CellRendering::AddToBatchRendering(int ID, int x, int y, int size);
-
+	//! Add texture to batch renderer
+	void CellRendering::AddToBatchRendering(int ID, int& x, int& y, int& size, char layer);
+	//! Render player stats
 	bool renderStats = false;
-	
-	struct tree
-	{
-		glm::vec2 pos;
-		bool isFern = false;
-		bool isOak = false;
-		bool isPine = false;
-		glm::vec2 treeSize;
-	};
-	
-
-	std::vector<tree> treesBelow;
-	std::vector<tree> treesAbove;
-
+	//! If the game has darkness
 	bool isThereDarkness = true;
 
-	
-
 private:
-
-	std::vector<Texture> texturesToRender;
-
 	//Target Darkness
 	float Tdarkness;
 	float darkness = 255;
@@ -70,19 +52,32 @@ private:
 	int waterID = 0;
 	int water2ID = 1;
 
+	//! Atlas textures
 	Texture terrainAtlas;
-	Texture atlasTwoTest;
+	Texture roguelikeAtlas;
 
-
+	//! Contains the data for texture positions and layers
 	struct textureID
 	{
 		int index;
 		int x, y;
 		int width, height;
+		//! texture transparency
+		char transparency;
+		//! Layer to be rendered on -- 0 = Ground -- 1 = Items on ground -- 2 = Player -- 3 = Above player
+		char layer;
 	};
 
+	enum layers
+	{
+		seaLevel,
+		ground,
+		onGround,
+		player,
+		abovePlayer
+	};
+	//! A vector of all textures
 	std::vector<textureID> allTextures;
-
 	
 };
 

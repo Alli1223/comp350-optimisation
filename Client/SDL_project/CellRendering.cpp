@@ -4,12 +4,16 @@
 //! Constructor that initalises all the texture file locations
 CellRendering::CellRendering() : 
 healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"), hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png"),
-terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png"), atlasTwoTest(TerrainSpriteTextureLocation + "SpriteSheets\\roguelikeSheet_transparent.png")
+terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png"), roguelikeAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\roguelikeSheet_transparent.png")
 {
+	// Set other atlas stats
 	terrainAtlas.setTileSize(128);
-	atlasTwoTest.setTileSize(16);
-	atlasTwoTest.setAtlasType(1);
-	atlasTwoTest.setTileWidth(56);
+	terrainAtlas.setTileSize(16);
+
+	// Set rogue atlas stats
+	roguelikeAtlas.setTileSize(16);
+	roguelikeAtlas.setAtlasType(1);
+	roguelikeAtlas.setTileWidth(56);
 }
 
 //! Destructor
@@ -17,7 +21,7 @@ CellRendering::~CellRendering()
 {
 }
 
-void CellRendering::AddToBatchRendering(int ID, int x, int y, int size)
+void CellRendering::AddToBatchRendering(int ID, int& x, int& y, int& size, char layer)
 {
 	textureID texture;
 	texture.index = ID;
@@ -25,14 +29,13 @@ void CellRendering::AddToBatchRendering(int ID, int x, int y, int size)
 	texture.y = y;
 	texture.width = size;
 	texture.height = size;
+	texture.layer = layer;
 	allTextures.push_back(texture);
 }
 
 void CellRendering::AlterTextures(Level& level)
 {
-	/*
-	WaterTexture.alterTransparency(200);
-	WaterTexture2.alterTransparency(200);
+	
 	//TreePixelTexture.alterTransparency(200);
 
 		time = level.getTimeOfDay();
@@ -52,18 +55,8 @@ void CellRendering::AlterTextures(Level& level)
 		else if (Tdarkness < darkness)
 			darkness--;
 		
-		Grass1Texture.alterTextureColour(darkness, darkness, darkness);
-		TreePixelTexture.alterTextureColour(darkness, darkness, darkness);
-		SandTexture.alterTextureColour(darkness, darkness, darkness);
-		WaterTexture.alterTextureColour(darkness, darkness, darkness);
-		WaterTexture2.alterTextureColour(darkness, darkness, darkness);
-		LongGrass1.alterTextureColour(darkness, darkness, darkness);
-		LongGrass2.alterTextureColour(darkness, darkness, darkness);
-		LongGrass3.alterTextureColour(darkness, darkness, darkness);
-		PineTreeTexture.alterTextureColour(darkness, darkness, darkness);
-		OakTreeTexture.alterTextureColour(darkness, darkness, darkness);
-		FernTreeTexture.alterTextureColour(darkness, darkness, darkness);
-		*/
+		roguelikeAtlas.alterTextureColour(darkness, darkness, darkness);
+		
 }
 
 void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer)
@@ -89,49 +82,48 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 				// Code for ripples
 				//sin(sqrt(pow(chunk->tiles[x][y]->getX(),2) + pow(chunk->tiles[x][y]->getY(),2)) + SDL_GetTicks() / 500) > 0)
 				if (sin(chunk->tiles[x][y]->getX() + SDL_GetTicks() / 500) > 0)
-					AddToBatchRendering(waterID, xPos, yPos, cellSize);
+					AddToBatchRendering(waterID, xPos, yPos, cellSize, seaLevel);
 				else
-					AddToBatchRendering(water2ID, xPos, yPos, cellSize);
+					AddToBatchRendering(water2ID, xPos, yPos, cellSize, seaLevel);
 
 			}
 			else
 			{
-
 				// Base Ground Textures rendered in decending order (Top layered textures at bottom of list)
 				if (chunk->tiles[x][y]->isGrass)
-					AddToBatchRendering(899, xPos, yPos, cellSize);
+					AddToBatchRendering(899, xPos, yPos, cellSize, onGround);
 				if (chunk->tiles[x][y]->isSand)
-					AddToBatchRendering(8, xPos, yPos, cellSize);
+					AddToBatchRendering(8, xPos, yPos, cellSize, onGround);
 
 				if (chunk->tiles[x][y]->isFlower1)
-					AddToBatchRendering(409, xPos, yPos, cellSize);;
+					AddToBatchRendering(409, xPos, yPos, cellSize, onGround);;
 				if (chunk->tiles[x][y]->isDirt)
-					AddToBatchRendering(6, xPos, yPos, cellSize);
+					AddToBatchRendering(6, xPos, yPos, cellSize, onGround);
 
 
 
 				if (chunk->tiles[x][y]->isStoneWall)
-					AddToBatchRendering(18, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isFlower1)
-					AddToBatchRendering(395, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isFlower2)
-					AddToBatchRendering(395, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isBerryPlant)
-					AddToBatchRendering(34, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isBush)
-					AddToBatchRendering(36, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isLongGrass)
-					AddToBatchRendering(sandID, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isLongGrass2)
-					AddToBatchRendering(sandID, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isSnow)
-					AddToBatchRendering(sandID, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isRock)
-					AddToBatchRendering(sandID, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isWood)
-					AddToBatchRendering(78, xPos, yPos, cellSize);
-				if (chunk->tiles[x][y]->isStone)
-					AddToBatchRendering(58, xPos, yPos, cellSize);
+					AddToBatchRendering(18, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isFlower1)
+					AddToBatchRendering(395, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isFlower2)
+					AddToBatchRendering(395, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isBerryPlant)
+					AddToBatchRendering(820, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isBush)
+					AddToBatchRendering(815, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isLongGrass)
+					AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isLongGrass2)
+					AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isSnow)
+					AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isRock)
+					AddToBatchRendering(525, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isWood)
+					AddToBatchRendering(78, xPos, yPos, cellSize, onGround);
+				else if (chunk->tiles[x][y]->isStone)
+					AddToBatchRendering(58, xPos, yPos, cellSize, onGround);
 
 
 				if (chunk->tiles[x][y]->isWheat)
@@ -154,7 +146,12 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 				}
 
 				if (chunk->tiles[x][y]->isTree)
-					AddToBatchRendering(144, xPos, yPos, cellSize);
+				{
+					AddToBatchRendering(631, xPos, yPos, cellSize, abovePlayer);
+					AddToBatchRendering(575, xPos, yPos, cellSize, abovePlayer);
+				}
+				//BUSH 815 - 830
+				//TREE - 575 - 631
 
 
 
@@ -186,29 +183,17 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	AlterTextures(level);
 
 	// Render all the cells in the chunks
-	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
-		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
+	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x - 1; i++)
+		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y - 1; j++)
 				RenderChunk(level,camera,player, level.World[i][j], renderer);
 
 	// Batch render all the textures
 	for each(auto &texture in allTextures)
 	{
-		atlasTwoTest.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height );
+		roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height );
 	}
 	allTextures.erase(allTextures.begin(), allTextures.end());
-	
-	// Render all the trees above the player
-	for each(auto &tree in treesAbove)
-	{
-		/*
-		if (tree.isFern)
-			FernTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
-		else if (tree.isOak)
-			OakTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
-		else if (tree.isPine)
-			PineTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
-			*/
-	}
+
 
 
 	// Render the player
@@ -220,24 +205,11 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 		player->RenderPlayer(renderer, camera);
 	}
 
-	// Render the trees below last
-	for each(auto &tree in treesBelow)
-	{
-		/*
-		if (tree.isFern)
-			FernTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
-		else if (tree.isOak)
-			OakTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
-		else if (tree.isPine)
-			PineTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
-			*/
-	}
+
 	hungerBarTexture.alterTransparency(100);
 	hungerBarTexture.render(renderer, player.placeItemPos.x * level.getCellSize() + (level.getCellSize() / 2) - camera.getX() , player.placeItemPos.y * level.getCellSize() + (level.getCellSize() / 2) - camera.getY(), level.getCellSize(), level.getCellSize());
 	
-	// Erase the trees after rendering them
-	treesBelow.erase(treesBelow.begin(), treesBelow.end());
-	treesAbove.erase(treesAbove.begin(), treesAbove.end());
+
 	
 }
 

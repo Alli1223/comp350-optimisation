@@ -15,7 +15,7 @@ public:
 private:
 	int x = 0;
 	int y = 0;
-	int chunkSize = 16;
+	int chunkSize = 8;
 	
 	std::string chunkID;
 };
