@@ -102,7 +102,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 					AddToBatchRendering(899, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isSand)
 					AddToBatchRendering(8, xPos, yPos, cellSize);
-				
+
 				if (chunk->tiles[x][y]->isFlower1)
 					AddToBatchRendering(409, xPos, yPos, cellSize);;
 				if (chunk->tiles[x][y]->isDirt)
@@ -132,7 +132,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 					AddToBatchRendering(78, xPos, yPos, cellSize);
 				if (chunk->tiles[x][y]->isStone)
 					AddToBatchRendering(58, xPos, yPos, cellSize);
-					
+
 
 				if (chunk->tiles[x][y]->isWheat)
 				{
@@ -155,7 +155,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 
 				if (chunk->tiles[x][y]->isTree)
 					AddToBatchRendering(144, xPos, yPos, cellSize);
-				
+
 
 
 				if (chunk->tiles[x][y]->isWoodFence)
@@ -173,7 +173,6 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 							//WoodFenceSide.render(renderer, xPos, yPos, cellSize, cellSize);
 							*/
 					}
-
 				}
 			}
 		}
