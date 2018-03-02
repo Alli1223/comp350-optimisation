@@ -38,13 +38,15 @@ void Texture::render(SDL_Renderer* renderer, int x, int y, int width, int height
 	
 	SDL_RenderCopy(renderer, texture, nullptr, &dest);
 }
+
+
+
 void Texture::renderRotation(SDL_Renderer* renderer, int x, int y, int width, int height, int angle)
 {
+
 	if (!texture)
 	{
 		texture = IMG_LoadTexture(renderer, fileName.c_str());
-
-
 		if (!texture)
 		{
 			throw InitialisationError("IMG_LoadTexture failed");
@@ -80,6 +82,41 @@ void Texture::renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int d
 
 
 	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+}
+
+void Texture::renderAtlas(SDL_Renderer* renderer, int x, int y, int width, int height, int index)
+{
+	// Did this while very tired
+	int sourceX = 0;
+	int sourceY = 0;
+	int spriteSize = 128;
+
+	while ( index > 16)
+	{
+		sourceY += spriteSize;
+		index -= 16;
+	}
+	sourceX = index * spriteSize;
+
+	if (!texture)
+	{
+		texture = IMG_LoadTexture(renderer, fileName.c_str());
+
+		if (!texture)
+		{
+			throw InitialisationError("IMG_LoadTexture failed");
+		}
+	}
+
+	SDL_Rect srcrect = { sourceX, sourceY, spriteSize, spriteSize };
+
+	SDL_Rect dest;
+	dest.x = x - width / 2;
+	dest.y = y - height / 2;
+	dest.w = width;
+	dest.h = height;
+
+	SDL_RenderCopy(renderer, texture, &srcrect, &dest);
 }
 
 void Texture::alterTransparency(int transparencyLevel)

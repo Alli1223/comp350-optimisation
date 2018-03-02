@@ -35,7 +35,7 @@ public:
 	bool fullscreen = false;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
-	bool mainMenu = true;
+	bool mainMenu = false;
 
 	glm::vec2 mouseCellPos;
 

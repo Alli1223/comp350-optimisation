@@ -20,6 +20,8 @@ public:
 
 	//! Renders the image in the window
 	void render(SDL_Renderer* renderer, int x, int y, int width, int height);
+	//! Render an Atlas
+	void renderAtlas(SDL_Renderer* renderer, int x, int y, int width, int height, int index);
 	//! Renders the image in the window with rotation
 	void renderRotation(SDL_Renderer* renderer, int x, int y, int width, int height, int angle);
 	//! Renders  the animation

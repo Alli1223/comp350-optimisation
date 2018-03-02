@@ -18,6 +18,8 @@ public:
 
 	void CellRendering::RenderPlayer(SDL_Renderer* renderer, Player& player, Level& level, Camera& camera);
 
+	void CellRendering::AddToBatchRendering(int ID, int x, int y, int size);
+
 	bool renderStats = false;
 	
 	struct tree
@@ -34,9 +36,13 @@ public:
 	std::vector<tree> treesAbove;
 
 	bool isThereDarkness = true;
+
 	
 
 private:
+
+	std::vector<Texture> texturesToRender;
+
 	//Target Darkness
 	float Tdarkness;
 	float darkness = 255;
@@ -105,5 +111,23 @@ private:
 	Texture hungerBarTexture;
 	Texture tiredBarTexture;
 	Texture oxygenBarTexture;
+
+
+	Texture terrainAtlas;
+
+	int grassID = 22;
+	int sandID = 17;
+
+
+	struct textureID
+	{
+		int index;
+		int x, y;
+		int width, height;
+	};
+
+	std::vector<textureID> allTextures;
+
+	
 };
 

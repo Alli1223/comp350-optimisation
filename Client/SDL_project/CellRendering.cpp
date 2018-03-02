@@ -31,7 +31,8 @@ WoodFenceSide(WallSpriteTextureLocation + "woodFenceSideCenter.png"), WoodFenceU
 WheatStageOne(TerrainSpriteTextureLocation + "WheatStageOne.png"), WheatStageTwo(TerrainSpriteTextureLocation + "WheatStageTwo.png"), WheatStageThree(TerrainSpriteTextureLocation + "WheatStageThree.png"), WheatStageFour(TerrainSpriteTextureLocation + "WheatStageFour.png"),
 
 characterTex(characterTextureLocation + "Alli.png"), npcDown(characterTextureLocation + "Sam.png"),
-healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"), hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png")
+healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"), hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png"),
+terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png")
 
 {
 }
@@ -39,6 +40,17 @@ healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarText
 //! Destructor
 CellRendering::~CellRendering()
 {
+}
+
+void CellRendering::AddToBatchRendering(int ID, int x, int y, int size)
+{
+	textureID texture;
+	texture.index = ID;
+	texture.x = x;
+	texture.y = y;
+	texture.width = size;
+	texture.height = size;
+	allTextures.push_back(texture);
 }
 
 void CellRendering::AlterTextures(Level& level)
@@ -82,7 +94,6 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 	int newX = 0, newY = 0;
 	int xPos = 0, yPos = 0;
 	int cellSize = level.getCellSize();
-
 	
 	for (int x = 0; x < level.getChunkSize(); x++)
 		for (int y = 0; y < level.getChunkSize(); y++)
@@ -95,6 +106,8 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 
 			xPos -= camera.getX();
 			yPos -= camera.getY();
+
+			//terrainAtlas.renderAtlas(renderer, xPos, yPos, cellSize, cellSize, 1);
 
 			//int light = chunk->tiles[x][y]->cellLightness;
 			//LongGrass3.alterTextureColour(darkness + light, darkness + light, darkness + light);
@@ -111,17 +124,20 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 			}
 			else
 			{
+				
 				// Base Ground Textures rendered in decending order (Top layered textures at bottom of list)
 				if (chunk->tiles[x][y]->isGrass)
-					Grass1Texture.render(renderer, xPos, yPos, cellSize, cellSize);
+					AddToBatchRendering(grassID, xPos, yPos, cellSize);
+				if (chunk->tiles[x][y]->isSand)
+					AddToBatchRendering(sandID, xPos, yPos, cellSize);
+				/*
 				if (chunk->tiles[x][y]->isFlower1)
 					Flower1Texture.render(renderer, xPos, yPos, cellSize, cellSize);
 				if (chunk->tiles[x][y]->isDirt)
 					DirtTexture.render(renderer, xPos, yPos, cellSize, cellSize);
 
+
 				
-				if (chunk->tiles[x][y]->isSand)
-					SandTexture.render(renderer, xPos, yPos, cellSize, cellSize);
 				if (chunk->tiles[x][y]->isStoneWall)
 					StoneWallTexture.render(renderer, xPos, yPos, cellSize, cellSize);
 				if (chunk->tiles[x][y]->isFlower1)
@@ -138,12 +154,13 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 					LongGrass2.render(renderer, xPos, yPos, cellSize, cellSize);
 				if (chunk->tiles[x][y]->isSnow)
 					SnowTexture.render(renderer, xPos, yPos, cellSize, cellSize);
-				if(chunk->tiles[x][y]->isRock)
+				if (chunk->tiles[x][y]->isRock)
 					rockTexture.render(renderer, xPos, yPos, cellSize, cellSize);
 				if (chunk->tiles[x][y]->isWood)
 					WoodTexture.render(renderer, xPos, yPos, cellSize, cellSize);
 				if (chunk->tiles[x][y]->isStone)
 					StoneTexture.render(renderer, xPos, yPos, cellSize, cellSize);
+					*/
 
 				if (chunk->tiles[x][y]->isWheat)
 				{
@@ -218,6 +235,11 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 				RenderChunk(level,camera,player, level.World[i][j], renderer);
 
 
+	for each(auto &texture in allTextures)
+	{
+		terrainAtlas.renderAtlas(renderer, texture.x, texture.y, texture.width, texture.height, texture.index);
+	}
+	allTextures.erase(allTextures.begin(), allTextures.end());
 	
 	// Render all the trees above the player
 	for each(auto &tree in treesAbove)
@@ -229,6 +251,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 		else if (tree.isPine)
 			PineTreeTexture.render(renderer, tree.pos.x, tree.pos.y, tree.treeSize.x, tree.treeSize.y);
 	}
+
 
 	// Render the player
 	player.RenderPlayer(renderer, camera);

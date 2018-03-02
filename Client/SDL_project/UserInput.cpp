@@ -462,6 +462,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 
 		}
 	}
+	
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSTONEWALL)
 	{
 		if (level.getCell(xPos, yPos)->isStoneWall == false)
