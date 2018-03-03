@@ -97,6 +97,14 @@ void Timer::unpause()
 	}
 }
 
+void Timer::restart()
+{
+	if (mStarted && !mPaused)
+	{
+		mStartTicks = 0;
+	}
+}
+
 
 
 bool Timer::isStarted()

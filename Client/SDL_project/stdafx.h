@@ -42,12 +42,11 @@
 #include <thread>
 #include <numeric>
 #include <random>
+#include <glm.hpp>
 
 #define PI 3.14159265
 
-// Graphics headers
-#include <glm.hpp>
-#include <GL\glew.h>
+
 
 //SDL TTF for writing to screen
 #include <SDL_ttf.h>

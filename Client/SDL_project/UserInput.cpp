@@ -265,37 +265,51 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	}
 	if (state[SDL_SCANCODE_I])
 	{
-		if (SDL_GetTicks() / 1000.0 > inventoryTimeout + 100)
-		{
-			inventoryTimeout = SDL_GetTicks() / 1000.0;
-			
-		}
-		// Close panel
-		if (player.InventoryPanel.getDispalayInventory())
-		{
-			gameSettings.displayMouse = false;
-			player.InventoryPanel.setDisplayInventory(false);
-			player.InventoryPanel.getInventoryIcons().erase(player.InventoryPanel.getInventoryIcons().begin(), player.InventoryPanel.getInventoryIcons().end());
-		}
-		//Open Panel
+		if (!inventoryTimer.isStarted())
+			inventoryTimer.start();
 		else
 		{
-			gameSettings.displayMouse = true;
-			player.InventoryPanel.CreateInventory(renderer, player.inventory);
-			player.InventoryPanel.setDisplayInventory(true);
+			if (inventoryTimer.getTicks() > inventoryTimeout)
+			{
+				// Close panel
+				if (player.InventoryPanel.getDispalayInventory())
+				{
+					gameSettings.displayMouse = false;
+					player.InventoryPanel.setDisplayInventory(false);
+					player.InventoryPanel.getInventoryIcons().erase(player.InventoryPanel.getInventoryIcons().begin(), player.InventoryPanel.getInventoryIcons().end());
+				}
+				//Open Panel
+				else
+				{
+					gameSettings.displayMouse = true;
+					player.InventoryPanel.CreateInventory(renderer, player.inventory);
+					player.InventoryPanel.setDisplayInventory(true);
+				}
+		
+			}
+			inventoryTimer.restart();
 		}
 	}
 	if (state[SDL_SCANCODE_C])
 	{
-		if (player.craftingUI.getDispalayCrafting())
-		{
-			gameSettings.displayMouse = false;
-			player.craftingUI.setDisplayCrafting(false);
-		}
+		if (!craftingTimer.isStarted())
+			craftingTimer.start();
 		else
 		{
-			gameSettings.displayMouse = true;
-			player.craftingUI.setDisplayCrafting(true);
+			if (craftingTimer.getTicks() > craftingTimeout)
+			{
+				if (player.craftingUI.getDispalayCrafting())
+				{
+					gameSettings.displayMouse = false;
+					player.craftingUI.setDisplayCrafting(false);
+				}
+				else
+				{
+					gameSettings.displayMouse = true;
+					player.craftingUI.setDisplayCrafting(true);
+				}
+			}
+			
 		}
 	}
 	

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "ToolBar.h"
 #include "InventoryUI.h"
+#include "Timer.h"
 class UserInput
 {
 public:
@@ -19,7 +20,11 @@ public:
 
 	void ChangeCellsAroundPoint(Level& level, glm::vec2 point, int dist, std::string type);
 private:
-	float inventoryTimeout = 0;
+	Timer inventoryTimer;
+	Timer craftingTimer;
+	//! Timeout in milliseconds
+	float inventoryTimeout = 500;
+	float craftingTimeout = 500;
 	glm::vec2 playerChunkPos;
 	glm::vec2 playercellPos;
 	glm::vec2 InterDir;

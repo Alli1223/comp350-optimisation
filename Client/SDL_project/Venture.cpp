@@ -43,7 +43,6 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 		printf("TTF_Init: %s\n", TTF_GetError());
 		exit(1);
 	}
-
 }
 
 Venture::~Venture()
