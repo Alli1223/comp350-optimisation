@@ -86,7 +86,8 @@ void Texture::renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int d
 
 void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int width, int height)
 {
-	
+	SDL_Rect dest;
+	SDL_Rect srcrect;
 	if (!texture)
 	{
 		texture = IMG_LoadTexture(renderer, fileName.c_str());
@@ -108,14 +109,13 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int w
 		}
 		sourceX = index * atlasTileSize;
 
-		SDL_Rect dest;
+		
 		dest.x = x - width / 2;
 		dest.y = y - height / 2;
 		dest.w = width;
 		dest.h = height;
 		
-		SDL_Rect srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
-		SDL_RenderCopy(renderer, texture, &srcrect, &dest);
+		srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
 	}
 	// With borders
 	else if (atlasType == 1)
@@ -130,17 +130,15 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int w
 		}
 		sourceX = index * atlasTileSize + index;
 
-		SDL_Rect dest;
 		dest.x = x - width / 2;
 		dest.y = y - height / 2;
 		dest.w = width;
 		dest.h = height;
 
-		SDL_Rect srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
-		SDL_RenderCopy(renderer, texture, &srcrect, &dest);
+		srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
 	}
 		
-	
+	SDL_RenderCopy(renderer, texture, &srcrect, &dest);
 
 	//SDL_RenderCopy(renderer, texture, &srcrect, &dest);
 }

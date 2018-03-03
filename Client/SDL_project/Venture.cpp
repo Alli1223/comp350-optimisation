@@ -25,7 +25,7 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 	camera.WindowWidth = gameSettings.WINDOW_WIDTH;
 	camera.SetPos(0, 0);
 
-	window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	glContext = SDL_GL_CreateContext(window);
 	if (window == nullptr)
 	{

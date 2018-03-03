@@ -18,7 +18,7 @@ public:
 	//! Render player
 	void CellRendering::RenderPlayer(SDL_Renderer* renderer, Player& player, Level& level, Camera& camera);
 	//! Add texture to batch renderer
-	void CellRendering::AddToBatchRendering(int ID, int& x, int& y, int& size, char layer);
+	void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char layer);
 	//! Render player stats
 	bool renderStats = false;
 	//! If the game has darkness
@@ -73,7 +73,6 @@ private:
 		seaLevel,
 		ground,
 		onGround,
-		player,
 		abovePlayer
 	};
 	//! A vector of all textures

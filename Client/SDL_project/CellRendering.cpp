@@ -21,7 +21,7 @@ CellRendering::~CellRendering()
 {
 }
 
-void CellRendering::AddToBatchRendering(int ID, int& x, int& y, int& size, char layer)
+void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char layer)
 {
 	textureID texture;
 	texture.index = ID;
@@ -148,7 +148,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 				if (chunk->tiles[x][y]->isTree)
 				{
 					AddToBatchRendering(631, xPos, yPos, cellSize, abovePlayer);
-					AddToBatchRendering(575, xPos, yPos, cellSize, abovePlayer);
+					AddToBatchRendering(575, xPos, yPos - cellSize, cellSize, abovePlayer);
 				}
 				//BUSH 815 - 830
 				//TREE - 575 - 631
@@ -190,9 +190,20 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	// Batch render all the textures
 	for each(auto &texture in allTextures)
 	{
-		roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height );
+		switch (texture.layer)
+		{
+		case seaLevel:
+			roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+			break;
+		case ground:
+			roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+			break;
+		case onGround:
+			roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+			break;
+		}
 	}
-	allTextures.erase(allTextures.begin(), allTextures.end());
+	
 
 
 
@@ -205,11 +216,22 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 		player->RenderPlayer(renderer, camera);
 	}
 
+	// Batch render all the textures
+	for each(auto &texture in allTextures)
+	{
+		switch (texture.layer)
+		{
+		case abovePlayer:
+			roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+			break;
+		}
+	}
+
 
 	hungerBarTexture.alterTransparency(100);
 	hungerBarTexture.render(renderer, player.placeItemPos.x * level.getCellSize() + (level.getCellSize() / 2) - camera.getX() , player.placeItemPos.y * level.getCellSize() + (level.getCellSize() / 2) - camera.getY(), level.getCellSize(), level.getCellSize());
 	
-
+	allTextures.erase(allTextures.begin(), allTextures.end());
 	
 }
 
