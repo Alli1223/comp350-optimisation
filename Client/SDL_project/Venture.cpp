@@ -18,6 +18,7 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 	}
 	SDL_ShowCursor(SDL_DISABLE);
 	
+	// Set Window Size
 	gameSettings.getScreenResolution();
 	gameSettings.WINDOW_HEIGHT /= 2;
 	gameSettings.WINDOW_WIDTH /= 2;
@@ -25,18 +26,16 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 	camera.WindowWidth = gameSettings.WINDOW_WIDTH;
 	camera.SetPos(0, 0);
 
+	// Create the window
 	window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 	glContext = SDL_GL_CreateContext(window);
 	if (window == nullptr)
-	{
 		throw InitialisationError("SDL_CreateWindow failed");
-	}
-
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+	
+	// Create Renderer
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == nullptr)
-	{
 		throw InitialisationError("SDL_CreateRenderer failed");
-	}
 
 	// IF TTF Init error
 	if (!TTF_WasInit() && TTF_Init() == -1) {
@@ -58,7 +57,7 @@ void Venture::run()
 	terrainGen.setSeed(0123);
 
 	level.GenerateWorld(camera);
-	//cellrenderer.RenderObjects(level, renderer, camera, player, networkManager.allPlayers);
+
 	// Run the main menu
 	if (gameSettings.mainMenu)
 	{

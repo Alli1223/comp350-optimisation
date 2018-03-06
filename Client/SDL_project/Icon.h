@@ -21,7 +21,8 @@ public:
 private:
 	Item iconItem;
 	std::string iconTextureLocation = "Resources\\Sprites\\\Toolbar\\";
-	const std::string SpriteSheets = "Resources\\Sprites\\SpriteSheets";
+	std::string SpriteSheets = "Resources\\Sprites\\SpriteSheets\\";
+
 	Texture itemsAtlas;
 
 	//Refactor this to be more memory effecient

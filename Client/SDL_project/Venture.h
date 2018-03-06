@@ -10,7 +10,6 @@
 #include "ToolBar.h"
 #include "Items.h"
 #include "CellRendering.h"
-
 #include "PerlinNoise.h"
 #include "ProceduralTerrain.h"
 #include "Camera.h"
@@ -42,7 +41,6 @@ public:
 	Level level;
 	GameSettings gameSettings;
 	Map mapLoader;
-
 	Cell cell;
 	ToolBar toolbar;
 	CellRendering cellrenderer;
