@@ -5,7 +5,8 @@
 Icon::Icon() : WoodAxeTexture(iconTextureLocation + "axe.png"), PickAxeTexture(iconTextureLocation + "pickAxe.png"), hoeTexture(iconTextureLocation + "hoe.png"), seedsTexture(iconTextureLocation + "seeds.png"), ScytheTexture(iconTextureLocation + "scythe.png"), WheatTexture(iconTextureLocation + "wheat.png"),
 FishingRodTexture(iconTextureLocation + "fishingPole.png"), WateringCanTexture(iconTextureLocation + "wateringCan.png"),
 WoodTexture(iconTextureLocation + "wood.png"), StoneTexture(iconTextureLocation + "stone.png"), IconBackgroundTexture(iconTextureLocation + "IconBackground.png"),
-WoodFenceTexture(iconTextureLocation + "FenceWood.png"), StoneFenceTexture(iconTextureLocation + "FenceStone.png")
+WoodFenceTexture(iconTextureLocation + "FenceWood.png"), StoneFenceTexture(iconTextureLocation + "FenceStone.png"),
+itemsAtlas(SpriteSheets + "spritesheet_items.png")
 {
 }
 

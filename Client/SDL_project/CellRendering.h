@@ -29,12 +29,13 @@ private:
 	float Tdarkness;
 	float darkness = 255;
 	float time = 0;
+
+	const std::string SpriteSheets = "Resources\\Sprites\\SpriteSheets";
 	const std::string RoomSpriteTextureLocation = "Resources\\Sprites\\roomSprites\\texturePack\\";
 	const std::string ItemsSpriteTextureLocation = "Resources\\Sprites\\SpawnItems\\";
 	const std::string TerrainSpriteTextureLocation = "Resources\\Sprites\\Terrain\\";
 	const std::string TreeTerrainSpriteTextureLocation = "Resources\\Sprites\\Terrain\\Trees\\";
 	const std::string WallSpriteTextureLocation = "Resources\\Sprites\\Terrain\\Walls\\";
-
 	const std::string characterTextureLocation = "Resources\\Sprites\\Character\\";
 	const std::string playerStatsTextureLocation = "Resources\\Sprites\\GUI\\PlayerStats\\";
 

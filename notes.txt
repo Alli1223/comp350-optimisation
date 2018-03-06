@@ -6,6 +6,9 @@ bit flags or enums instead of boools
 inline get and set functions
 move code that calls other functions frequently close to each other in the same cpp file
 
+//look at later:
+https://github.com/grimfang4/sdl-gpu
+
 
 External librarays removed: 
 

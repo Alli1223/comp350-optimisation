@@ -14,7 +14,6 @@ public:
 		if (capacity > items.size())
 		{
 			items.push_back(item);
-			//item.onInsertionFailed() /* A trick I've done in the past to give custom behavior */
 			return true;
 		}
 		return false;
@@ -24,24 +23,22 @@ public:
 	{
 		for (unsigned int i = 0; i < getCurrentSize(); i++)
 		{
+			if (items[i].type.Resource == type.Resource)
+			{
+				items[i].type.Resource = Item::ItemType::noResource;
+				return;
+			}
+			if (items[i].type.Food == type.Food)
+			{
+				items[i].type.Food = Item::ItemType::noFood;
+				return;
+			}
 
-				if (items[i].type.Resource == type.Resource)
-				{
-					items[i].type.Resource = Item::ItemType::noResource;
-					return;
-				}
-				if (items[i].type.Food == type.Food)
-				{
-					items[i].type.Food = Item::ItemType::noFood;
-					return;
-				}
-					
-				if (items[i].type.Tool == type.Tool)
-				{
-					items[i].type.Tool = Item::ItemType::noTool;
-					return;
-				}
-			
+			if (items[i].type.Tool == type.Tool)
+			{
+				items[i].type.Tool = Item::ItemType::noTool;
+				return;
+			}
 		}
 	}
 	// returns the size of inventory

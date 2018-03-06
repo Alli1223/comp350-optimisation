@@ -4,7 +4,7 @@
 //! Constructor that initalises all the texture file locations
 CellRendering::CellRendering() : 
 healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"), hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png"),
-terrainAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\mapPack_tilesheet.png"), roguelikeAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\roguelikeSheet_transparent.png")
+terrainAtlas(SpriteSheets + "mapPack_tilesheet.png"), roguelikeAtlas(TerrainSpriteTextureLocation + "SpriteSheets\\roguelikeSheet_transparent.png")
 {
 	// Set other atlas stats
 	terrainAtlas.setTileSize(128);
