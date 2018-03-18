@@ -187,6 +187,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y - 1; j++)
 				RenderChunk(level,camera,player, level.World[i][j], renderer);
 
+
 	// Batch render all the textures
 	for each(auto &texture in allTextures)
 	{

@@ -25,7 +25,8 @@ public:
 	//Timer used to update the caption
 	Timer fpsTimer;
 	float getAverageFPS() { return avgFPS; }
-	bool displayFPS = true;
+	static const bool displayFPS = true;
+	
 
 
 	int amountOfWoodInTrees = 3;
@@ -35,7 +36,7 @@ public:
 	bool fullscreen = false;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
-	bool mainMenu = false;
+	bool mainMenu = true;
 
 	glm::vec2 mouseCellPos;
 

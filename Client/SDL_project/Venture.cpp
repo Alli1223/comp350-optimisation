@@ -20,8 +20,8 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 	
 	// Set Window Size
 	gameSettings.getScreenResolution();
-	gameSettings.WINDOW_HEIGHT /= 2;
-	gameSettings.WINDOW_WIDTH /= 2;
+	gameSettings.WINDOW_HEIGHT /=2;
+	gameSettings.WINDOW_WIDTH /=2;
 	camera.WindowHeight = gameSettings.WINDOW_HEIGHT;
 	camera.WindowWidth = gameSettings.WINDOW_WIDTH;
 	camera.SetPos(0, 0);
