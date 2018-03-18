@@ -75,5 +75,6 @@ public:
 private:
 	unsigned int capacity = 20;
 	std::vector<Item> items;
+
 };
 

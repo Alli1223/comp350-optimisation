@@ -33,7 +33,7 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 		throw InitialisationError("SDL_CreateWindow failed");
 	
 	// Create Renderer
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr)
 		throw InitialisationError("SDL_CreateRenderer failed");
 
