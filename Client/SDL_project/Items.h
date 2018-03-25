@@ -7,12 +7,15 @@ class Item
 public:
 	//! Constructor
 	Item();
+	//! Overloaded Constructor
+	
 	//! Destructor
 	~Item();
 	int getItemHealth() { return itemHealth; }
 	int setItemHealth(int newHealth) { return itemHealth = newHealth; }
 	int increaseStack(int amount) { return stack += amount; }
 	int decreaseStack(int amount) { if (stack >= 0){ return stack -= amount; } }
+
 	typedef struct
 	{
 		enum Resource
@@ -21,19 +24,12 @@ public:
 			isWOOD,
 			isSTONE,
 			isSTONEWALL,
-			isWOODFENCE
-		} Resource;
-		enum Food
-		{
+			isWOODFENCE,
 			noFood,
 			isBERRY,
 			isFISH,
 			isSEEDS,
-			isWHEAT
-		} Food;
-
-		enum Tool
-		{
+			isWHEAT,
 			noTool,
 			isWOODAXE,
 			isPICKAXE,
@@ -41,13 +37,14 @@ public:
 			isSCYTHE,
 			isWATERINGCAN,
 			isFISHINGROD
-			
-		}Tool;
+		} Resource;
 	} ItemType;
 	
-	ItemType type;
+	ItemType type; 
 	bool isInInventory = false;
 	bool isPlaceable = false;
+
+	Item::Item(Item::ItemType type);
 private:
 	int itemHealth = 100;
 	int stack = 0;

@@ -23,7 +23,7 @@ void Icon::RenderIcon(SDL_Renderer* renderer)
 		IconBackgroundTexture.alterTransparency(150);
 		IconBackgroundTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
 	}
-	switch (iconItem.type.Tool)
+	switch (iconItem.type.Resource)
 	{
 	case Item::ItemType::isWOODAXE:
 		WoodAxeTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
@@ -44,7 +44,7 @@ void Icon::RenderIcon(SDL_Renderer* renderer)
 		WateringCanTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
 		break;
 	}
-	switch (iconItem.type.Food)
+	switch (iconItem.type.Resource)
 	{
 	case Item::ItemType::isSEEDS:
 		seedsTexture.render(renderer, getX(), getY(), getWidth(), getHeight());

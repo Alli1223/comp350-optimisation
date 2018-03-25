@@ -28,15 +28,15 @@ public:
 				items[i].type.Resource = Item::ItemType::noResource;
 				return;
 			}
-			if (items[i].type.Food == type.Food)
+			if (items[i].type.Resource == type.Resource)
 			{
-				items[i].type.Food = Item::ItemType::noFood;
+				items[i].type.Resource = Item::ItemType::noFood;
 				return;
 			}
 
-			if (items[i].type.Tool == type.Tool)
+			if (items[i].type.Resource == type.Resource)
 			{
-				items[i].type.Tool = Item::ItemType::noTool;
+				items[i].type.Resource = Item::ItemType::noTool;
 				return;
 			}
 		}

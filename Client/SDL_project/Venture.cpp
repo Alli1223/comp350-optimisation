@@ -85,19 +85,19 @@ void Venture::run()
 	player.inventory.setCapacity(56);
 	// Add starting items
 	Item hoe;
-	hoe.type.Tool = Item::ItemType::isHOE;
+	hoe.type.Resource = Item::ItemType::isHOE;
 	Item WoodAxe;
-	WoodAxe.type.Tool = Item::ItemType::isWOODAXE;
+	WoodAxe.type.Resource = Item::ItemType::isWOODAXE;
 	Item PickAxe;
-	PickAxe.type.Tool = Item::ItemType::isPICKAXE;
+	PickAxe.type.Resource = Item::ItemType::isPICKAXE;
 	Item Scythe;
-	Scythe.type.Tool = Item::ItemType::isSCYTHE;
+	Scythe.type.Resource = Item::ItemType::isSCYTHE;
 	Item seeds;
-	seeds.type.Food = Item::ItemType::isSEEDS;
+	seeds.type.Resource = Item::ItemType::isSEEDS;
 	Item waterCan;
-	waterCan.type.Tool = Item::ItemType::isWATERINGCAN;
+	waterCan.type.Resource = Item::ItemType::isWATERINGCAN;
 	Item fishingPole;
-	fishingPole.type.Tool = Item::ItemType::isFISHINGROD;
+	fishingPole.type.Resource = Item::ItemType::isFISHINGROD;
 	Item wood;
 	wood.type.Resource = Item::ItemType::isWOOD;
 	Item stone;
@@ -111,11 +111,7 @@ void Venture::run()
 	//player.inventory.add(fishingPole);
 	player.inventory.add(Scythe);
 	player.inventory.add(seeds);
-
-	for (int i = 0; i < 30; i++)
-		player.inventory.add(wood);
-	for (int i = 0; i < 30; i++)
-		player.inventory.add(stone);
+	player.inventory.add(wood);
 	
 	player.InventoryPanel.setX(gameSettings.WINDOW_WIDTH / 2 + gameSettings.WINDOW_WIDTH / 4);
 	player.InventoryPanel.setY(gameSettings.WINDOW_HEIGHT / 2);

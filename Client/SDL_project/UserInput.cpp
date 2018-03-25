@@ -209,7 +209,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	if (state[SDL_SCANCODE_DOWN])
 	{
 		Item wheat;
-		wheat.type.Food = Item::ItemType::isWHEAT;
+		wheat.type.Resource = Item::ItemType::isWHEAT;
 		player.inventory.add(wheat);
 	}
 	
@@ -352,7 +352,7 @@ void UserInput::ChangeCellsAroundPoint(Level& level, glm::vec2 point, int dist, 
 void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player& player, Level& level, GameSettings& gameSettings, SDL_Renderer* renderer)
 {
 	// AXE
-	if (toolbar.getSelectedItem().type.Tool == Item::ItemType::isWOODAXE)
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isWOODAXE)
 	{
 		for (int x = -1; x <= 1; x++)
 			for (int y = -1; y <= 1; y++)
@@ -379,7 +379,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 				}
 			}
 	}
-	if (toolbar.getSelectedItem().type.Tool == Item::ItemType::isPICKAXE)
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isPICKAXE)
 	{
 		for (int x = -1; x <= 1; x++)
 			for (int y = -1; y <= 1; y++)
@@ -396,7 +396,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 					}
 	}
 	// HOE
-	if (toolbar.getSelectedItem().type.Tool == Item::ItemType::isHOE)
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isHOE)
 	{
 		//level.getCell(xPos + x, yPos + y)->isTree = false;
 		if (level.getCell(xPos, yPos)->isDirt == false)
@@ -409,14 +409,14 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 		}
 	}
 	// SCYTHE
-	if (toolbar.getSelectedItem().type.Tool == Item::ItemType::isSCYTHE)
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSCYTHE)
 	{
 		if (level.getCell(xPos, yPos)->isWheat)
 		{
 			if (level.getCell(xPos, yPos)->seedsStage == Cell::seedsGrowthStage::PlantStageFour)
 			{
 				Item wheat;
-				wheat.type.Food = Item::ItemType::isWHEAT;
+				wheat.type.Resource = Item::ItemType::isWHEAT;
 				player.inventory.add(wheat);
 			}
 			level.getCell(xPos, yPos)->isWheat = false;
@@ -428,7 +428,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 		}
 	}
 	// Wheat SEEDS
-	if (toolbar.getSelectedItem().type.Food == Item::ItemType::isSEEDS)
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSEEDS)
 	{
 		if (level.getCell(xPos, yPos)->isDirt && !level.getCell(xPos, yPos)->isWheat)
 		{
@@ -442,7 +442,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 	}
 
 	// FISHING ROD
-	if (toolbar.getSelectedItem().type.Tool == Item::ItemType::isFISHINGROD)
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isFISHINGROD)
 	{
 		if (level.getCell(player.getCellX() + 2, player.getCellY())->isWater)
 		{

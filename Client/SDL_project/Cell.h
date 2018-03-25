@@ -31,7 +31,7 @@ public:
 	//! Sets the Cells X and Y values
 	int setPos(int newX, int newY) { return x = newX, y = newY; }
 
-	int cellLightness = 255;
+	char cellLightness = 255;
 
 	//! Whether the cell is part of a room
 	bool isRoom = false;

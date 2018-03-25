@@ -49,6 +49,7 @@ public:
 	//! Creates a vector of vectors to store cells in
 	void Level::CreateChunk(int initX, int initY);
 
+	//! Stores the area the player explored out to
 	int xMinExplored = 0;
 	int xMaxExplored = 0;
 	int yMinExplored = 0;
@@ -67,7 +68,7 @@ protected:
 	ProceduralTerrain proceduralTerrain;
 
 	//! The size that the cell will be rendered at
-	int cellSize = 10;
+	int cellSize = 50;
 	//! chunkSizes value is set when level is constructed and is used for ease of access for the rest of the game to use
 	int chunkSize;
 

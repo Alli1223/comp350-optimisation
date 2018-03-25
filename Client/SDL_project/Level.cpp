@@ -15,6 +15,8 @@ void Level::CreateChunk(int initX, int initY)
 		{
 			// Populates the column with pointers to cells
 			Cell cell(x + (initX * chunkSize), y + (initY * chunkSize));
+			//if (x == 0 || x == chunkSize || y == 0 || y == chunkSize)
+				//cell.isWater = true;
 			cell.isWalkable = true;
 			if (cell.getX() < xMinExplored)
 				xMinExplored = cell.getX() ;

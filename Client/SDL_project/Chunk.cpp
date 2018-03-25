@@ -4,6 +4,7 @@
 
 Chunk::Chunk()
 {
+	tiles.reserve(chunkSize);
 }
 Chunk::Chunk(int initX, int initY)
 {
