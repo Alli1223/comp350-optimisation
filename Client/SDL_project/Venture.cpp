@@ -17,11 +17,20 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 		throw InitialisationError("SDL_Init failed");
 	}
 	SDL_ShowCursor(SDL_DISABLE);
-	
+
 	// Set Window Size
 	gameSettings.getScreenResolution();
-	gameSettings.WINDOW_HEIGHT /=2;
-	gameSettings.WINDOW_WIDTH /=2;
+	if (gameSettings.fullscreen)
+	{
+		gameSettings.WINDOW_HEIGHT;
+		gameSettings.WINDOW_WIDTH;
+	}
+	else
+	{
+		gameSettings.WINDOW_HEIGHT /= 2;
+		gameSettings.WINDOW_WIDTH /= 2;
+	}
+
 	camera.WindowHeight = gameSettings.WINDOW_HEIGHT;
 	camera.WindowWidth = gameSettings.WINDOW_WIDTH;
 	camera.SetPos(0, 0);
@@ -31,7 +40,7 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 	glContext = SDL_GL_CreateContext(window);
 	if (window == nullptr)
 		throw InitialisationError("SDL_CreateWindow failed");
-	
+
 	// Create Renderer
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (renderer == nullptr)
@@ -67,19 +76,19 @@ void Venture::run()
 	}
 
 	// Generates the world around the camera position
-	
+
 
 	int cellSize = level.getCellSize();
 
 	// Create a unique playername
 	std::string playerName = std::to_string(SDL_GetTicks());
 
-		player.characterType = "Player";
-		player.setSpeed(1);
-		player.setID(playerName);
-		player.setX(0);
-		player.setY(0);
-	
+	player.characterType = "Player";
+	player.setSpeed(1);
+	player.setID(playerName);
+	player.setX(0);
+	player.setY(0);
+
 	toolbar.createToolbar(player, gameSettings);
 
 	player.inventory.setCapacity(56);
@@ -112,7 +121,7 @@ void Venture::run()
 	player.inventory.add(Scythe);
 	player.inventory.add(seeds);
 	player.inventory.add(wood);
-	
+
 	player.InventoryPanel.setX(gameSettings.WINDOW_WIDTH / 2 + gameSettings.WINDOW_WIDTH / 4);
 	player.InventoryPanel.setY(gameSettings.WINDOW_HEIGHT / 2);
 	player.InventoryPanel.setHeight(gameSettings.WINDOW_HEIGHT - gameSettings.WINDOW_HEIGHT / 4);
@@ -120,42 +129,42 @@ void Venture::run()
 	player.InventoryPanel.setIconSize(gameSettings.WINDOW_WIDTH / 50);
 	player.InventoryPanel.CreateInventory(renderer, player.inventory);
 	player.InventoryPanel.setDisplayInventory(false);
-	
+
 	player.craftingUI.setX(gameSettings.WINDOW_WIDTH / 4);
 	player.craftingUI.setY(gameSettings.WINDOW_HEIGHT / 2);
 	player.craftingUI.setHeight(gameSettings.WINDOW_HEIGHT - gameSettings.WINDOW_HEIGHT / 4);
 	player.craftingUI.setWidth(gameSettings.WINDOW_WIDTH / 3);
 	player.craftingUI.setIconSize(gameSettings.WINDOW_WIDTH / 25);
 	gameSettings.fpsTimer.start();
-	
+
 	/////////////////////////////////////////////// MAIN LOOP ///////////////////////////////////////
 	while (gameSettings.running)
 	{
 		// Get mouse Position
 		SDL_GetMouseState(&mouseX, &mouseY);
 		//gameSettings.getScreenResolution();
-		
-		if(gameSettings.displayFPS)
+
+		if (gameSettings.displayFPS)
 			gameSettings.CalculateFramesPerSecond();
 
-		
-		
+
+
 		player.setSize(level.getCellSize());
 		gameSettings.mouseCellPos.x = mouseX / level.getCellSize() + camera.getX() / level.getCellSize();
 		gameSettings.mouseCellPos.y = mouseY / level.getCellSize() + camera.getY() / level.getCellSize();
 
 
-		
+
 		// Handle the input
 		input.HandleUserInput(renderer, level, player, camera, gameSettings, toolbar);
 
-		
+
 		//Player pos for camera lerp
 		glm::vec2 playerPos;
 		playerPos.x = player.getX() - camera.WindowWidth / 2;
 		playerPos.y = player.getY() - camera.WindowHeight / 2;
-		
-		
+
+
 		camera.Lerp_To(playerPos, camera.getCameraSpeed());
 		level.GenerateWorld(camera);
 
@@ -168,11 +177,11 @@ void Venture::run()
 
 
 		// Renders all the cells and players
-		cellrenderer.RenderObjects(level, renderer, camera, player, allPlayers);
+		cellrenderer.RenderObjects(level, renderer, camera, player, gameSettings, allPlayers);
 
 		// Renders UI
 		player.InventoryPanel.RenderInventory(renderer, player.inventory);
-		
+
 		toolbar.UpdateAndRenderToolbar(renderer, player, gameSettings);
 		player.craftingUI.renderCraftingMenu(renderer, player.inventory);
 
@@ -187,8 +196,8 @@ void Venture::run()
 
 
 	// Save player settings when the game ends the game loop
-	if(gameSettings.saveLevelOnExit && !gameSettings.useNetworking)
+	if (gameSettings.saveLevelOnExit && !gameSettings.useNetworking)
 		gameSettings.saveLevelData(level);
-	if(gameSettings.savePlayerOnExit)
+	if (gameSettings.savePlayerOnExit)
 		gameSettings.savePlayerSettings(player);
 }

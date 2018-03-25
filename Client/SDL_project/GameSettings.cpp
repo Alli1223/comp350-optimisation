@@ -105,8 +105,6 @@ Level GameSettings::loadGameFromSave(Level& level)
 			}
 		}
 	}
-
-
 	return levelToReturn;
 }
 

@@ -216,6 +216,7 @@ Level::Level()
 	Chunk exampleChunk;
 	chunkSize = exampleChunk.getChunkSize();
 	
+	
 	exampleChunk.~Chunk();
 }
 

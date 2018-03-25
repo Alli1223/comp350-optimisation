@@ -98,7 +98,6 @@ void Menu::MainMenu(GameSettings& gameSettings,Level& level, Camera& camera, Pla
 				toggleFullscreen->setText("Fullscreen");
 				gameSettings.fullscreen = true;
 			}
-			
 		}
 		
 		// Dont save data when exit is pressed

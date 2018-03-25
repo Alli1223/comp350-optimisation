@@ -211,6 +211,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 		Item wheat;
 		wheat.type.Resource = Item::ItemType::isWHEAT;
 		player.inventory.add(wheat);
+		
 	}
 	
 	if (state[SDL_SCANCODE_LEFT])
@@ -413,19 +414,38 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 	{
 		if (level.getCell(xPos, yPos)->isWheat)
 		{
-			if (level.getCell(xPos, yPos)->seedsStage == Cell::seedsGrowthStage::PlantStageFour)
+			if (level.getCell(xPos, yPos)->seedsStage == Cell::seedsGrowthStage::PlantStageSeven)
 			{
 				Item wheat;
 				wheat.type.Resource = Item::ItemType::isWHEAT;
 				player.inventory.add(wheat);
 			}
 			level.getCell(xPos, yPos)->isWheat = false;
-			level.getCell(xPos, yPos)->seedsStage = Cell::seedsGrowthStage::PlantStageZero;
+			level.getCell(xPos, yPos)->seedsStage = Cell::seedsGrowthStage::noPlant;
 			//dump celldata of where the player has changed the cell
 			std::string seralisedData = level.getCell(xPos, yPos)->getCellData().dump();
 			std::cout << seralisedData << std::endl;
 
 		}
+		else if (level.getCell(xPos, yPos)->isBush || level.getCell(xPos, yPos)->isBerryPlant)
+		{
+			level.getCell(xPos, yPos)->isBush = false;
+			level.getCell(xPos, yPos)->isBerryPlant = false;
+			Item seeds;
+			seeds.type.Resource = Item::ItemType::isSEEDS;
+			player.inventory.add(seeds);
+		}
+			
+		else if (level.getCell(xPos, yPos)->isFlower1)
+		{
+			level.getCell(xPos, yPos)->isFlower1 = false;
+			Item seeds;
+			seeds.type.Resource = Item::ItemType::isSEEDS;
+			player.inventory.add(seeds);
+		}
+			
+		else if (level.getCell(xPos, yPos)->isFlower2)
+			level.getCell(xPos, yPos)->isFlower2 = false;
 	}
 	// Wheat SEEDS
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSEEDS)
@@ -434,6 +454,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 		{
 			level.getCell(xPos, yPos)->isWheat = true;
 			level.getCell(xPos, yPos)->seedsStage = Cell::seedsGrowthStage::PlantStageOne;
+			level.getCell(xPos, yPos)->plantTimer.start();
 			//dump celldata of where the player has changed the cell
 			std::string seralisedData = level.getCell(xPos, yPos)->getCellData().dump();
 			std::cout << seralisedData << std::endl;

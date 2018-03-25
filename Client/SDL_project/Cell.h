@@ -1,5 +1,6 @@
 #pragma once
 #include "Texture.h"
+#include "Timer.h"
 
 class Cell
 {
@@ -64,11 +65,14 @@ public:
 	
 	enum seedsGrowthStage
 	{
-		PlantStageZero,
+		noPlant,
 		PlantStageOne,
 		PlantStageTwo,
 		PlantStageThree,
-		PlantStageFour
+		PlantStageFour,
+		PlantStageFive,
+		PlantStageSix,
+		PlantStageSeven
 	} seedsStage;
 
 	enum TreeType
@@ -80,6 +84,8 @@ public:
 	};
 	TreeType treeType;
 
+	Timer plantTimer;
+	
 	bool isVegetation = false;
 	bool isFlower1 = false;
 	bool isFlower2 = false;

@@ -32,12 +32,15 @@ public:
 	int amountOfWoodInTrees = 3;
 	int amountOfStoneInRocks = 3;
 
+	//! Time it takes for plants to grow in ms
+	UINT32 plantGrowSpeed = 10000;
+
 	//! Whether the game is fullscreen
-	bool fullscreen = false;
+	bool fullscreen = true;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
 	//! Main Menu toggle
-	bool mainMenu = false;
+	bool mainMenu = true;
 
 	glm::vec2 mouseCellPos;
 
@@ -48,7 +51,7 @@ public:
 	bool useNetworking = false;
 
 	//! Whether the game will save the game when it closes
-	bool saveLevelOnExit = false;
+	bool saveLevelOnExit = true;
 	bool savePlayerOnExit = true;
 	//! Whether the game is running or not
 	bool running = true;

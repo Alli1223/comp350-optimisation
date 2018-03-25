@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Character.h"
 #include "Player.h"
+#include "GameSettings.h"
 
 class CellRendering
 {
@@ -10,9 +11,9 @@ public:
 	CellRendering();
 	~CellRendering();
 	//! Render all game objects
-	void RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, std::vector<std::shared_ptr<Player>>& allPlayers);
+	void RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers);
 	//! Render a chunk of the level
-	void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
+	void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
 	//! Alter textures, i.e. transparency
 	void CellRendering::AlterTextures(Level& level);
 	//! Render player
@@ -56,6 +57,7 @@ private:
 	//! Atlas textures
 	Texture terrainAtlas;
 	Texture roguelikeAtlas;
+	Texture cropsAtlas;
 
 	//! Contains the data for texture positions and layers
 	struct textureID
@@ -67,6 +69,8 @@ private:
 		char transparency;
 		//! Layer to be rendered on -- 0 = Ground -- 1 = Items on ground -- 2 = Player -- 3 = Above player
 		char layer;
+		//! Atlas to render texture from
+		char atlasID;
 	};
 
 	enum layers
@@ -74,6 +78,7 @@ private:
 		seaLevel,
 		ground,
 		onGround,
+		isCrops,
 		abovePlayer
 	};
 	//! A vector of all textures

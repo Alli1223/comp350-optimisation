@@ -41,7 +41,7 @@ private:
 	int atlasTileWidth = 16;
 	//! Atlas tile size
 	int atlasTileSize = 16;
-	//! Atlas type -- Type 0 = 128px / no border -- Type 1 = 16bit / 1px border
+	//! Atlas type -- Type 0 = no border -- Type 1 = 1px border -- Type 2 = 32bit no border
 	char atlasType;
 	//! The image location
 	std::string fileName;

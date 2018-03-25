@@ -4,7 +4,7 @@
 //! Constructor that initalises all the texture file locations
 CellRendering::CellRendering() : 
 healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"), hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png"),
-terrainAtlas(SpriteSheets + "mapPack_tilesheet.png"), roguelikeAtlas(SpriteSheets + "roguelikeSheet_transparent.png")
+terrainAtlas(SpriteSheets + "mapPack_tilesheet.png"), roguelikeAtlas(SpriteSheets + "roguelikeSheet_transparent.png"), cropsAtlas(SpriteSheets + "crops.png")
 {
 	// Set other atlas stats
 	terrainAtlas.setTileSize(128);
@@ -14,6 +14,10 @@ terrainAtlas(SpriteSheets + "mapPack_tilesheet.png"), roguelikeAtlas(SpriteSheet
 	roguelikeAtlas.setTileSize(16);
 	roguelikeAtlas.setAtlasType(1);
 	roguelikeAtlas.setTileWidth(56);
+
+	cropsAtlas.setTileSize(32);
+	cropsAtlas.setTileWidth(8);
+	cropsAtlas.setAtlasType(0);
 }
 
 //! Destructor
@@ -32,6 +36,7 @@ void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char la
 	texture.layer = layer;
 	allTextures.push_back(texture);
 }
+
 
 void CellRendering::AlterTextures(Level& level)
 {
@@ -59,7 +64,7 @@ void CellRendering::AlterTextures(Level& level)
 		
 }
 
-void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer)
+void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer)
 {
 	int newX = 0, newY = 0;
 	int xPos = 0, yPos = 0;
@@ -91,14 +96,14 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 			{
 				// Base Ground Textures rendered in decending order (Top layered textures at bottom of list)
 				if (chunk->tiles[x][y]->isGrass)
-					AddToBatchRendering(899, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(899, xPos, yPos, cellSize, ground);
 				if (chunk->tiles[x][y]->isSand)
-					AddToBatchRendering(8, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(8, xPos, yPos, cellSize, ground);
 
 				if (chunk->tiles[x][y]->isFlower1)
 					AddToBatchRendering(409, xPos, yPos, cellSize, onGround);;
 				if (chunk->tiles[x][y]->isDirt)
-					AddToBatchRendering(6, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(6, xPos, yPos, cellSize, ground);
 
 
 
@@ -109,9 +114,9 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 				else if (chunk->tiles[x][y]->isFlower2)
 					AddToBatchRendering(395, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isBerryPlant)
-					AddToBatchRendering(820, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(530, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isBush)
-					AddToBatchRendering(815, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(525, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isLongGrass)
 					AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isLongGrass2)
@@ -119,28 +124,67 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 				else if (chunk->tiles[x][y]->isSnow)
 					AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isRock)
-					AddToBatchRendering(525, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(825, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isWood)
-					AddToBatchRendering(78, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(289, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isStone)
 					AddToBatchRendering(58, xPos, yPos, cellSize, onGround);
 
 
 				if (chunk->tiles[x][y]->isWheat)
 				{
+					// Update seeds
+					if (chunk->tiles[x][y]->plantTimer.getTicks() > gameSettings.plantGrowSpeed)
+					{
+						switch (chunk->tiles[x][y]->seedsStage)
+						{
+						case Cell::seedsGrowthStage::PlantStageOne:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageTwo;
+							break;
+						case Cell::seedsGrowthStage::PlantStageTwo:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageThree;
+							break;
+						case Cell::seedsGrowthStage::PlantStageThree:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageFour;
+							break;
+						case Cell::seedsGrowthStage::PlantStageFour:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageFive;
+							break;
+						case Cell::seedsGrowthStage::PlantStageFive:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageSix;
+							break;
+						case Cell::seedsGrowthStage::PlantStageSix:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageSeven;
+							break;
+						case Cell::seedsGrowthStage::PlantStageSeven:
+							chunk->tiles[x][y]->seedsStage = Cell::seedsGrowthStage::PlantStageSeven;
+							break;
+						}
+						chunk->tiles[x][y]->plantTimer.restart();
+					}
+						
 					switch (chunk->tiles[x][y]->seedsStage)
 					{
 					case Cell::seedsGrowthStage::PlantStageOne:
-						//WheatStageOne.render(renderer, xPos, yPos, cellSize, cellSize);
+						AddToBatchRendering(1, xPos, yPos, cellSize, isCrops);
 						break;
 					case Cell::seedsGrowthStage::PlantStageTwo:
-						//WheatStageTwo.render(renderer, xPos, yPos, cellSize, cellSize);
+						AddToBatchRendering(2, xPos, yPos, cellSize, isCrops);
 						break;
 					case Cell::seedsGrowthStage::PlantStageThree:
-						//WheatStageThree.render(renderer, xPos, yPos, cellSize, cellSize);
+						AddToBatchRendering(3, xPos, yPos, cellSize, isCrops);
 						break;
 					case Cell::seedsGrowthStage::PlantStageFour:
-						//WheatStageFour.render(renderer, xPos, yPos, cellSize, cellSize);
+						AddToBatchRendering(4, xPos, yPos, cellSize, isCrops);
+						break;
+					case Cell::seedsGrowthStage::PlantStageFive:
+						AddToBatchRendering(5, xPos, yPos, cellSize, isCrops);
+						break;
+					case Cell::seedsGrowthStage::PlantStageSix:
+						AddToBatchRendering(6, xPos, yPos, cellSize, isCrops);
+						break;
+					case Cell::seedsGrowthStage::PlantStageSeven:
+						AddToBatchRendering(7, xPos, yPos, cellSize, isCrops);
 						break;
 					}
 				}
@@ -177,7 +221,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, Player& player, st
 
 
 //! Renders the chunks of cells
-void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, std::vector<std::shared_ptr<Player>>& allPlayers)
+void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers)
 {	
 	// Alter the textures
 	AlterTextures(level);
@@ -185,7 +229,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	// Render all the cells in the chunks
 	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x - 1; i++)
 		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y - 1; j++)
-				RenderChunk(level,camera,player, level.World[i][j], renderer);
+				RenderChunk(level,camera, gameSettings, level.World[i][j], renderer);
 
 
 	// Batch render all the textures
@@ -201,6 +245,9 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 			break;
 		case onGround:
 			roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+			break;
+		case isCrops:
+			cropsAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
 			break;
 		}
 	}
