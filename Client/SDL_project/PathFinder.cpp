@@ -185,7 +185,7 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 				cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
 				//if the cell is a room and not in closed set and not on fire
 				//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
-				if (!isInClosedSet(neighbour->point) && level.getCell(cellPos.x, cellPos.y)->isWalkable)
+				if (!isInClosedSet(neighbour->point))
 				{
 
 					double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);

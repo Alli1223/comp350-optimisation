@@ -200,7 +200,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 				// Fences
 				if (chunk->tiles[x][y]->isWoodFence)
 				{
-					AddToBatchRendering(woodFence + 1, xPos, yPos, cellSize, abovePlayer);
+					AddToBatchRendering(woodHalfFence, xPos, yPos, cellSize, onGround);
 					//renderCellsAroundObject(renderer, level, chunk, x, y, xPos, yPos);
 				}
 			}
@@ -287,7 +287,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 		}
 	}
 
-
+	
 	hungerBarTexture.alterTransparency(100);
 	hungerBarTexture.render(renderer, player.placeItemPos.x * level.getCellSize() + (level.getCellSize() / 2) - camera.getX() , player.placeItemPos.y * level.getCellSize() + (level.getCellSize() / 2) - camera.getY(), level.getCellSize(), level.getCellSize());
 	

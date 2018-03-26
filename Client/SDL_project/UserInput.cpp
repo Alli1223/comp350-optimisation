@@ -220,7 +220,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	}
 	if (state[SDL_SCANCODE_UP])
 	{
-		std::cout << player.inventory.getCurrentSize() << " " << std::endl;
+		//std::cout << player.inventory.getCurrentSize() << " " << std::endl;
 	}
 
 	// Set cell size
@@ -232,6 +232,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	if (state[SDL_SCANCODE_PAGEDOWN] && level.getCellSize() > 1)
 	{
 		level.setCellSize(level.getCellSize() - 1);
+		
 	}
 		
 
