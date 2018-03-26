@@ -58,7 +58,7 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 
 std::shared_ptr<Node> Pathfinder::getOrCreateNode(int x, int y)
 {
-	if (x < searchSize && y < searchSize)
+	if (x < nodes.size() && y < nodes[0].size())
 	{
 
 		auto result = nodes[x][y];
@@ -115,93 +115,97 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 
 	std::cout << "Computing Path" << std::endl;
 
-	//start and end offset
-	glm::vec2 cellPos;
-
-	// Set offset to make path above 0
-	if (goal.getX() < 0)
+	// IF the start and end are accessable
+	if (level.getCell(start.getX(), start.getY())->isWalkable && level.getCell(goal.getX(), goal.getY())->isWalkable)
 	{
-		offsetPath = true;
-		offset.x = (goal.getX() * -1);
-	}
-	if (goal.getY() < 0)
-	{
-		offsetPath = true;
-		offset.y = (goal.getY() * -1);
-	}
-	
 
-	if (start.getX() < 0 && offset.x < (start.getX() * -1))
-	{
-		offset.x += (start.getX() * -1);
-		offsetPath = true;
-	}
-		
-	if (start.getY() < 0 && offset.y < (start.getY() * -1))
-	{
-		offsetPath = true;
-		offset.y += (start.getY() * -1);
-	}
-		
+		//start and end offset
+		glm::vec2 cellPos;
 
-	start.adjustPosition(start.getX() + offset.x, start.getY() + offset.y);
-	goal.adjustPosition(goal.getX() + offset.x, goal.getY() + offset.y);
-	
-
-	// Create nodes for every cell in the grid
-	for (int x = 0; x < searchSize; x++)
-	{
-		nodes.push_back(std::vector<std::shared_ptr<Node>>(searchSize, nullptr));
-	}
-
-	auto startNode = getOrCreateNode(start);
-	startNode->g = 0;
-	startNode->h = euclideanDistance(start, goal);
-	startNode->cameFrom = nullptr;
-	addToOpenSet(startNode);
-
-
-	// Chooses the best neighbour cell to move to
-	while (auto currentNode = getOpenSetElementWithLowestScore())
-	{
-		//if the current cell is the goal, make the path
-		if (currentNode->point.getX() == goal.getX() && currentNode->point.getY() == goal.getY())
+		// Set offset to make path above 0
+		if (goal.getX() < 0)
 		{
-			if (StringPullPath)
-				return StringPulling(reconstructPath(currentNode), level);
-			else
-				return reconstructPath(currentNode);
+			offsetPath = true;
+			offset.x = (goal.getX() * -1);
+		}
+		if (goal.getY() < 0)
+		{
+			offsetPath = true;
+			offset.y = (goal.getY() * -1);
 		}
 
-		addToClosedSet(currentNode);
 
-		// Loops through each of the neighbours
-		for each (auto neighbour in getNeighbours(currentNode))
+		if (start.getX() < 0 && offset.x < (start.getX() * -1))
 		{
-			cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
-			//if the cell is a room and not in closed set and not on fire
-			//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
-			if (!isInClosedSet(neighbour->point))
+			offset.x += (start.getX() * -1);
+			offsetPath = true;
+		}
+
+		if (start.getY() < 0 && offset.y < (start.getY() * -1))
+		{
+			offsetPath = true;
+			offset.y += (start.getY() * -1);
+		}
+
+
+		start.adjustPosition(start.getX() + offset.x, start.getY() + offset.y);
+		goal.adjustPosition(goal.getX() + offset.x, goal.getY() + offset.y);
+
+
+		// Create nodes for every cell in the grid
+		for (int x = 0; x < searchSize; x++)
+		{
+			nodes.push_back(std::vector<std::shared_ptr<Node>>(searchSize, nullptr));
+		}
+
+		auto startNode = getOrCreateNode(start);
+		startNode->g = 0;
+		startNode->h = euclideanDistance(start, goal);
+		startNode->cameFrom = nullptr;
+		addToOpenSet(startNode);
+
+
+		// Chooses the best neighbour cell to move to
+		while (auto currentNode = getOpenSetElementWithLowestScore())
+		{
+			//if the current cell is the goal, make the path
+			if (currentNode->point.getX() == goal.getX() && currentNode->point.getY() == goal.getY())
 			{
+				if (StringPullPath)
+					return StringPulling(reconstructPath(currentNode), level);
+				else
+					return reconstructPath(currentNode);
+			}
 
-				double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);
+			addToClosedSet(currentNode);
 
-				if (neighbour->status != NodeStatus::Open || gTentative < neighbour->g)
+			// Loops through each of the neighbours
+			for each (auto neighbour in getNeighbours(currentNode))
+			{
+				cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
+				//if the cell is a room and not in closed set and not on fire
+				//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
+				if (!isInClosedSet(neighbour->point) && level.getCell(cellPos.x, cellPos.y)->isWalkable)
 				{
-					neighbour->g = gTentative;
-					neighbour->h = euclideanDistance(neighbour->point, goal);
-					neighbour->cameFrom = currentNode;
 
+					double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);
 
-					if (neighbour->status != NodeStatus::Open)
+					if (neighbour->status != NodeStatus::Open || gTentative < neighbour->g)
 					{
-						addToOpenSet(neighbour);
+						neighbour->g = gTentative;
+						neighbour->h = euclideanDistance(neighbour->point, goal);
+						neighbour->cameFrom = currentNode;
+
+
+						if (neighbour->status != NodeStatus::Open)
+						{
+							addToOpenSet(neighbour);
+						}
 					}
 				}
 			}
 		}
-
-		}
+	}
 	//Return empty path if there is no route
 	std::vector<Point> EmptyPath;
 	return EmptyPath;

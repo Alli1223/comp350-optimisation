@@ -133,6 +133,7 @@ void ProceduralTerrain::generateGround(std::shared_ptr<Chunk>& chunk, int x, int
 		if (terrainElevation >= -1.8 && terrainElevation <= 20.0)
 		{
 			chunk->tiles[x][y]->isGrass = true;
+
 		}
 		else if (terrainElevation >= -2.3 && terrainElevation < -1.8)
 		{
@@ -143,6 +144,7 @@ void ProceduralTerrain::generateGround(std::shared_ptr<Chunk>& chunk, int x, int
 		else if (terrainElevation < -2.3)
 		{
 			chunk->tiles[x][y]->isWater = true;
+			chunk->tiles[x][y]->isWalkable = false;
 		}
 		else if (terrainElevation > 10.0 && terrainElevation < 20.0)
 		{

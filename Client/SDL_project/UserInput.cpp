@@ -208,9 +208,9 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	}
 	if (state[SDL_SCANCODE_DOWN])
 	{
-		Item wheat;
-		wheat.type.Resource = Item::ItemType::isWHEAT;
-		player.inventory.add(wheat);
+		Item fence;
+		fence.type.Resource = Item::ItemType::isWOODFENCE;
+		player.inventory.add(fence);
 		
 	}
 	
@@ -456,11 +456,14 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 		else if (level.getCell(xPos, yPos)->isFlower2)
 			level.getCell(xPos, yPos)->isFlower2 = false;
 	}
+
+
 	// Wheat SEEDS
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSEEDS)
 	{
 		if (level.getCell(xPos, yPos)->isDirt && !level.getCell(xPos, yPos)->isWheat)
 		{
+			player.inventory.remove(toolbar.getToolbarSelection());
 			level.getCell(xPos, yPos)->isWheat = true;
 			level.getCell(xPos, yPos)->seedsStage = Cell::seedsGrowthStage::PlantStageOne;
 			level.getCell(xPos, yPos)->plantTimer.start();
@@ -539,7 +542,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 		if (level.getCell(xPos, yPos)->isWoodFence == false)
 		{
 			level.getCell(xPos, yPos)->isWoodFence = true;
-
+			level.getCell(xPos, yPos)->isWalkable = false;
 			player.inventory.remove(toolbar.getToolbarSelection());
 			toolbar.removeToolbarItem(toolbar.getToolbarSelection());
 			std::string seralisedData = level.getCell(xPos, yPos)->getCellData().dump();

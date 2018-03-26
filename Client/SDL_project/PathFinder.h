@@ -112,6 +112,8 @@ private:
 	//! A bool that enables pathfinding to use diagonal paths
 	bool diagonalPaths = true;
 
+	bool canTraverseWater = false;
+
 	bool OnlyUsePaths = true;
 
 	

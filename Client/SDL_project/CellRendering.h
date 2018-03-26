@@ -65,6 +65,8 @@ private:
 	int longGrass1 = 638;
 	int longWood = 179;
 
+	int woodFence = 1356;
+
 
 	int treeTop = 583;
 	int treeBottom = 640;

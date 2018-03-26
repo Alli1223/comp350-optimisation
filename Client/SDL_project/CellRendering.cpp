@@ -129,6 +129,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 				else if (chunk->tiles[x][y]->isStone)
 					AddToBatchRendering(stoneID, xPos, yPos, cellSize, onGround);
 
+				
 
 				if (chunk->tiles[x][y]->isWheat)
 				{
@@ -193,26 +194,14 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 					AddToBatchRendering(treeBottom, xPos, yPos, cellSize, onGround);
 					AddToBatchRendering(treeTop, xPos, yPos - cellSize, cellSize, abovePlayer);
 				}
-				//BUSH 815 - 830
-				//TREE - 575 - 631
-				//renderCellsAroundObject(renderer, level, chunk, x, y, xPos, yPos);
 
+				
 
+				// Fences
 				if (chunk->tiles[x][y]->isWoodFence)
 				{
-					//WoodFenceCenter.render(renderer, xPos, yPos, cellSize, cellSize);
-					// Uncomment for fences to be combined
-					if (level.isCellInChunk(x, y - 1) && level.isCellInChunk(x, y + 1) && level.isCellInChunk(x - 1, y) && level.isCellInChunk(x + 1, y))
-					{
-						/*
-						if (chunk->tiles[x][y]->isWoodFence && chunk->tiles[x][y + 1]->isWoodFence && chunk->tiles[x][y - 1]->isWoodFence && !chunk->tiles[x + 1][y]->isWoodFence && !chunk->tiles[x - 1][y]->isWoodFence)
-							//WoodFenceUP.render(renderer, xPos, yPos, cellSize, cellSize);
-						else if (chunk->tiles[x][y]->isWoodFence && chunk->tiles[x][y + 1]->isWoodFence && chunk->tiles[x][y - 1]->isWoodFence && chunk->tiles[x + 1][y]->isWoodFence && chunk->tiles[x - 1][y]->isWoodFence)
-							//WoodFenceCenter.render(renderer, xPos, yPos, cellSize, cellSize);
-						else
-							//WoodFenceSide.render(renderer, xPos, yPos, cellSize, cellSize);
-							*/
-					}
+					AddToBatchRendering(woodFence + 1, xPos, yPos, cellSize, abovePlayer);
+					//renderCellsAroundObject(renderer, level, chunk, x, y, xPos, yPos);
 				}
 			}
 		}
@@ -225,19 +214,18 @@ void CellRendering::renderCellsAroundObject(SDL_Renderer* renderer, Level& level
 	if (level.isCellInChunk(x, y - 1) && level.isCellInChunk(x, y + 1) && level.isCellInChunk(x - 1, y) && level.isCellInChunk(x + 1, y))
 	{
 		//
-		if (chunk->tiles[x][y]->isWater && chunk->tiles[x][y + 1]->isDirt && chunk->tiles[x][y - 1]->isWater && chunk->tiles[x + 1][y]->isWater && chunk->tiles[x - 1][y]->isWater)
+		if (level.getCell(xPos + 1, yPos)->isWoodFence && level.getCell(xPos, yPos + 1)->isWoodFence && level.getCell(xPos, yPos - 1)->isWoodFence && !level.getCell(xPos + 1, yPos)->isWoodFence && !level.getCell(xPos - 1, yPos)->isWoodFence)
 		{
-			//AddToBatchRendering(3, xPos, yPos, cellSize, abovePlayer);
+			AddToBatchRendering(woodFence, xPos, yPos - cellSize, cellSize, abovePlayer);
 		}
-		
-		else if (chunk->tiles[x][y]->isWoodFence && chunk->tiles[x][y + 1]->isWoodFence && chunk->tiles[x][y - 1]->isWoodFence && chunk->tiles[x + 1][y]->isWoodFence && chunk->tiles[x - 1][y]->isWoodFence)
+		else if (level.getCell(xPos, yPos)->isWoodFence && level.getCell(xPos, yPos + 1)->isWoodFence && level.getCell(xPos, yPos - 1)->isWoodFence && !level.getCell(xPos + 1, yPos)->isWoodFence && !level.getCell(xPos - 1, yPos)->isWoodFence)
 		{
-
+			AddToBatchRendering(woodFence +1, xPos, yPos - cellSize, cellSize, abovePlayer);
 		}
 		//WoodFenceCenter.render(renderer, xPos, yPos, cellSize, cellSize);
 		else
 		{
-
+			AddToBatchRendering(woodFence + 2, xPos, yPos - cellSize, cellSize, abovePlayer);
 		}
 		//WoodFenceSide.render(renderer, xPos, yPos, cellSize, cellSize);
 		
