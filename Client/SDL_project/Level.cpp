@@ -196,6 +196,14 @@ Cell& Level::GetCellFromJson(json& json)
 		nc.isWood = json.at("Wood").get<bool>();
 	if (json.count("Stone") > 0)
 		nc.isStone = json.at("Stone").get<bool>();
+	if (json.count("Rock") > 0)
+		nc.isRock = json.at("Rock").get<bool>();
+	if (json.count("Tree") > 0)
+		nc.isTree = json.at("Tree").get<bool>();
+	if (json.count("Flower1") > 0)
+		nc.isFlower1 = json.at("Flower1").get<bool>();
+	if (json.count("Flower2") > 0)
+		nc.isFlower2 = json.at("Flower2").get<bool>();
 	if (json.count("StoneWall") > 0)
 		nc.isStoneWall = json.at("StoneWall").get<bool>();
 	if (json.count("PlantStage") > 0)

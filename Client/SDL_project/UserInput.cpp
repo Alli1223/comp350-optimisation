@@ -380,7 +380,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 					std::string seralisedData = level.getCell(xPos + x, yPos + y)->getCellData().dump();
 					std::cout << seralisedData << std::endl;
 
-					
+
 
 					for (int i = 0; i < gameSettings.amountOfWoodInTrees; i++)
 					{
@@ -388,14 +388,12 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 						wood.type.Resource = Item::ItemType::isWOOD;
 						player.inventory.add(wood);
 					}
-						
-
 				}
 			}
 	}
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isPICKAXE)
 	{
-
+		// Remove rock from ground
 		if (level.getCell(xPos, yPos)->isRock)
 		{
 			level.getCell(xPos, yPos)->isRock = false;
@@ -404,6 +402,12 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 			for (int i = 0; i < gameSettings.amountOfStoneInRocks; i++)
 				player.inventory.add(stone);
 
+		}
+		// Remove dirt with pickaxe
+		else if (level.getCell(xPos, yPos)->isDirt)
+		{
+			level.getCell(xPos, yPos)->isDirt = false;
+			level.getCell(xPos, yPos)->isGrass = true;
 		}
 	}
 	// HOE

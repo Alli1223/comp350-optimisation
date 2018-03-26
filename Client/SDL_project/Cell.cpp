@@ -16,7 +16,7 @@ Cell::Cell(int x, int y)
 Cell::~Cell(){
 }
 
-//TO modify these values, the other values in classes gameSettings.loadGameFromSave and NetWorkManager.MapNetworkUpdate need to be modified
+//TO modify these values, the other values in classes gameSettings.loadGameFromSave and Level.getCellFromJson need to be modified
 json Cell::getCellData()
 {	
 	json cellData;
@@ -34,8 +34,16 @@ json Cell::getCellData()
 		cellData["Sand"] = isSand;
 	if(isWood)
 		cellData["Wood"] = isWood;
-	if(isRock)
-		cellData["Stone"] = isRock;
+	if(isStone)
+		cellData["Stone"] = isStone;
+	if (isRock)
+		cellData["Rock"] = isRock;
+	if (isTree)
+		cellData["Tree"] = isTree;
+	if (isFlower1)
+		cellData["Flower1"] = isFlower1;
+	if (isFlower2)
+		cellData["Flower2"] = isFlower2;
 	if(isStoneWall)
 		cellData["StoneWall"] = isStoneWall;
 	if(isWheat)

@@ -21,7 +21,7 @@ public:
 	
 
 	//! Whether the game will save the game when it closes
-	bool saveLevelOnExit = false;
+	bool saveLevelOnExit = true;
 	bool savePlayerOnExit = true;
 
 	//! Get screen resolution
@@ -32,7 +32,7 @@ public:
 	//Timer used to update the caption
 	Timer fpsTimer;
 	float getAverageFPS() { return avgFPS; }
-	static const bool displayFPS = false;
+	static const bool displayFPS = true;
 	
 
 	//! amount of items in items
@@ -47,7 +47,7 @@ public:
 	bool displayMouse = false;
 	int mousePointerSize = 25;
 	//! Main Menu toggle
-	bool mainMenu = false;
+	bool mainMenu = true;
 
 	//! The cell the mouse is hovering over
 	glm::vec2 mouseCellPos;
