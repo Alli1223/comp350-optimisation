@@ -102,7 +102,7 @@ private:
 	std::shared_ptr<Node> getOrCreateNode(int x, int y);
 	std::shared_ptr<Node> getOrCreateNode(const Point& point);
 	bool isInClosedSet(Point& point);
-	bool negativePath = false;
+	bool offsetPath = false;
 	glm::vec2 offset;
 
 	int searchSize = 100;

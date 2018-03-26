@@ -394,19 +394,16 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 	}
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isPICKAXE)
 	{
-		for (int x = -1; x <= 1; x++)
-			for (int y = -1; y <= 1; y++)
-				if (level.getCell(xPos, yPos)->isRock)
-					{
-						level.getCell(xPos, player.getCellY())->isRock = false;
 
-						for (int i = 0; i < gameSettings.amountOfStoneInRocks; i++)
-						{
-							Item stone;
-							stone.type.Resource = Item::ItemType::isSTONE;
-							player.inventory.add(stone);
-						}
-					}
+		if (level.getCell(xPos, yPos)->isRock)
+		{
+			level.getCell(xPos, yPos)->isRock = false;
+			Item stone;
+			stone.type.Resource = Item::ItemType::isSTONE;
+			for (int i = 0; i < gameSettings.amountOfStoneInRocks; i++)
+				player.inventory.add(stone);
+
+		}
 	}
 	// HOE
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isHOE)

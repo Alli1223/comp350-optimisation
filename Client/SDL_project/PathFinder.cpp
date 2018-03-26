@@ -29,9 +29,9 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 {
 	std::vector<std::shared_ptr<Node>> result;
 	// If the node is within the level
-	if (node->point.getX() - 1 >= 0 && node->point.getX() + 1 <= searchSize)
+	if (node->point.getX() - 1 >= 0 && node->point.getX() + 1 < searchSize)
 	{
-		if (node->point.getY() - 1 >= 0 && node->point.getY() + 1<= searchSize)
+		if (node->point.getY() - 1 >= 0 && node->point.getY() + 1< searchSize)
 		{
 			//left
 			result.push_back(getOrCreateNode(node->point.getX() - 1, node->point.getY()));
@@ -121,26 +121,26 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 	// Set offset to make path above 0
 	if (goal.getX() < 0)
 	{
-		negativePath = true;
+		offsetPath = true;
 		offset.x = (goal.getX() * -1);
 	}
 	if (goal.getY() < 0)
 	{
-		negativePath = true;
+		offsetPath = true;
 		offset.y = (goal.getY() * -1);
 	}
 	
 
-	if (start.getX() < 0)
+	if (start.getX() < 0 && offset.x < (start.getX() * -1))
 	{
-		offset.x = (start.getX() * -1);
-		negativePath = true;
+		offset.x += (start.getX() * -1);
+		offsetPath = true;
 	}
 		
-	if (start.getY() < 0)
+	if (start.getY() < 0 && offset.y < (start.getY() * -1))
 	{
-		negativePath = true;
-		offset.y = (start.getY() * -1);
+		offsetPath = true;
+		offset.y += (start.getY() * -1);
 	}
 		
 
@@ -215,7 +215,7 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	for (auto currentNode = goalNode; currentNode; currentNode = currentNode->cameFrom)
 	{
 		// If the path is offset, reset it
-		if(negativePath)
+		if(offsetPath)
 			currentNode->point.adjustPosition(currentNode->point.getX() - offset.x, currentNode->point.getY() - offset.y);
 		result.insert(result.begin(), currentNode->point);
 	}
