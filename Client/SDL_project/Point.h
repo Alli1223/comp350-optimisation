@@ -9,6 +9,10 @@ public:
 	int getX() const { return x; }
 	int getY() const { return y; }
 
+	int setX(int newX) { return x = newX; }
+	int setY(int newY) { return y = newY; }
+
+	int adjustPosition(int newX, int newY) { return x = newX, y = newY; }
 private:
 	int x, y;
 };

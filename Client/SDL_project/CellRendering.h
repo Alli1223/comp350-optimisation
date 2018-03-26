@@ -13,13 +13,15 @@ public:
 	//! Render all game objects
 	void RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers);
 	//! Render a chunk of the level
-	void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
+	void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
 	//! Alter textures, i.e. transparency
 	void CellRendering::AlterTextures(Level& level);
 	//! Render player
 	void CellRendering::RenderPlayer(SDL_Renderer* renderer, Player& player, Level& level, Camera& camera);
 	//! Add texture to batch renderer
 	void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char layer);
+	//! render cells around objects
+	void CellRendering::renderCellsAroundObject(SDL_Renderer* renderer, Level& level, std::shared_ptr<Chunk>& chunk, int& x, int& y, int& xPos, int& yPos);
 	//! Render player stats
 	bool renderStats = false;
 	//! If the game has darkness
@@ -50,9 +52,23 @@ private:
 
 	//TODO: load json file containing the array of different texture IDs
 	int grassID = 5;
+	int dirtID = 6;
 	int sandID = 8;
 	int waterID = 0;
 	int water2ID = 1;
+	int rockID = 614;
+	int stoneID = 177;
+	int redFlower = 542;
+	int whiteFlower = 573;
+	int blueFlower = 541;
+	int redBerryBush = 528;
+	int longGrass1 = 638;
+	int longWood = 179;
+
+
+	int treeTop = 583;
+	int treeBottom = 640;
+	
 
 	//! Atlas textures
 	Texture terrainAtlas;

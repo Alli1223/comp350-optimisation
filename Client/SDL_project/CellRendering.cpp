@@ -64,7 +64,7 @@ void CellRendering::AlterTextures(Level& level)
 		
 }
 
-void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer)
+void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer)
 {
 	int newX = 0, newY = 0;
 	int xPos = 0, yPos = 0;
@@ -92,29 +92,28 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 					AddToBatchRendering(water2ID, xPos, yPos, cellSize, seaLevel);
 
 			}
+
 			else
 			{
 				// Base Ground Textures rendered in decending order (Top layered textures at bottom of list)
 				if (chunk->tiles[x][y]->isGrass)
-					AddToBatchRendering(899, xPos, yPos, cellSize, ground);
+					AddToBatchRendering(grassID, xPos, yPos, cellSize, ground);
 				if (chunk->tiles[x][y]->isSand)
-					AddToBatchRendering(8, xPos, yPos, cellSize, ground);
+					AddToBatchRendering(sandID, xPos, yPos, cellSize, ground);
 
-				if (chunk->tiles[x][y]->isFlower1)
-					AddToBatchRendering(409, xPos, yPos, cellSize, onGround);;
 				if (chunk->tiles[x][y]->isDirt)
-					AddToBatchRendering(6, xPos, yPos, cellSize, ground);
+					AddToBatchRendering(dirtID, xPos, yPos, cellSize, ground);
 
 
 
 				if (chunk->tiles[x][y]->isStoneWall)
 					AddToBatchRendering(18, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isFlower1)
-					AddToBatchRendering(395, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(blueFlower, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isFlower2)
-					AddToBatchRendering(395, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(redFlower, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isBerryPlant)
-					AddToBatchRendering(530, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(redBerryBush, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isBush)
 					AddToBatchRendering(525, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isLongGrass)
@@ -124,11 +123,11 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 				else if (chunk->tiles[x][y]->isSnow)
 					AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isRock)
-					AddToBatchRendering(825, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(rockID, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isWood)
-					AddToBatchRendering(289, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(longWood, xPos, yPos, cellSize, onGround);
 				else if (chunk->tiles[x][y]->isStone)
-					AddToBatchRendering(58, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(stoneID, xPos, yPos, cellSize, onGround);
 
 
 				if (chunk->tiles[x][y]->isWheat)
@@ -191,12 +190,12 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 
 				if (chunk->tiles[x][y]->isTree)
 				{
-					AddToBatchRendering(631, xPos, yPos, cellSize, abovePlayer);
-					AddToBatchRendering(575, xPos, yPos - cellSize, cellSize, abovePlayer);
+					AddToBatchRendering(treeBottom, xPos, yPos, cellSize, onGround);
+					AddToBatchRendering(treeTop, xPos, yPos - cellSize, cellSize, abovePlayer);
 				}
 				//BUSH 815 - 830
 				//TREE - 575 - 631
-
+				//renderCellsAroundObject(renderer, level, chunk, x, y, xPos, yPos);
 
 
 				if (chunk->tiles[x][y]->isWoodFence)
@@ -219,6 +218,31 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 		}
 }
 
+void CellRendering::renderCellsAroundObject(SDL_Renderer* renderer, Level& level, std::shared_ptr<Chunk>& chunk, int& x, int& y, int& xPos, int& yPos)
+{
+	// Render Pools
+	int cellSize = level.getCellSize();
+	if (level.isCellInChunk(x, y - 1) && level.isCellInChunk(x, y + 1) && level.isCellInChunk(x - 1, y) && level.isCellInChunk(x + 1, y))
+	{
+		//
+		if (chunk->tiles[x][y]->isWater && chunk->tiles[x][y + 1]->isDirt && chunk->tiles[x][y - 1]->isWater && chunk->tiles[x + 1][y]->isWater && chunk->tiles[x - 1][y]->isWater)
+		{
+			//AddToBatchRendering(3, xPos, yPos, cellSize, abovePlayer);
+		}
+		
+		else if (chunk->tiles[x][y]->isWoodFence && chunk->tiles[x][y + 1]->isWoodFence && chunk->tiles[x][y - 1]->isWoodFence && chunk->tiles[x + 1][y]->isWoodFence && chunk->tiles[x - 1][y]->isWoodFence)
+		{
+
+		}
+		//WoodFenceCenter.render(renderer, xPos, yPos, cellSize, cellSize);
+		else
+		{
+
+		}
+		//WoodFenceSide.render(renderer, xPos, yPos, cellSize, cellSize);
+		
+	}
+}
 
 //! Renders the chunks of cells
 void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers)
@@ -229,7 +253,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	// Render all the cells in the chunks
 	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x - 1; i++)
 		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y - 1; j++)
-				RenderChunk(level,camera, gameSettings, level.World[i][j], renderer);
+				RenderChunk(level,camera, gameSettings, player, level.World[i][j], renderer);
 
 
 	// Batch render all the textures

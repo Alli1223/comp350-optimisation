@@ -20,23 +20,26 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 
 	// Set Window Size
 	gameSettings.getScreenResolution();
-	if (gameSettings.fullscreen)
+
+	gameSettings.WINDOW_HEIGHT;
+	gameSettings.WINDOW_WIDTH;
+	if (!gameSettings.fullscreen)
 	{
-		gameSettings.WINDOW_HEIGHT;
-		gameSettings.WINDOW_WIDTH;
-	}
-	else
-	{
-		gameSettings.WINDOW_HEIGHT /= 2;
+		gameSettings.WINDOW_HEIGHT /=2;
 		gameSettings.WINDOW_WIDTH /= 2;
 	}
+	
 
 	camera.WindowHeight = gameSettings.WINDOW_HEIGHT;
 	camera.WindowWidth = gameSettings.WINDOW_WIDTH;
 	camera.SetPos(0, 0);
 
 	// Create the window
-	window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+	if (gameSettings.fullscreen)
+		window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+	else
+		window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+
 	glContext = SDL_GL_CreateContext(window);
 	if (window == nullptr)
 		throw InitialisationError("SDL_CreateWindow failed");
@@ -63,7 +66,7 @@ Venture::~Venture()
 
 void Venture::run()
 {
-	terrainGen.setSeed(0123);
+	terrainGen.setSeed(321);
 
 	level.GenerateWorld(camera);
 
@@ -158,7 +161,7 @@ void Venture::run()
 		// Handle the input
 		input.HandleUserInput(renderer, level, player, camera, gameSettings, toolbar);
 
-
+		
 		//Player pos for camera lerp
 		glm::vec2 playerPos;
 		playerPos.x = player.getX() - camera.WindowWidth / 2;
@@ -185,6 +188,9 @@ void Venture::run()
 		toolbar.UpdateAndRenderToolbar(renderer, player, gameSettings);
 		player.craftingUI.renderCraftingMenu(renderer, player.inventory);
 
+
+		if(player.pathFinder.Path.size() > 0)
+			player.pathFinder.drawPath(player.pathFinder.Path, renderer, camera, level);
 
 		if (gameSettings.displayMouse)
 			mousePointer.render(renderer, mouseX + (gameSettings.mousePointerSize / 2), mouseY + (gameSettings.mousePointerSize / 2), gameSettings.mousePointerSize, gameSettings.mousePointerSize);

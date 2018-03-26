@@ -106,12 +106,12 @@ void ProceduralTerrain::generateGround(std::shared_ptr<Chunk>& chunk, int x, int
 {
 	float noiseX = chunk->tiles[x][y]->getX();
 	float noiseY = chunk->tiles[x][y]->getY();
+
+	// Layerd noise
 	double terrainElevation = Elevation.noise((double)noiseX / terrainNoiseOffest, (double)noiseY / terrainNoiseOffest, 0.0) * 20.0;
 	double terrainElevationTwo = ElevationLayerTwo.noise((double)noiseX / terrainNoiseOffest / 2.0, (double)noiseY / terrainNoiseOffest / 2.0, 0.0) * 20.0;
 	double terrainElevationThree = ElevationLayerThree.noise((double)noiseX, (double)noiseY, 0.0) * 20.0;
 	double sNoise = simNoise.noise(noiseX / 40, noiseY / 40);
-
-	
 
 	terrainElevation = sNoise + terrainElevationTwo + terrainElevation + terrainElevationThree + 2;
 	double climate = sin(chunk->tiles[x][y]->getY() / 500.0);

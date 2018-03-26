@@ -12,10 +12,17 @@ public:
 	int WINDOW_WIDTH = 800;
 	int WINDOW_HEIGHT = 600;
 
+	//! Save the players settings
 	void savePlayerSettings(Player& player);
+	Player getPlayerFromSave();
+	//! Save the level
 	void saveLevelData(Level& level);
 	Level loadGameFromSave(Level& level);
-	Player getPlayerFromSave();
+	
+
+	//! Whether the game will save the game when it closes
+	bool saveLevelOnExit = false;
+	bool savePlayerOnExit = true;
 
 	//! Get screen resolution
 	void getScreenResolution();
@@ -25,10 +32,10 @@ public:
 	//Timer used to update the caption
 	Timer fpsTimer;
 	float getAverageFPS() { return avgFPS; }
-	static const bool displayFPS = true;
+	static const bool displayFPS = false;
 	
 
-
+	//! amount of items in items
 	int amountOfWoodInTrees = 3;
 	int amountOfStoneInRocks = 3;
 
@@ -36,12 +43,13 @@ public:
 	UINT32 plantGrowSpeed = 10000;
 
 	//! Whether the game is fullscreen
-	bool fullscreen = true;
+	bool fullscreen = false;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
 	//! Main Menu toggle
-	bool mainMenu = true;
+	bool mainMenu = false;
 
+	//! The cell the mouse is hovering over
 	glm::vec2 mouseCellPos;
 
 	//TODO: implement UI scaling
@@ -50,9 +58,7 @@ public:
 	//! Whether the game uses networking and false if singleplayer
 	bool useNetworking = false;
 
-	//! Whether the game will save the game when it closes
-	bool saveLevelOnExit = true;
-	bool savePlayerOnExit = true;
+
 	//! Whether the game is running or not
 	bool running = true;
 	//! stores screen resolution

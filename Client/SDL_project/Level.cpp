@@ -27,6 +27,8 @@ void Level::CreateChunk(int initX, int initY)
 			if (cell.getY() > yMaxExplored)
 				yMaxExplored = cell.getY();
 
+			//cell.isLongGrass = true;
+
 			
 			auto sharedCell = std::make_shared<Cell>(cell);
 			chunk->tiles[x].push_back(sharedCell);

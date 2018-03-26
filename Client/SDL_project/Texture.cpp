@@ -126,7 +126,7 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int w
 		while (index > atlasTileWidth)
 		{
 			sourceY += atlasTileSize + 1;
-			index -= atlasTileWidth;
+			index -= atlasTileWidth + 1;
 		}
 		sourceX = index * atlasTileSize + index;
 

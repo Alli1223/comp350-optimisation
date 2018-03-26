@@ -41,7 +41,7 @@ public:
 
 private:
 	//! Seed values are random
-	int seed = 3210387;
+	int seed = 5432;
 	int forrestSeed = seed + 30;
 	int elevationSeed = seed + 36945;
 	int riverSeed = seed + 1255;

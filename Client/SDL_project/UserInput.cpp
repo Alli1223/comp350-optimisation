@@ -248,11 +248,26 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	// Use Action
 	if (toolbar.getSelectedItem().type.Resource != Item::ItemType::noResource)
 	{
-			//UseItemFromToolbar(player.getCellX(), player.getCellY(), toolbar, player, level, networkManager, gameSettings, renderer);
+		//UseItemFromToolbar(player.getCellX(), player.getCellY(), toolbar, player, level, networkManager, gameSettings, renderer);
 		int mouseX, mouseY = 0;
 		if (SDL_GetMouseState(&mouseX, &mouseY) & SDL_BUTTON(SDL_BUTTON_LEFT))
 		{
 			UseItemFromToolbar(gameSettings.mouseCellPos.x, gameSettings.mouseCellPos.y, toolbar, player, level, gameSettings, renderer);
+		}
+		if (SDL_GetMouseState(&mouseX, &mouseY) & SDL_BUTTON(SDL_BUTTON_RIGHT))
+		{
+			glm::vec2 eoffset;
+			glm::vec2 soffset;
+			glm::vec2 start;
+			//glm::vec2 end;
+			start.x = player.getCellX(), start.y = player.getCellY();
+			//end.x = gameSettings.mouseCellPos.x, end.y = gameSettings.mouseCellPos.y;
+
+
+			Point startPoint(start.x + eoffset.x + soffset.x, start.y + eoffset.y + soffset.y);
+			Point endPoint(gameSettings.mouseCellPos.x, gameSettings.mouseCellPos.y);
+			// add negative offset
+			player.pathFinder.findPath(level, startPoint, endPoint);
 		}
 		player.placeItemPos.x = gameSettings.mouseCellPos.x;
 		player.placeItemPos.y = gameSettings.mouseCellPos.y;
@@ -458,7 +473,6 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 			//dump celldata of where the player has changed the cell
 			std::string seralisedData = level.getCell(xPos, yPos)->getCellData().dump();
 			std::cout << seralisedData << std::endl;
-
 		}
 	}
 
@@ -497,6 +511,21 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 
 		}
 	}
+	// Place stone on ground
+	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSTONE)
+	{
+		//PlaceItemTexture.render(renderer, gameSettings.mouseCellPos.x, gameSettings.mouseCellPos.y, level.getCellSize(), level.getCellSize());
+		if (level.getCell(xPos, yPos)->isStone == false)
+		{
+			level.getCell(xPos, yPos)->isStone = true;
+
+			player.inventory.remove(toolbar.getToolbarSelection());
+			toolbar.removeToolbarItem(toolbar.getToolbarSelection());
+			std::string seralisedData = level.getCell(xPos, yPos)->getCellData().dump();
+			std::cout << seralisedData << std::endl;
+
+		}
+	}
 	
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isSTONEWALL)
 	{
@@ -524,5 +553,6 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 
 		}
 	}
+	
 	
 }

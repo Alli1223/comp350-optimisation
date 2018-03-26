@@ -25,7 +25,7 @@ void Pathfinder::addToOpenSet(std::shared_ptr<Node> node)
 	node->status = NodeStatus::Open;
 }
 
-std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Node> node, Level& level)
+std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Node> node)
 {
 	std::vector<std::shared_ptr<Node>> result;
 	// If the node is within the level
@@ -50,10 +50,10 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 				result.push_back(getOrCreateNode(node->point.getX() + 1, node->point.getY() - 1));
 				result.push_back(getOrCreateNode(node->point.getX() + 1, node->point.getY() + 1));
 			}
-
-			return result;
 		}
 	}
+	return result;
+
 }
 
 
@@ -84,6 +84,7 @@ std::shared_ptr<Node> Pathfinder::getOpenSetElementWithLowestScore()
 	std::shared_ptr<Node> result = nullptr;
 	double lowestFScore = 1e10;
 
+
 	for (auto column : nodes)
 	{
 		for (auto node : column)
@@ -103,17 +104,52 @@ std::shared_ptr<Node> Pathfinder::getOpenSetElementWithLowestScore()
 	return result;
 }
 
-std::vector<Point> Pathfinder::findPath(Level& level, const Point& start, const Point& goal)
+std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 {
 	// Clear all the node for fresh pathfind
 	nodes.clear();
 
 	std::cout << "Computing Path" << std::endl;
 
-	// Create nodes for every cell in the grid
-	for (int x = 0; x < level.tiles.size(); x++)
+	//start and end offset
+	glm::vec2 cellPos;
+
+	// Set offset to make path above 0
+	if (goal.getX() < 0)
 	{
-		nodes.push_back(std::vector<std::shared_ptr<Node>>(level.tiles.size(), nullptr));
+		negativePath = true;
+		eoffset.x = (goal.getX() * -1);
+	}
+	if (goal.getY() < 0)
+	{
+		negativePath = true;
+		eoffset.y = (goal.getX() * -1);
+	}
+	
+
+	if (start.getX() < 0)
+	{
+		eoffset.x = (start.getX() * -1);
+		negativePath = true;
+	}
+		
+	if (start.getX() < 0)
+	{
+		negativePath = true;
+		eoffset.y = (start.getX() * -1);
+	}
+		
+
+	start.adjustPosition(start.getX() + eoffset.x, start.getY() + eoffset.y);
+	goal.adjustPosition(goal.getX() + eoffset.x, goal.getY() + eoffset.y);
+	
+	int xWorldSize = 500;
+	int yWorldSize = 500;
+
+	// Create nodes for every cell in the grid
+	for (int x = 0; x < xWorldSize; x++)
+	{
+		nodes.push_back(std::vector<std::shared_ptr<Node>>(yWorldSize, nullptr));
 	}
 
 	auto startNode = getOrCreateNode(start);
@@ -138,10 +174,12 @@ std::vector<Point> Pathfinder::findPath(Level& level, const Point& start, const 
 		addToClosedSet(currentNode);
 
 		// Loops through each of the neighbours
-		for (auto neighbour : getNeighbours(currentNode, level))
+		for each (auto neighbour in getNeighbours(currentNode))
 		{
+			cellPos.x = neighbour->point.getX() - eoffset.x, cellPos.y = neighbour->point.getY() - eoffset.y;
 			//if the cell is a room and not in closed set and not on fire
-			if (level.tiles[neighbour->point.getX()][neighbour->point.getY()]->isWalkable && !level.tiles[neighbour->point.getX()][neighbour->point.getY()]->isWater && !isInClosedSet(neighbour->point) && level.tiles[neighbour->point.getX()][neighbour->point.getY()]->isDirt)
+			//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
+			if (!isInClosedSet(neighbour->point))
 			{
 
 				double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);
@@ -158,10 +196,10 @@ std::vector<Point> Pathfinder::findPath(Level& level, const Point& start, const 
 						addToOpenSet(neighbour);
 					}
 				}
-
 			}
 		}
-	}
+
+		}
 	//Return empty path if there is no route
 	std::vector<Point> EmptyPath;
 	return EmptyPath;
@@ -174,8 +212,12 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	// Goes back through the path and reconstruct it and then return the result
 	for (auto currentNode = goalNode; currentNode; currentNode = currentNode->cameFrom)
 	{
+		if(negativePath)
+			currentNode->point.adjustPosition(currentNode->point.getX() -eoffset.x, currentNode->point.getY() - eoffset.y);
 		result.insert(result.begin(), currentNode->point);
 	}
+	Path = result;
+	std::cout << "PathSize: " << result.size() << std::endl;
 	return result;
 }
 
@@ -248,4 +290,31 @@ bool Pathfinder::isPathObsructed(Level& level, Point firstPoint, Point secondPoi
 		}
 	}
 	return true;
+}
+
+void Pathfinder::drawPath( std::vector<Point>& path, SDL_Renderer* renderer, Camera& camera, Level& level)
+{
+	// Start at the start point
+	int lastX = 0;
+	int lastY = 0;
+	int cellSize = level.getCellSize();
+	// tileSize / 2 is added to all coordinates to put them in the centre of the tile
+
+	lastX = path[0].getX() * cellSize + cellSize / 2;
+	lastY = path[0].getY() * cellSize + cellSize / 2;
+
+	// Step through the path
+	for (const Point& point : path)
+	{
+		int nextX = point.getX() * cellSize + cellSize / 2;
+		int nextY = point.getY() * cellSize + cellSize / 2;
+
+		
+		nextX -= camera.getX();
+		nextY -= camera.getY();
+
+		SDL_RenderDrawLine(renderer, lastX, lastY, nextX, nextY);
+		lastX = nextX;
+		lastY = nextY;
+	}
 }

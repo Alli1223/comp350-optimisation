@@ -39,6 +39,8 @@ public:
 	int setJacketColour(int r, int g, int b) { return JacketColour.r = r, JacketColour.g = g, JacketColour.b = b; }
 	int setJeansColour(int r, int g, int b) { return JeansColour.r = r, JeansColour.g = g, JeansColour.b = b; }
 	Inventory inventory;
+
+	Pathfinder pathFinder;
 	
 private:
 	//! Json data to store player stats
