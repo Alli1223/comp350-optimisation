@@ -103,7 +103,9 @@ private:
 	std::shared_ptr<Node> getOrCreateNode(const Point& point);
 	bool isInClosedSet(Point& point);
 	bool negativePath = false;
-	glm::vec2 eoffset;
+	glm::vec2 offset;
+
+	int searchSize = 100;
 
 	//! A bool that enables stringpulling
 	bool StringPullPath = false;

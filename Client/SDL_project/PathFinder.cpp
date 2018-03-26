@@ -29,9 +29,9 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 {
 	std::vector<std::shared_ptr<Node>> result;
 	// If the node is within the level
-	if (node->point.getX() - 1 >= 0)
+	if (node->point.getX() - 1 >= 0 && node->point.getX() + 1 <= searchSize)
 	{
-		if (node->point.getY() - 1 >= 0)
+		if (node->point.getY() - 1 >= 0 && node->point.getY() + 1<= searchSize)
 		{
 			//left
 			result.push_back(getOrCreateNode(node->point.getX() - 1, node->point.getY()));
@@ -53,19 +53,23 @@ std::vector<std::shared_ptr<Node>> Pathfinder::getNeighbours(std::shared_ptr<Nod
 		}
 	}
 	return result;
-
 }
 
 
 std::shared_ptr<Node> Pathfinder::getOrCreateNode(int x, int y)
 {
-	auto result = nodes[x][y];
-	if (!result)
+	if (x < searchSize && y < searchSize)
 	{
-		result = std::make_shared<Node>(x, y);
-		nodes[x][y] = result;
+
+		auto result = nodes[x][y];
+		if (!result)
+		{
+			result = std::make_shared<Node>(x, y);
+			nodes[x][y] = result;
+		}
+
+		return result;
 	}
-	return result;
 }
 
 std::shared_ptr<Node> Pathfinder::getOrCreateNode(const Point& point)
@@ -118,38 +122,36 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 	if (goal.getX() < 0)
 	{
 		negativePath = true;
-		eoffset.x = (goal.getX() * -1);
+		offset.x = (goal.getX() * -1);
 	}
 	if (goal.getY() < 0)
 	{
 		negativePath = true;
-		eoffset.y = (goal.getX() * -1);
+		offset.y = (goal.getY() * -1);
 	}
 	
 
 	if (start.getX() < 0)
 	{
-		eoffset.x = (start.getX() * -1);
+		offset.x = (start.getX() * -1);
 		negativePath = true;
 	}
 		
-	if (start.getX() < 0)
+	if (start.getY() < 0)
 	{
 		negativePath = true;
-		eoffset.y = (start.getX() * -1);
+		offset.y = (start.getY() * -1);
 	}
 		
 
-	start.adjustPosition(start.getX() + eoffset.x, start.getY() + eoffset.y);
-	goal.adjustPosition(goal.getX() + eoffset.x, goal.getY() + eoffset.y);
+	start.adjustPosition(start.getX() + offset.x, start.getY() + offset.y);
+	goal.adjustPosition(goal.getX() + offset.x, goal.getY() + offset.y);
 	
-	int xWorldSize = 500;
-	int yWorldSize = 500;
 
 	// Create nodes for every cell in the grid
-	for (int x = 0; x < xWorldSize; x++)
+	for (int x = 0; x < searchSize; x++)
 	{
-		nodes.push_back(std::vector<std::shared_ptr<Node>>(yWorldSize, nullptr));
+		nodes.push_back(std::vector<std::shared_ptr<Node>>(searchSize, nullptr));
 	}
 
 	auto startNode = getOrCreateNode(start);
@@ -176,7 +178,7 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 		// Loops through each of the neighbours
 		for each (auto neighbour in getNeighbours(currentNode))
 		{
-			cellPos.x = neighbour->point.getX() - eoffset.x, cellPos.y = neighbour->point.getY() - eoffset.y;
+			cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
 			//if the cell is a room and not in closed set and not on fire
 			//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
 			if (!isInClosedSet(neighbour->point))
@@ -212,8 +214,9 @@ std::vector<Point> Pathfinder::reconstructPath(std::shared_ptr<Node> goalNode)
 	// Goes back through the path and reconstruct it and then return the result
 	for (auto currentNode = goalNode; currentNode; currentNode = currentNode->cameFrom)
 	{
+		// If the path is offset, reset it
 		if(negativePath)
-			currentNode->point.adjustPosition(currentNode->point.getX() -eoffset.x, currentNode->point.getY() - eoffset.y);
+			currentNode->point.adjustPosition(currentNode->point.getX() - offset.x, currentNode->point.getY() - offset.y);
 		result.insert(result.begin(), currentNode->point);
 	}
 	Path = result;
