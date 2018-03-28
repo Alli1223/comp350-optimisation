@@ -158,6 +158,8 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 			nodes.push_back(std::vector<std::shared_ptr<Node>>(searchSize, nullptr));
 		}
 
+
+
 		auto startNode = getOrCreateNode(start);
 		startNode->g = 0;
 		startNode->h = euclideanDistance(start, goal);
@@ -185,7 +187,7 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 				cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
 				//if the cell is a room and not in closed set and not on fire
 				//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
-				if (!isInClosedSet(neighbour->point))
+				if (!isInClosedSet(neighbour->point) && level.getCell(cellPos.x, cellPos.y)->isWalkable)
 				{
 
 					double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);
@@ -307,8 +309,45 @@ void Pathfinder::drawPath( std::vector<Point>& path, SDL_Renderer* renderer, Cam
 	int cellSize = level.getCellSize();
 	// tileSize / 2 is added to all coordinates to put them in the centre of the tile
 
-	lastX = path[0].getX() * cellSize + cellSize / 2;
-	lastY = path[0].getY() * cellSize + cellSize / 2;
+	lastX = (path[0].getX() * cellSize + cellSize / 2) - camera.getX();
+	lastY = (path[0].getY() * cellSize + cellSize / 2) - camera.getY();
+
+
+	if (debugPathfinderArea)
+	{
+		
+		glm::vec4 top;
+		top.x = 0;
+		top.y = 0;
+		top.z = nodes.size();
+		top.w = 0;
+		top *= cellSize;
+		top += 1;
+
+		glm::vec4 left;
+		left.y = nodes[0].size();
+		left *= cellSize;
+		left += 1;
+
+
+		SDL_RenderDrawLine(renderer, top.x, top.y, top.z, top.w);
+		SDL_RenderDrawLine(renderer, left.x, left.y, left.z, left.w);
+
+		SDL_RenderDrawLine(renderer, 0, 0, nodes.size(), 0);
+
+		for (auto colums : nodes)
+			for (auto node : colums)
+			{
+				SDL_Rect cell;
+				
+				getOrCreateNode(node->point);
+				cell.x = node->point.getX();
+				cell.y = node->point.getY();
+				cell.w = cellSize;
+				cell.h = cellSize;
+				SDL_RenderDrawRect(renderer, &cell);
+			}
+	}
 
 	// Step through the path
 	for (const Point& point : path)

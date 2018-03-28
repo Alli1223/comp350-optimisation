@@ -105,14 +105,14 @@ private:
 	bool offsetPath = false;
 	glm::vec2 offset;
 
-	int searchSize = 100;
+	int searchSize = 50;
+
+	bool debugPathfinderArea = true;
 
 	//! A bool that enables stringpulling
 	bool StringPullPath = false;
 	//! A bool that enables pathfinding to use diagonal paths
-	bool diagonalPaths = true;
-
-	bool canTraverseWater = false;
+	bool diagonalPaths = false;
 
 	bool OnlyUsePaths = true;
 

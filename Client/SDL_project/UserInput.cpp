@@ -534,7 +534,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 		if (level.getCell(xPos, yPos)->isStoneWall == false)
 		{
 			level.getCell(xPos, yPos)->isStoneWall = true;
-
+			level.getCell(xPos, yPos)->isWalkable = false;
 			player.inventory.remove(toolbar.getToolbarSelection());
 			toolbar.removeToolbarItem(toolbar.getToolbarSelection());
 			std::string seralisedData = level.getCell(xPos, yPos)->getCellData().dump();

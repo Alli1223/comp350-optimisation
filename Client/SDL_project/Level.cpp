@@ -115,7 +115,9 @@ std::shared_ptr<Cell>& Level::getCell(int cellX, int cellY)
 	}
 	if (isCellInChunk(cellX, cellY))
 	{
-		return World[chunkX][chunkY]->tiles[cellX][cellY];
+		if (World[chunkX][chunkY] != nullptr)
+			if (World[chunkX][chunkY]->tiles[cellX][cellY] != nullptr)
+				return World[chunkX][chunkY]->tiles[cellX][cellY];
 	}
 }
 
