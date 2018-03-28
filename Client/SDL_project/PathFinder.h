@@ -104,15 +104,16 @@ private:
 	bool isInClosedSet(Point& point);
 	bool offsetPath = false;
 	glm::vec2 offset;
+	Point startNode;
 
-	int searchSize = 50;
+	int searchSize = 10;
 
 	bool debugPathfinderArea = true;
 
 	//! A bool that enables stringpulling
 	bool StringPullPath = false;
 	//! A bool that enables pathfinding to use diagonal paths
-	bool diagonalPaths = false;
+	bool diagonalPaths = true;
 
 	bool OnlyUsePaths = true;
 

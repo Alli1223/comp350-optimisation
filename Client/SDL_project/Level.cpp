@@ -118,6 +118,13 @@ std::shared_ptr<Cell>& Level::getCell(int cellX, int cellY)
 		if (World[chunkX][chunkY] != nullptr)
 			if (World[chunkX][chunkY]->tiles[cellX][cellY] != nullptr)
 				return World[chunkX][chunkY]->tiles[cellX][cellY];
+			else
+			{
+				CreateChunk(chunkX, chunkY);
+				proceduralTerrain.populateTerrain(World[chunkX][chunkY]);
+				std::cout << "Cell not in valid chunk, creating chunk: " << chunkX << ", " << chunkY << std::endl;
+				return World[chunkX][chunkY]->tiles[cellX][cellY];
+			}
 	}
 }
 

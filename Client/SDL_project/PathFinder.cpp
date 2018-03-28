@@ -121,6 +121,7 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 
 		//start and end offset
 		glm::vec2 cellPos;
+		startNode = start;
 
 		// Set offset to make path above 0
 		if (goal.getX() < 0)
@@ -147,11 +148,19 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 			offset.y += (start.getY() * -1);
 		}
 
+		//offset += euclideanDistance(start, goal) * 2;
+		
+
 
 		start.adjustPosition(start.getX() + offset.x, start.getY() + offset.y);
 		goal.adjustPosition(goal.getX() + offset.x, goal.getY() + offset.y);
+		//startNode = start;
 
-
+		//change searchSize based on distance between target
+		searchSize = euclideanDistance(start, goal);
+		if (searchSize <= 0)
+			searchSize = 10;
+		std::cout << "SearchSize: " << searchSize << std::endl;
 		// Create nodes for every cell in the grid
 		for (int x = 0; x < searchSize; x++)
 		{
@@ -161,47 +170,50 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 
 
 		auto startNode = getOrCreateNode(start);
-		startNode->g = 0;
-		startNode->h = euclideanDistance(start, goal);
-		startNode->cameFrom = nullptr;
-		addToOpenSet(startNode);
-
-
-		// Chooses the best neighbour cell to move to
-		while (auto currentNode = getOpenSetElementWithLowestScore())
+		if (startNode != nullptr)
 		{
-			//if the current cell is the goal, make the path
-			if (currentNode->point.getX() == goal.getX() && currentNode->point.getY() == goal.getY())
-			{
-				if (StringPullPath)
-					return StringPulling(reconstructPath(currentNode), level);
-				else
-					return reconstructPath(currentNode);
-			}
+			startNode->g = 0;
+			startNode->h = euclideanDistance(start, goal);
+			startNode->cameFrom = nullptr;
+			addToOpenSet(startNode);
 
-			addToClosedSet(currentNode);
 
-			// Loops through each of the neighbours
-			for each (auto neighbour in getNeighbours(currentNode))
+			// Chooses the best neighbour cell to move to
+			while (auto currentNode = getOpenSetElementWithLowestScore())
 			{
-				cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
-				//if the cell is a room and not in closed set and not on fire
-				//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
-				if (!isInClosedSet(neighbour->point) && level.getCell(cellPos.x, cellPos.y)->isWalkable)
+				//if the current cell is the goal, make the path
+				if (currentNode->point.getX() == goal.getX() && currentNode->point.getY() == goal.getY())
 				{
+					if (StringPullPath)
+						return StringPulling(reconstructPath(currentNode), level);
+					else
+						return reconstructPath(currentNode);
+				}
 
-					double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);
+				addToClosedSet(currentNode);
 
-					if (neighbour->status != NodeStatus::Open || gTentative < neighbour->g)
+				// Loops through each of the neighbours
+				for each (auto neighbour in getNeighbours(currentNode))
+				{
+					cellPos.x = neighbour->point.getX() - offset.x, cellPos.y = neighbour->point.getY() - offset.y;
+					//if the cell is a room and not in closed set and not on fire
+					//level.getCell(cellPos.x, cellPos.y)->isWalkable && !level.getCell(cellPos.x, cellPos.y)->isWater && 
+					if (!isInClosedSet(neighbour->point))
 					{
-						neighbour->g = gTentative;
-						neighbour->h = euclideanDistance(neighbour->point, goal);
-						neighbour->cameFrom = currentNode;
 
+						double gTentative = currentNode->g + euclideanDistance(neighbour->point, goal);
 
-						if (neighbour->status != NodeStatus::Open)
+						if (neighbour->status != NodeStatus::Open || gTentative < neighbour->g)
 						{
-							addToOpenSet(neighbour);
+							neighbour->g = gTentative;
+							neighbour->h = euclideanDistance(neighbour->point, goal);
+							neighbour->cameFrom = currentNode;
+
+
+							if (neighbour->status != NodeStatus::Open)
+							{
+								addToOpenSet(neighbour);
+							}
 						}
 					}
 				}
@@ -301,7 +313,7 @@ bool Pathfinder::isPathObsructed(Level& level, Point firstPoint, Point secondPoi
 	return true;
 }
 
-void Pathfinder::drawPath( std::vector<Point>& path, SDL_Renderer* renderer, Camera& camera, Level& level)
+void Pathfinder::drawPath(std::vector<Point>& path, SDL_Renderer* renderer, Camera& camera, Level& level)
 {
 	// Start at the start point
 	int lastX = 0;
@@ -312,34 +324,25 @@ void Pathfinder::drawPath( std::vector<Point>& path, SDL_Renderer* renderer, Cam
 	lastX = (path[0].getX() * cellSize + cellSize / 2) - camera.getX();
 	lastY = (path[0].getY() * cellSize + cellSize / 2) - camera.getY();
 
-
 	if (debugPathfinderArea)
 	{
-		
-		glm::vec4 top;
-		top.x = 0;
-		top.y = 0;
-		top.z = nodes.size();
-		top.w = 0;
-		top *= cellSize;
-		top += 1;
 
-		glm::vec4 left;
-		left.y = nodes[0].size();
-		left *= cellSize;
-		left += 1;
+		SDL_Rect area;
+		area.x = startNode.getX() - (offset.x * cellSize);
+		area.y = startNode.getY() - (offset.y * cellSize);
+		area.x -= camera.getX();
+		area.y -= camera.getY();
 
+		area.w = nodes.size() * cellSize;
+		area.h = nodes[0].size() * cellSize;
 
-		SDL_RenderDrawLine(renderer, top.x, top.y, top.z, top.w);
-		SDL_RenderDrawLine(renderer, left.x, left.y, left.z, left.w);
-
-		SDL_RenderDrawLine(renderer, 0, 0, nodes.size(), 0);
-
+		SDL_RenderDrawRect(renderer, &area);
+		/*
 		for (auto colums : nodes)
 			for (auto node : colums)
 			{
 				SDL_Rect cell;
-				
+
 				getOrCreateNode(node->point);
 				cell.x = node->point.getX();
 				cell.y = node->point.getY();
@@ -347,6 +350,7 @@ void Pathfinder::drawPath( std::vector<Point>& path, SDL_Renderer* renderer, Cam
 				cell.h = cellSize;
 				SDL_RenderDrawRect(renderer, &cell);
 			}
+			*/
 	}
 
 	// Step through the path
@@ -355,7 +359,7 @@ void Pathfinder::drawPath( std::vector<Point>& path, SDL_Renderer* renderer, Cam
 		int nextX = point.getX() * cellSize + cellSize / 2;
 		int nextY = point.getY() * cellSize + cellSize / 2;
 
-		
+
 		nextX -= camera.getX();
 		nextY -= camera.getY();
 

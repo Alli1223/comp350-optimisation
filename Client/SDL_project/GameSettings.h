@@ -32,7 +32,7 @@ public:
 	//Timer used to update the caption
 	Timer fpsTimer;
 	float getAverageFPS() { return avgFPS; }
-	static const bool displayFPS = true;
+	static const bool displayFPS = false;
 	
 
 	//! amount of items in items
