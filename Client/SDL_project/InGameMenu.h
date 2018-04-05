@@ -18,7 +18,8 @@ public:
 
 	Texture background;
 
-	int buttonSize = 100;
+	int buttonSizeX = 100;
+	int buttonSizeY = 50;
 	Timer timeout;
 
 	bool isOpen;

@@ -20,11 +20,11 @@ void InGameMenu::render(SDL_Renderer* renderer, GameSettings& gameSettings)
 	background.alterTransparency(200);
 	background.alterTextureColour(200, 100, 50);
 	background.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 2, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT);
-	Exit.render(renderer, gameSettings.WINDOW_WIDTH / 2 - buttonSize, gameSettings.WINDOW_HEIGHT / 2, buttonSize, buttonSize);
-	Save.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 2, buttonSize, buttonSize);
-	Fullscreen.render(renderer, gameSettings.WINDOW_WIDTH / 2 + buttonSize * 2, gameSettings.WINDOW_HEIGHT / 2 - (buttonSize / 2), buttonSize * 2, buttonSize);
+	Exit.render(renderer, gameSettings.WINDOW_WIDTH / 2 - buttonSizeX, gameSettings.WINDOW_HEIGHT / 2, buttonSizeX, buttonSizeY);
+	Save.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 2, buttonSizeX, buttonSizeY);
+	Fullscreen.render(renderer, gameSettings.WINDOW_WIDTH / 2 + buttonSizeX * 2, gameSettings.WINDOW_HEIGHT / 2 - (buttonSizeX / 2), buttonSizeX, buttonSizeY);
 	//Windowed.render(renderer, gameSettings.WINDOW_WIDTH / 2 + buttonSize * 2, gameSettings.WINDOW_HEIGHT / 2 + (buttonSize / 2), buttonSize * 2, buttonSize);
-	MainMenu.render(renderer, gameSettings.WINDOW_WIDTH / 2 + buttonSize * 2, gameSettings.WINDOW_HEIGHT / 2 + (buttonSize / 2), buttonSize * 2, buttonSize);
+	MainMenu.render(renderer, gameSettings.WINDOW_WIDTH / 2 + buttonSizeX * 2, gameSettings.WINDOW_HEIGHT / 2 + (buttonSizeX / 2), buttonSizeX, buttonSizeY);
 	if (Exit.isPressed())
 	{
 		gameSettings.saveLevelOnExit = false;
