@@ -157,11 +157,10 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 		//startNode = start;
 
 		//change searchSize based on distance between target
-		//searchSize = euclideanDistance(start, goal) * 2;
+		//searchSize = euclideanDistance(start, goal) * 2 + 10;
 		//std::cout << "SearchSize: " << searchSize << std::endl;
-		//std::cout << "Second Pos: " << start.getX() << "," << start.getY() << " End: " << goal.getX() << "," << goal.getY() << std::endl;
 		//if (searchSize <= 0)
-			//searchSize = 10;
+		//	searchSize = 10;
 		
 		// Create nodes for every cell in the grid
 		for (int x = 0; x < searchSize; x++)
