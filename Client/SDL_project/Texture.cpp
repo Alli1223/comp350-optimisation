@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Texture.h"
 #include "InitialisationError.h"
-
+#include "HSL.h"
 /*
 Texture class that manages the rendering of textures in the game
 */
@@ -22,7 +22,7 @@ void Texture::render(SDL_Renderer* renderer, int x, int y, int width, int height
 	if (!texture)
 	{
 		texture = IMG_LoadTexture(renderer, fileName.c_str());
-
+		
 
 		if (!texture)
 		{
@@ -74,12 +74,61 @@ void Texture::renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int d
 		}
 	}
 	SDL_Rect srcrect = { sourceX, sourceY, pixelSize, pixelSize };
+
+
+	SDL_Rect dstrect = { destX, destY, pixelSize, pixelSize };
+	dstrect.w = renderSize;
+	dstrect.h = renderSize;
+	dstrect.x = destX - dstrect.w / 2;
+	dstrect.y = destY - dstrect.h / 2;
+
+	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
+}
+void Texture::renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int destX, int destY, int pixelSize, int renderSize, bool flipHorizontal)
+{
+	if (!texture)
+	{
+		texture = IMG_LoadTexture(renderer, fileName.c_str());
+
+
+		if (!texture)
+		{
+			throw InitialisationError("IMG_LoadTexture failed");
+		}
+	}
+	SDL_Rect srcrect = { sourceX, sourceY, pixelSize, pixelSize };
+
+	
 	SDL_Rect dstrect = { destX, destY, pixelSize, pixelSize };
 	dstrect.w = renderSize;
 	dstrect.h = renderSize;
 	dstrect.x = destX  - dstrect.w / 2;
 	dstrect.y = destY - dstrect.h / 2;
 
+	if(flipHorizontal)
+		SDL_RenderCopyEx(renderer, texture, &srcrect, &dstrect, 0, 0, SDL_FLIP_HORIZONTAL);
+	else
+		SDL_RenderCopyEx(renderer, texture, &srcrect, &dstrect, 0, 0, SDL_FLIP_NONE);
+}
+
+void Texture::renderLight(SDL_Renderer* renderer, int sourceX, int sourceY, int destX, int destY, int pixelSize, int renderSize)
+{
+	if (!texture)
+	{
+		texture = IMG_LoadTexture(renderer, fileName.c_str());
+
+
+		if (!texture)
+		{
+			throw InitialisationError("IMG_LoadTexture failed");
+		}
+	}
+	SDL_Rect srcrect = { sourceX, sourceY, pixelSize, pixelSize };
+	SDL_Rect dstrect = { destX, destY, pixelSize, pixelSize };
+	dstrect.w = renderSize;
+	dstrect.h = renderSize;
+	dstrect.x = destX - dstrect.w / 2;
+	dstrect.y = destY - dstrect.h / 2;
 
 	SDL_RenderCopy(renderer, texture, &srcrect, &dstrect);
 }
@@ -148,7 +197,23 @@ void Texture::alterTransparency(int transparencyLevel)
 	SDL_SetTextureAlphaMod(texture, transparencyLevel);
 }
 
+void Texture::alterTextureColour(SDL_Color& color)
+{
+
+	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
+}
+void Texture::alterTextureColour(SDL_Color& color, int hueChange)
+{
+	HSL hsl;
+	hsl.TurnToHSL(color);
+	hsl.Hue += hueChange;
+	SDL_Color changedColour = hsl.TurnToRGB();
+	SDL_SetTextureColorMod(texture, changedColour.r, changedColour.g, changedColour.b);
+}
+
 void Texture::alterTextureColour(int r, int g, int b)
 {
+	
 	SDL_SetTextureColorMod(texture, r, g, b);
 }
+

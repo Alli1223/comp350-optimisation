@@ -64,20 +64,11 @@
     <ClCompile Include="Character.cpp">
       <Filter>Source Files\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Venture.cpp">
-      <Filter>Source Files\Main Game Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Chunk.cpp">
       <Filter>Source Files\Level Classes</Filter>
     </ClCompile>
     <ClCompile Include="SimplexNoise.cpp">
       <Filter>Source Files\Level Classes\PCG</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files\Main Game Classes</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\GUI</Filter>
@@ -96,6 +87,27 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameMenu.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GameUI.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ColourSlider.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="HSL.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Venture.cpp">
+      <Filter>Source Files\Main Game Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,17 +183,11 @@
     <ClInclude Include="Player.h">
       <Filter>Headers\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Venture.h">
-      <Filter>Headers\Main Game Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Chunk.h">
       <Filter>Headers\Level Classes</Filter>
     </ClInclude>
     <ClInclude Include="SimplexNoise.h">
       <Filter>Headers\Level Classes\PCG</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Headers\Main Game Classes</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Headers\GUI</Filter>
@@ -200,6 +206,27 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Headers\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Headers\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameMenu.h">
+      <Filter>Headers\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUI.h">
+      <Filter>Headers\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteLocations.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ColourSlider.h">
+      <Filter>Headers\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="HSL.h">
+      <Filter>Headers\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Venture.h">
+      <Filter>Headers\Main Game Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

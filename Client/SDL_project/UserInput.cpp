@@ -41,7 +41,7 @@ bool UserInput::CheckIfCellIsWalkable(Level& level, int x, int y)
 		return true;
 }
 
-void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& player, Camera& camera, GameSettings& gameSettings, ToolBar& toolbar)
+void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& player, Camera& camera, GameSettings& gameSettings, ToolBar& toolbar, GameUI& UI)
 {
 	int cellSize = level.getCellSize();
 	//SDL_JoystickEventState(SDL_ENABLE);
@@ -97,11 +97,23 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_ESCAPE])
-		gameSettings.running = false;
+	{
+		if (UI.gameMenu.timeout.getTicks() > 500)
+		{
+			if (gameSettings.inGameMenu)
+				gameSettings.inGameMenu = false;
+			else
+				gameSettings.inGameMenu = true;
+			UI.gameMenu.timeout.restart();
+		}
+	}
+		
+
+	float deltaTime = gameSettings.deltaTime;
 
 	int playerX = player.getX();
 	int playerY = player.getY();
-	int playerSpeed = player.getSpeed();
+	float playerSpeed = player.getSpeed() * deltaTime;
 	playerChunkPos = player.chunkPos;
 	playercellPos = player.cellPos;
 	/////////// PLAYER MOVEMENT ////////////
@@ -111,7 +123,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 		//player.setTargetRotation(225);
 		player.setTargetRotation(270);
 		player.setPlayerMoving(true);
-		if(CheckIfCellIsWalkable(level, playerX + playerSpeed, playerY - playerSpeed))
+		if(CheckIfCellIsWalkable(level, (playerX + playerSpeed), playerY - playerSpeed))
 			player.setPosition(playerX + playerSpeed, playerY - playerSpeed);
 	}
 	else if (state[SDL_SCANCODE_W] && state[SDL_SCANCODE_A])
@@ -172,9 +184,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	{
 		player.setSpeed(0);
 		player.setPlayerMoving(false);
-		player.setTargetRotation(0);
-		//Reset the walk animation
-		player.getWalkAnimation().setCurrentFrame(0);
+		//player.setTargetRotation(0);
 	}
 
 
@@ -220,6 +230,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	}
 	if (state[SDL_SCANCODE_UP])
 	{
+		player.setSpeed(player.getSpeed() + 1.0);
 		//std::cout << player.inventory.getCurrentSize() << " " << std::endl;
 	}
 

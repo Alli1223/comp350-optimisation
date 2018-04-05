@@ -13,8 +13,13 @@ public:
 	
 	//! Render the player
 	void RenderPlayer(SDL_Renderer* renderer, Camera& camera);
+	void RenderPlayerNew(SDL_Renderer* renderer, Camera& camera);
 	//! Renders the characters clothes
 	void renderCharacterClothes(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize);
+	void renderCharacterBody(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize, bool flipSprite);
+	//! Move the player to the position
+	void Player::Move();
+
 
 	json getPlayerJson();
 	
@@ -32,14 +37,19 @@ public:
 	Animation getWalkAnimation() { return walkHorizontalAnimation; }
 	SDL_Color gethairColour() { return hairColour; }
 	SDL_Color getEyeColour() { return eyeColour; }
-	SDL_Color getJacketColour() { return JacketColour; }
-	SDL_Color getJeansColour() { return JeansColour; }
+	SDL_Color getJacketColour() { return jacketColour; }
+	SDL_Color getJeansColour() { return jeansColour; }
+	SDL_Color getBodyColour() { return bodyColour; }
 	int setHairColour(int r, int g, int b) { return hairColour.r = r, hairColour.g = g, hairColour.b = b; }
 	int setEyeColour(int r, int g, int b) { return eyeColour.r = r, eyeColour.g = g, eyeColour.b = b; }
-	int setJacketColour(int r, int g, int b) { return JacketColour.r = r, JacketColour.g = g, JacketColour.b = b; }
-	int setJeansColour(int r, int g, int b) { return JeansColour.r = r, JeansColour.g = g, JeansColour.b = b; }
-	Inventory inventory;
+	int setJacketColour(int r, int g, int b) { return jacketColour.r = r, jacketColour.g = g, jacketColour.b = b; }
+	int setJeansColour(int r, int g, int b) { return jeansColour.r = r, jeansColour.g = g, jeansColour.b = b; }
+	int setBodyColour(int r, int g, int b) { return bodyColour.r = r, bodyColour.g = g, bodyColour.b = b; }
+	SDL_Color setBodyColour(SDL_Color colour) { return bodyColour = colour; }
+	SDL_Color setEyeColour(SDL_Color colour) { return eyeColour = colour; }
+	SDL_Color setHairColour(SDL_Color colour) { return hairColour = colour; }
 
+	Inventory inventory;
 	Pathfinder pathFinder;
 	
 private:
@@ -48,15 +58,65 @@ private:
 	//! Whether the player is able to move
 	bool playerCanMove = true;
 	//! Pixel size of the player sprite in the spritesheet
-	int pixelSize = 32;
+	int pixelSize = 64;
 	//! Default colours
 	SDL_Color hairColour = { 255,255,255 };
 	SDL_Color eyeColour = { 255,255,255 };
-	SDL_Color JacketColour = { 255,255,255 };
-	SDL_Color JeansColour = { 255,255,255 };
+	SDL_Color jacketColour = { 255,255,255 };
+	SDL_Color jeansColour = { 255,255,255 };
+
+	SDL_Color bodyColour = { 255,224,189 };
 	//! Texture locations
 	std::string characterTextureLocation = "Resources\\Sprites\\Character\\";
 	std::string clothesTextureLocation = "Resources\\Sprites\\Character\\Clothes\\";
+
+	std::string CharacterTextureLocation = "Resources\\Characters\\";
+	std::string CharacterEarsTextureLocation = "Resources\\Characters\\Accessories\\Ears\\";
+	std::string CharacterEyesTextureLocation = "Resources\\Characters\\Accessories\\Eyes\\";
+	std::string CharacterHairTextureLocation = "Resources\\Characters\\Accessories\\Hair\\";
+
+	//! Gender Textures
+	Texture male;
+	Texture female;
+
+	//! Ear Textures
+	Texture aquaticEar;
+	Texture catEar1;
+	Texture catEar2;
+	Texture elfEar1;
+	Texture elfEar2;
+	Texture elfEar3;
+	Texture elfEar4;
+	Texture elfEar5;
+	Texture elfEar6;
+	Texture human;
+
+	Texture eye1;
+	Texture eye2;
+	Texture eye3;
+	Texture eye4;
+	Texture eye5;
+	Texture eye6;
+	Texture eye7;
+	Texture eye8;
+	Texture eye9;
+	Texture eye10;
+	Texture eye11;
+	Texture eye12;
+	Texture eye13;
+
+	Texture hair1;
+	Texture hair2;
+	Texture hair3;
+	Texture hair4;
+	Texture hair5;
+	Texture hair6;
+	Texture hair7;
+	Texture hair8;
+
+
+	//!Shadow
+	Texture playerShadow;
 
 	//! Texture for the Character
 	Texture characterIdleTexture;

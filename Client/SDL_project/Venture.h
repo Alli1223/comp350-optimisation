@@ -20,6 +20,7 @@
 #include "Menu.h"
 #include "InventoryUI.h"
 #include "CraftingUI.h"
+#include "GameUI.h"
 
 
 //! The main class
@@ -42,15 +43,15 @@ public:
 	GameSettings gameSettings;
 	Map mapLoader;
 	Cell cell;
-	ToolBar toolbar;
 	CellRendering cellrenderer;
 	ProceduralTerrain terrainGen;
 	Camera camera;
 	UserInput input;
 	Player player;
+	GameUI UI;
 	
 	
-
+	bool needsRestart = false;
 	
 
 	//! Vector of all other players names in the game

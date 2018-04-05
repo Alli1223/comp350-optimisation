@@ -16,11 +16,18 @@ public:
 
 	void addDelay(int delayTime, int animationRunTime);
 
+	int setAnimationAtlasPosition(int X, int Y) { return x = X, y = Y; }
+	int getX() { return x; }
+	int getY() { return y; }
 private:
 	int currentFrame;
 	int frameInc;
 	int frameRate;
 	long oldTime;
 	int startTime;
+
+	int x;
+	int y;
+
 };
 

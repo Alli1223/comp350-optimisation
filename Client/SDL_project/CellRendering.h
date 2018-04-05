@@ -26,7 +26,7 @@ public:
 	bool renderStats = false;
 	//! If the game has darkness
 	bool isThereDarkness = true;
-
+	
 private:
 	//Target Darkness
 	float Tdarkness;
@@ -49,8 +49,10 @@ private:
 	Texture hungerBarTexture;
 	Texture tiredBarTexture;
 	Texture oxygenBarTexture;
+	Texture light;
+	Texture lightsBackground;
 
-	//TODO: load json file containing the array of different texture IDs
+	//TODO: load json file containing the array of different texture IDs //56 cells long
 	int grassID = 5;
 	int dirtID = 6;
 	int sandID = 8;
@@ -70,7 +72,19 @@ private:
 
 	int treeTop = 583;
 	int treeBottom = 640;
-	
+
+	int waterTopLeft = 2;
+	int waterTopMiddle = 3;
+	int waterTopRight = 4;
+
+	int waterMiddleLeft = 59;
+	int waterMiddle = 60;
+	int waterMiddleRight = 61;
+
+
+	int waterBottomLeft = 114;
+	int waterBottomMiddle = 115;
+	int waterBottomRight = 116;
 
 	//! Atlas textures
 	Texture terrainAtlas;

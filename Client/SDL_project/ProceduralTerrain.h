@@ -38,6 +38,7 @@ public:
 	void ProceduralTerrain::spawnRandomVegetation(std::shared_ptr<Chunk>& chunk);
 	//! Generate the ground based of the elevation and climate
 	void ProceduralTerrain::generateGround(std::shared_ptr<Chunk>& chunk, int x, int y);
+	void ProceduralTerrain::GenerateCellOrientations(std::shared_ptr<Chunk>& chunk, int& x, int& y);
 
 private:
 	//! Seed values are random

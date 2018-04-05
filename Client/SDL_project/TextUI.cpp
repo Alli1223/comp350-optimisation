@@ -22,19 +22,19 @@ void TextUI::render(SDL_Renderer* renderer, std::string text, int x, int y, int 
 		
 		textContent = text;
 
-		TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\OpenSans.ttf", height);
+		TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\pixelart.ttf", height);
 		if (FontType == "Ostrich")
 		{
-			TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\ostrich.ttf", height);
+			TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\pixelart.ttf", height);
 		}
 		else if (FontType == "Sans")
 		{
-			TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\OpenSans.ttf", height);
+			TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\pixelart.ttf", height);
 		}
 		//Default to sans
 		else
 		{
-			TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\OpenSans.ttf", height);
+			TTF_Font* font = TTF_OpenFont("Resources\\Fonts\\pixelart.ttf", height);
 		}
 		// Create texture from surface
 		SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, text.c_str(), Colour);

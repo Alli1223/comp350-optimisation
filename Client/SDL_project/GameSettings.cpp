@@ -114,13 +114,17 @@ Player GameSettings::getPlayerFromSave()
 	Player existingPlayer;
 	std::string line;
 	std::ifstream readPlayerSave(playerSavePath);
-	if (readPlayerSave.is_open())
+	try
 	{
-		while (std::getline(readPlayerSave, line))
+
+
+		if (readPlayerSave.is_open())
 		{
-			//saveData = line;
-			json jsonData = json::parse(line.begin(), line.end());;
-			json playerData = jsonData.at("PlayerData");
+			while (std::getline(readPlayerSave, line))
+			{
+				//saveData = line;
+				json jsonData = json::parse(line.begin(), line.end());;
+				json playerData = jsonData.at("PlayerData");
 
 				// Player movement
 				int x = playerData.at("X").get<int>();
@@ -130,24 +134,40 @@ Player GameSettings::getPlayerFromSave()
 				bool isMoving = playerData.at("isMoving").get<bool>();
 
 				// Player clothes
+
+				// ints for converting the json enums
 				int headWear;
 				int bodyWear;
 				int legWear;
+				int EarType;
+				int EyeType;
+				int gender;
 
 				// Check to see if the data is there
 				if (playerData.count("headWear") > 0)
 				{
 					headWear = playerData.at("headWear").get<int>();
 				}
-				if (playerData.count("headWear") > 0)
+				if (playerData.count("bodyWear") > 0)
 				{
 					bodyWear = playerData.at("bodyWear").get<int>();
 				}
-				if (playerData.count("headWear") > 0)
+				if (playerData.count("bodyWear") > 0)
 				{
 					legWear = playerData.at("legWear").get<int>();
 				}
-				
+				if (playerData.count("eyeType") > 0)
+				{
+					EyeType = playerData.at("eyeType").get<int>();
+				}
+				if (playerData.count("earType") > 0)
+				{
+					EarType = playerData.at("earType").get<int>();
+				}
+				if (playerData.count("gender") > 0)
+				{
+					gender = playerData.at("gender").get<int>();
+				}
 				json hairColour = playerData.at("hairColour");
 				int hr = hairColour.at("r").get<int>();
 				int hg = hairColour.at("g").get<int>();
@@ -156,27 +176,40 @@ Player GameSettings::getPlayerFromSave()
 				int er = eyeColour.at("r").get<int>();
 				int eg = eyeColour.at("g").get<int>();
 				int eb = eyeColour.at("b").get<int>();
-				json bodyColour = playerData.at("bodyColour");
-				int br = bodyColour.at("r").get<int>();
-				int bg = bodyColour.at("g").get<int>();
-				int bb = bodyColour.at("b").get<int>();
+				json upperClothesColour = playerData.at("upperClothesColour");
+				int jr = upperClothesColour.at("r").get<int>();
+				int jg = upperClothesColour.at("g").get<int>();
+				int jb = upperClothesColour.at("b").get<int>();
 				json legsColour = playerData.at("legColour");
 				int lr = legsColour.at("r").get<int>();
 				int lg = legsColour.at("g").get<int>();
 				int lb = legsColour.at("b").get<int>();
-				
+				json bodyColour = playerData.at("bodyColour");
+				int br = bodyColour.at("r").get<int>();
+				int bg = bodyColour.at("g").get<int>();
+				int bb = bodyColour.at("b").get<int>();
 				existingPlayer.setEyeColour(er, eg, eb);
 				existingPlayer.setHairColour(hr, hg, hb);
 				existingPlayer.setJacketColour(br, bg, bb);
 				existingPlayer.setJeansColour(lr, lg, lb);
+				existingPlayer.setBodyColour(br, bg, bb);
 
+				existingPlayer.body.gender = (Player::Body::Gender)gender;
+				existingPlayer.body.earType = (Player::Body::EarType)EarType;
+				existingPlayer.body.eyeType = (Player::Body::EyeType)EyeType;
 				existingPlayer.PlayerClothes.head = (Player::Clothing::HeadWear)headWear;
 				existingPlayer.PlayerClothes.body = (Player::Clothing::BodyWear)bodyWear;
 				existingPlayer.PlayerClothes.leg = (Player::Clothing::LegWear)legWear;
 				existingPlayer.setPlayerMoving(isMoving);
+
+			}
+
+			readPlayerSave.close();
 		}
-		
-		readPlayerSave.close();
+	}
+	catch (std::exception e)
+	{
+		printf("Error getting saved player %s", e.what());
 	}
 	return existingPlayer;
 }

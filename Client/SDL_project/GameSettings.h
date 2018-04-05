@@ -24,6 +24,7 @@ public:
 	bool saveLevelOnExit = true;
 	bool savePlayerOnExit = true;
 
+	bool restartGame = false;
 	//! Get screen resolution
 	void getScreenResolution();
 	//! Calculate FPS
@@ -33,7 +34,11 @@ public:
 	Timer fpsTimer;
 	float getAverageFPS() { return avgFPS; }
 	static const bool displayFPS = false;
-	
+
+
+	Uint32 elapsedTime = 0;
+	Uint32 lastFrameTimeElapsed = 0;
+	float deltaTime = 0;
 
 	//! amount of items in items
 	int amountOfWoodInTrees = 3;
@@ -43,12 +48,15 @@ public:
 	UINT32 plantGrowSpeed = 10000;
 
 	//! Whether the game is fullscreen
-	bool fullscreen = false;
+	bool fullscreen = true;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
+
 	//! Main Menu toggle
 	bool mainMenu = true;
+	bool inGameMenu = false;
 
+	bool gotoMainMenu = false;
 	//! The cell the mouse is hovering over
 	glm::vec2 mouseCellPos;
 
@@ -70,8 +78,8 @@ private:
 	std::ofstream playerSave;
 	std::ofstream levelSave;
 
-	std::string levelSavePath = "Resources\\SaveData\\levelData.txt";
-	std::string playerSavePath = "Resources\\SaveData\\playerData.txt";
+	std::string levelSavePath = "Resources\\Data\\levelData.txt";
+	std::string playerSavePath = "Resources\\Data\\playerData.txt";
 
 	//The frames per second timer
 	//Timer used to calculate the frames per second

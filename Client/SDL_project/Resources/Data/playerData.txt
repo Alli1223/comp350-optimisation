@@ -1,0 +1,1 @@
+{"PlayerData":{"X":-24,"Y":48,"bodyColour":{"b":180,"g":211,"r":248},"bodyWear":0,"earType":7,"eyeColour":{"b":30,"g":224,"r":56},"eyeType":1,"gender":0,"hairColour":{"b":243,"g":243,"r":118},"headWear":0,"isMoving":false,"legColour":{"b":30,"g":14,"r":117},"legWear":0,"name":"15580","rotation":90,"upperClothesColour":{"b":180,"g":211,"r":248}}}

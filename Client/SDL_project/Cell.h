@@ -84,6 +84,8 @@ public:
 	};
 	TreeType treeType;
 
+	
+
 	Timer plantTimer;
 	
 	bool isVegetation = false;
@@ -96,6 +98,19 @@ public:
 	bool isBuilding = false;
 	bool isStoneWall = false;
 	bool isWoodFence = false;
+
+		enum orientation
+		{
+			topLeft,
+			topMiddle,
+			topRight,
+			middleLeft,
+			middle,
+			middleRight,
+			bottomLeft,
+			bottomMiddle,
+			bottomRight
+		} orientation;
 
 private:
 	//! The Cells X and Y values

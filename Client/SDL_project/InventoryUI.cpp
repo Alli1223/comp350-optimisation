@@ -2,7 +2,7 @@
 #include "InventoryUI.h"
 
 
-InventoryUI::InventoryUI() : backgroundTexture("Resources\\Sprites\\Toolbar\\InventoryBackground.png"), selectionTexture("Resources\\Sprites\\Toolbar\\InventoryBackground.png")
+InventoryUI::InventoryUI() : backgroundTexture("Resources\\Sprites\\Toolbar\\menuBackground.png"), selectionTexture("Resources\\Sprites\\Toolbar\\InventoryBackground.png")
 {
 }
 

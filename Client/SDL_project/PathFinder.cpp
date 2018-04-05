@@ -114,7 +114,7 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 	nodes.clear();
 
 	std::cout << "Computing Path" << std::endl;
-
+	std::cout << "First Pos: " << start.getX() << "," << start.getY() << " End: " << goal.getX() << "," << goal.getY() << std::endl;
 	// IF the start and end are accessable
 	if (level.getCell(start.getX(), start.getY())->isWalkable && level.getCell(goal.getX(), goal.getY())->isWalkable)
 	{
@@ -157,10 +157,12 @@ std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 		//startNode = start;
 
 		//change searchSize based on distance between target
-		searchSize = euclideanDistance(start, goal);
-		if (searchSize <= 0)
-			searchSize = 10;
-		std::cout << "SearchSize: " << searchSize << std::endl;
+		//searchSize = euclideanDistance(start, goal) * 2;
+		//std::cout << "SearchSize: " << searchSize << std::endl;
+		//std::cout << "Second Pos: " << start.getX() << "," << start.getY() << " End: " << goal.getX() << "," << goal.getY() << std::endl;
+		//if (searchSize <= 0)
+			//searchSize = 10;
+		
 		// Create nodes for every cell in the grid
 		for (int x = 0; x < searchSize; x++)
 		{

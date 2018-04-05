@@ -16,7 +16,7 @@ public:
 	int getHeight() { return height; }
 	int setWidth(int newWidth) { return width = newWidth; }
 	int setHeight(int newHeight) { return height = newHeight; }
-	
+	int setPosition(int newX, int newY) { return x = newX, y = newY; }
 private:
 	int x;
 	int y;

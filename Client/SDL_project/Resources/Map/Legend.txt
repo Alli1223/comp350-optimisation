@@ -1,4 +1,0 @@
-# = Room
-space = empty
-D = Door
-O = crate

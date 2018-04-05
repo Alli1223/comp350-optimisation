@@ -9,13 +9,14 @@ void showErrorMessage(const char* message, const char* title)
 
 
 
-Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePointer("Resources\\Sprites\\Menu\\Cursor.png")
+Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePointer("Resources\\Sprites\\Cursor\\cursor.png")
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0 || SDL_Init(SDL_INIT_TIMER | SDL_INIT_JOYSTICK) < 0)
 	{
 		std::cout << (stderr, "Couldn't initialize SDL: %s\n", SDL_GetError()) << std::endl;
 		throw InitialisationError("SDL_Init failed");
 	}
+	
 	SDL_ShowCursor(SDL_DISABLE);
 
 	// Set Window Size
@@ -28,24 +29,27 @@ Venture::Venture() : backgroundTexture("Resources\\background5.jpg"), mousePoint
 		gameSettings.WINDOW_HEIGHT /=2;
 		gameSettings.WINDOW_WIDTH /= 2;
 	}
+	gameSettings.deltaTime = SDL_GetTicks();
 	
 
 	camera.WindowHeight = gameSettings.WINDOW_HEIGHT;
 	camera.WindowWidth = gameSettings.WINDOW_WIDTH;
 	camera.SetPos(0, 0);
+	
+
 
 	// Create the window
 	if (gameSettings.fullscreen)
-		window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+		window = SDL_CreateWindow("Magic Cafe", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
 	else
-		window = SDL_CreateWindow("Venture", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+		window = SDL_CreateWindow("Magic Cafe", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	glContext = SDL_GL_CreateContext(window);
 	if (window == nullptr)
 		throw InitialisationError("SDL_CreateWindow failed");
 
 	// Create Renderer
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_TEXTUREACCESS_TARGET | SDL_RENDERER_TARGETTEXTURE);
 	if (renderer == nullptr)
 		throw InitialisationError("SDL_CreateRenderer failed");
 
@@ -71,6 +75,7 @@ void Venture::run()
 	level.GenerateWorld(camera);
 
 	// Run the main menu
+Menu:
 	if (gameSettings.mainMenu)
 	{
 		Menu menu;
@@ -82,17 +87,19 @@ void Venture::run()
 
 
 	int cellSize = level.getCellSize();
+	
 
 	// Create a unique playername
 	std::string playerName = std::to_string(SDL_GetTicks());
 
 	player.characterType = "Player";
-	player.setSpeed(1);
+	player.setSpeed(0.5);
 	player.setID(playerName);
 	player.setX(0);
-	player.setY(0);
+	player.setY(0); 
+	
 
-	toolbar.createToolbar(player, gameSettings);
+	UI.toolbar.createToolbar(player, gameSettings);
 
 	player.inventory.setCapacity(56);
 	// Add starting items
@@ -149,18 +156,17 @@ void Venture::run()
 
 		if (gameSettings.displayFPS)
 			gameSettings.CalculateFramesPerSecond();
+		gameSettings.elapsedTime = SDL_GetTicks();
 
-
-
-		player.setSize(level.getCellSize());
+		
 		gameSettings.mouseCellPos.x = mouseX / level.getCellSize() + camera.getX() / level.getCellSize();
 		gameSettings.mouseCellPos.y = mouseY / level.getCellSize() + camera.getY() / level.getCellSize();
 
 
 
 		// Handle the input
-		input.HandleUserInput(renderer, level, player, camera, gameSettings, toolbar);
-
+		input.HandleUserInput(renderer, level, player, camera, gameSettings, UI.toolbar, UI);
+		player.setSize(level.getCellSize() * 2);
 		
 		//Player pos for camera lerp
 		glm::vec2 playerPos;
@@ -182,22 +188,25 @@ void Venture::run()
 		// Renders all the cells and players
 		cellrenderer.RenderObjects(level, renderer, camera, player, gameSettings, allPlayers);
 
-		// Renders UI
-		player.InventoryPanel.RenderInventory(renderer, player.inventory);
-
-		toolbar.UpdateAndRenderToolbar(renderer, player, gameSettings);
-		player.craftingUI.renderCraftingMenu(renderer, player.inventory);
+		// Render all the UI
+		UI.Render(renderer, player, gameSettings);
 
 
 		if(player.pathFinder.Path.size() > 0)
 			player.pathFinder.drawPath(player.pathFinder.Path, renderer, camera, level);
 
+		
 		if (gameSettings.displayMouse)
-			mousePointer.render(renderer, mouseX + (gameSettings.mousePointerSize / 2), mouseY + (gameSettings.mousePointerSize / 2), gameSettings.mousePointerSize, gameSettings.mousePointerSize);
+			mousePointer.render(renderer, mouseX + (gameSettings.mousePointerSize / 2), mouseY + (gameSettings.mousePointerSize / 2), gameSettings.mousePointerSize, gameSettings.mousePointerSize * 1.5);
 		SDL_RenderPresent(renderer);
+
+		gameSettings.deltaTime = gameSettings.elapsedTime - gameSettings.lastFrameTimeElapsed;
+		gameSettings.lastFrameTimeElapsed = gameSettings.elapsedTime;
 		// End while running
 	}
 
+	if (gameSettings.gotoMainMenu)
+		goto Menu;
 	///// END GAME LOOP //////
 
 
@@ -206,4 +215,6 @@ void Venture::run()
 		gameSettings.saveLevelData(level);
 	if (gameSettings.savePlayerOnExit)
 		gameSettings.savePlayerSettings(player);
+	if (gameSettings.restartGame)
+		needsRestart = true;
 }

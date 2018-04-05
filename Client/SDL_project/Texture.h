@@ -1,4 +1,5 @@
 #pragma once
+
 //! Loads and renders images in the window
 /*!
 This class is used for all the images in the game. It loads textures from a given file location 
@@ -17,6 +18,7 @@ public:
 
 	//! Loads the texture
 	SDL_Texture* getTexture() { return texture; }
+	
 
 	//! Renders the image in the window
 	void render(SDL_Renderer* renderer, int x, int y, int width, int height);
@@ -26,10 +28,15 @@ public:
 	void renderRotation(SDL_Renderer* renderer, int x, int y, int width, int height, int angle);
 	//! Renders  the animation
 	void renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int destX, int destY, int pixelSize, int renderSize);
+	void renderAnim(SDL_Renderer* renderer, int sourceX, int sourceY, int destX, int destY, int pixelSize, int renderSize, bool flipHorizontal);
+	//! Render light
+	void renderLight(SDL_Renderer* renderer, int sourceX, int sourceY, int destX, int destY, int pixelSize, int renderSize);
 	//! Alters the alpha value of the image to make it appear transparent in the window
 	void alterTransparency(int transparencyLevel);
 	//! Alters the r,g,b colours of the texture
 	void alterTextureColour(int r, int g, int b);
+	void alterTextureColour(SDL_Color& color);
+	void alterTextureColour(SDL_Color& color, int hueChange);
 	//! Set Atlas type -- Type 0 = 128px / no border -- Type 1 = 16bit / 1px border
 	char setAtlasType(char type) { return atlasType = type; }
 	//! Set Atlas tile size

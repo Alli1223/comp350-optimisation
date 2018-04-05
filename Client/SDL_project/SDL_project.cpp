@@ -11,7 +11,11 @@ int main(int argc, char* args[])
 	
 	Venture game;
 	game.run();
-
+	while (game.needsRestart)
+	{
+		Venture game;
+		game.run();
+	}
 	return 0;
 
 }

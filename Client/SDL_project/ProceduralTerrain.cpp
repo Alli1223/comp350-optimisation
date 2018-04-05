@@ -94,6 +94,7 @@ void ProceduralTerrain::populateTerrain(std::shared_ptr<Chunk>& chunk)
 		{
 			//Generate the grass
 			generateGround(chunk, x, y);
+			GenerateCellOrientations(chunk, x, y);
 		}
 	}
 	//Cant spawn random items because that will cause de-sync between clients
@@ -189,15 +190,19 @@ void ProceduralTerrain::generateGround(std::shared_ptr<Chunk>& chunk, int x, int
 		if (rNoise > 0.5 && rNoise < 1.0)
 		{
 			chunk->tiles[x][y]->isWater = true;
+			chunk->tiles[x][y]->isGrass = false;
 			chunk->tiles[x][y]->terrainElevationValue = -2.1;
 
 		}
+		/*
 		else if (rNoise >= 1.0 && rNoise < 1.3 || rNoise >= 0.3 && rNoise <= 0.5 && chunk->tiles[x][y]->isGrass)
 		{
 			chunk->tiles[x][y]->isSand = true;
 			chunk->tiles[x][y]->isGrass = false;
 		}
+		*/
 	}
+	
 	else
 	{
 		if (terrainElevation > -1.8 && terrainElevation < 13.0)
@@ -207,3 +212,60 @@ void ProceduralTerrain::generateGround(std::shared_ptr<Chunk>& chunk, int x, int
 	}
 }
 
+void ProceduralTerrain::GenerateCellOrientations(std::shared_ptr<Chunk>& chunk, int& x, int& y)
+{
+	int chunkSize = chunk->getChunkSize();
+
+
+	// In one row
+	if (x - 1 >= 0 && x + 1 < chunkSize)
+	{
+		if (chunk->tiles[x][y]->isWater && chunk->tiles[x - 1][y]->isGrass)
+		{
+			chunk->tiles[x][y]->orientation = Cell::orientation::middleLeft;
+		}
+		if (chunk->tiles[x][y]->isWater && chunk->tiles[x + 1][y]->isGrass)
+		{
+			chunk->tiles[x][y]->orientation = Cell::orientation::middleLeft;
+		}
+
+		// Center of Chunk
+		if (y - 1 >= 0 && y + 1 < chunkSize)
+		{
+			// Top Left
+			if (chunk->tiles[x][y]->isWater && chunk->tiles[x - 1][y - 1]->isGrass && chunk->tiles[x][y - 1]->isGrass && chunk->tiles[x - 1][y]->isGrass)
+			{
+				chunk->tiles[x][y]->orientation = Cell::orientation::topLeft;
+			}
+			else if (chunk->tiles[x][y]->isWater && chunk->tiles[x][y - 1]->isGrass)
+			{
+				chunk->tiles[x][y]->orientation = Cell::orientation::topMiddle;
+			}
+			else if (chunk->tiles[x][y]->isWater && chunk->tiles[x + 1][y - 1]->isGrass && chunk->tiles[x][y - 1]->isGrass && chunk->tiles[x + 1][y]->isGrass)
+			{
+				chunk->tiles[x][y]->orientation = Cell::orientation::topRight;
+			}
+			else if (chunk->tiles[x][y]->isWater && chunk->tiles[x - 1][y]->isGrass)
+			{
+				chunk->tiles[x][y]->orientation = Cell::orientation::middleLeft;
+			}
+			else if (chunk->tiles[x][y]->isWater && chunk->tiles[x + 1][y]->isGrass)
+			{
+				chunk->tiles[x][y]->orientation = Cell::orientation::middleRight;
+			}
+			else if (chunk->tiles[x][y]->isWater && chunk->tiles[x][y + 1]->isGrass)
+			{
+				chunk->tiles[x][y]->orientation = Cell::orientation::bottomMiddle;
+			}
+			
+		}
+	}
+	else if (y - 1 >= 0 && y + 1 < chunkSize)
+	{
+		if (chunk->tiles[x][y]->isWater && chunk->tiles[x][y - 1]->isGrass)
+			chunk->tiles[x][y]->orientation = Cell::orientation::topMiddle;
+		if (chunk->tiles[x][y]->isWater && chunk->tiles[x][y + 1]->isGrass)
+			chunk->tiles[x][y]->orientation = Cell::orientation::topMiddle;
+
+	}
+}

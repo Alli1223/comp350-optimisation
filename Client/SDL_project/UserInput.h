@@ -5,6 +5,7 @@
 #include "ToolBar.h"
 #include "InventoryUI.h"
 #include "Timer.h"
+#include "GameUI.h"
 class UserInput
 {
 public:
@@ -14,7 +15,7 @@ public:
 	Inventory craftingInventory;
 	void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player& player, Level& level, GameSettings& gameSettings, SDL_Renderer* renderer);
 
-	void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& player, Camera& camera, GameSettings& gameSettings, ToolBar& toolbar);
+	void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& player, Camera& camera, GameSettings& gameSettings, ToolBar& toolbar, GameUI& UI);
 
 	bool UserInput::CheckIfCellIsWalkable(Level& level, int x, int y);
 

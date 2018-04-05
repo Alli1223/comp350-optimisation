@@ -2,10 +2,10 @@
 #include "Button.h"
 
 
-Button::Button(std::string newText) : buttonText("Ostrich"), text(newText), buttonBackground(buttonTextureLocation + "Grey.png")
+Button::Button(std::string newText) : buttonText("pixelart"), text(newText), buttonBackground(buttonTextureLocation + "Plain_Button.png")
 {
 }
-Button::Button(std::string newText, std::string backgroundType) : buttonText("Ostrich"), text(newText), buttonBackground(buttonTextureLocation + backgroundType + ".png")
+Button::Button(std::string newText, std::string backgroundType) : buttonText("pixelart"), text(newText), buttonBackground(buttonTextureLocation + backgroundType + ".png")
 {
 
 }
@@ -24,6 +24,8 @@ bool Button::isPressed()
 	else
 		return false;
 }
+
+
 
 void Button::render(SDL_Renderer* renderer, int x, int y, int width, int height)
 {
@@ -67,6 +69,6 @@ void Button::render(SDL_Renderer* renderer, int x, int y, int width, int height)
 		setWidth(getWidth() - mouseOverSizeInrease), setHeight(getHeight() - mouseOverSizeInrease);
 	// If the button has text, render it in the center of the button
 	if (text.size() > 0)
-		buttonText.render(renderer, text, getX() - (getWidth() / 2), getY() - (getHeight() / 2), getWidth(), getHeight(), buttonTextColour);
+		buttonText.render(renderer, text, getX() - (getWidth() / 2) +(getWidth() / 20), getY() - (getHeight() / 2) + (getHeight() / 5), getWidth() - (getWidth() / 10) / 2, getHeight() / 2, buttonTextColour);
 }
 

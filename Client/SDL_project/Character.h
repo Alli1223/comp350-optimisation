@@ -100,6 +100,60 @@ public:
 		}leg;
 	} Clothing;
 
+	typedef struct {
+		enum Gender
+		{
+			male,
+			female
+		} gender;
+
+		enum EarType
+		{
+			aquatic,
+			cat1,
+			cat2,
+			elf1,
+			elf2,
+			elf3,
+			elf4,
+			elf5,
+			elf6,
+			human
+		} earType;
+
+		enum EyeType
+		{
+			eye1,
+			eye2,
+			eye3,
+			eye4,
+			eye5,
+			eye6,
+			eye7,
+			eye8,
+			eye9,
+			eye10,
+			eye11,
+			eye12,
+			eye13
+		} eyeType;
+
+		enum HairType
+		{
+			hair1,
+			hair2,
+			hair3,
+			hair4,
+			hair5,
+			hair6,
+			hair7,
+			hair8
+		} hairType;
+
+	} Body;
+	//! Characters body options
+	Body body;
+
 	//! Character clothes
 	Clothing PlayerClothes;
 
@@ -118,7 +172,13 @@ private:
 	//! Integer for the agent's size when rendered
 	int size = 50;
 	//! Integer for the agent current speed
-	float speed = 2.0;
+	double speed = 0.3;
+	//! Double for swim speed
+	float swimSpeed = 0.1;
+	//! Default walk speed
+	float walkSpeed = 0.3;
+	//! Default walk speed
+	float runSpeed = 1.0;
 	//! A double for the agents's health
 	double health = 100.0;
 	//! A double for agents hunger decrease speed

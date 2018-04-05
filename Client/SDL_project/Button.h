@@ -28,6 +28,8 @@ public:
 	Item setButtonIconItem(Item newItem) { return buttonIcon.setIconItem(newItem); }
 	Item getButtonIconItem() { return buttonIcon.getIconItem(); }
 
+	Texture& getButtonBackgroundTexture() { return buttonBackground; }
+
 private:
 	Icon buttonIcon;
 	//! Buttons text
@@ -43,7 +45,7 @@ private:
 	bool mouseOverIncreaseSize = true;
 	int mouseOverSizeInrease = 5;
 	//! buttons texture location
-	std::string buttonTextureLocation = "Resources\\Sprites\\GUI\\buttonTextures\\";
+	std::string buttonTextureLocation = "Resources\\UI\\";
 	SDL_Color buttonTextColour = { 255, 255, 255 };
 	TextUI buttonText;
 	Texture buttonBackground;
