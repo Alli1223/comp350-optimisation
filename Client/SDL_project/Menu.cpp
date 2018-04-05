@@ -54,8 +54,8 @@ void Menu::MainMenu(GameSettings& gameSettings,Level& level, Camera& camera, Pla
 		SDL_ShowCursor(SDL_DISABLE);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
-		menuBackground.alterTransparency(100);
-		menuBackground.alterTextureColour(50, 50 ,50);
+		//menuBackground.alterTransparency(100);
+		menuBackground.alterTextureColour(150, 150 ,150);
 		menuBackground.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 2, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT);
 		
 		
@@ -214,8 +214,8 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 		changeBottomL.render(renderer, CbuttonsX - bSize2, CbuttonsY + buttonSize * 3, buttonSize, buttonSize);
 		changeBottomR.render(renderer, CbuttonsX, CbuttonsY + buttonSize * 3, buttonSize, buttonSize);
 
-		ChangeTopColour.render(renderer, CbuttonsX - buttonSize, ObuttonsY + buttonSize * 4, buttonSize * 4, buttonSize);
-		ChangeBottomColour.render(renderer, CbuttonsX - buttonSize, ObuttonsY + buttonSize * 5, buttonSize * 4, buttonSize);
+		ChangeTopColour.render(renderer, CbuttonsX - buttonSize, ObuttonsY + buttonSize * 5, buttonSize * 4, buttonSize);
+		ChangeBottomColour.render(renderer, CbuttonsX - buttonSize, ObuttonsY + buttonSize * 6, buttonSize * 4, buttonSize);
 
 		//changeBottom.render(renderer, playerCreation.getX() + playerCreation.getSize(), playerCreation.getY() + 100, 100, 50);
 
@@ -354,6 +354,9 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 			playerCreation.setJacketColour(rand() % 255, rand() % 255, rand() % 255);
 			playerCreation.setJeansColour(rand() % 255, rand() % 255, rand() % 255);
 			playerCreation.setBodyColour(rand() % 255, rand() % 255, rand() % 255);
+			playerCreation.body.earType = Player::Body::EarType(rand() % 8);
+			playerCreation.body.eyeType = Player::Body::EyeType(rand() % 13);
+			playerCreation.body.hairType = Player::Body::HairType(rand() % 8);
 		}
 		
 
