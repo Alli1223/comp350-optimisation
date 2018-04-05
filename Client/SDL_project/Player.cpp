@@ -5,11 +5,11 @@
 Player::Player() : characterIdleTexture(characterTextureLocation + "idle.png"), 
 shortHairTexture(clothesTextureLocation + "hair1.png"), longHairTexture(clothesTextureLocation + "hair2.png"),
 eyesTexture(characterTextureLocation + "eyesAnim.png"), walkTexture(characterTextureLocation + "walk.png"), sideBlinkTexture(characterTextureLocation + "sideBlink.png"),
-jacketTexture(clothesTextureLocation + "Jacket.png"), jeansTexture(clothesTextureLocation + "Legs.png"),
 male(CharacterTextureLocation + "\\Male\\MaleBasic.png"), female(CharacterTextureLocation + "\\Female\\FemaleBasic.png"), playerShadow(CharacterTextureLocation + "\\Shared\\BasicShadows.png"),
 aquaticEar(CharacterEarsTextureLocation + "Aquatic_Ears.png"),catEar1(CharacterEarsTextureLocation + "Cat_Ears_1.png"), catEar2(CharacterEarsTextureLocation + "Cat_Ears_2.png"),elfEar1(CharacterEarsTextureLocation + "Elf_Ears_1.png"),elfEar2(CharacterEarsTextureLocation + "Elf_Ears_2.png"),elfEar3(CharacterEarsTextureLocation + "Elf_Ears_3.png"), elfEar4(CharacterEarsTextureLocation + "Elf_Ears_4.png"),elfEar5(CharacterEarsTextureLocation + "Elf_Ears_5.png"),elfEar6(CharacterEarsTextureLocation + "Elf_Ears_6.png"),human(CharacterEarsTextureLocation + "Human_Ears.png"),
 eye1(CharacterEyesTextureLocation + "Eye_type_1.png"), eye2(CharacterEyesTextureLocation + "Eye_type_2.png"), eye3(CharacterEyesTextureLocation + "Eye_type_3.png"), eye4(CharacterEyesTextureLocation + "Eye_type_4.png"), eye5(CharacterEyesTextureLocation + "Eye_type_5.png"), eye6(CharacterEyesTextureLocation + "Eye_type_6.png"), eye7(CharacterEyesTextureLocation + "Eye_type_7.png"), eye8(CharacterEyesTextureLocation + "Eye_type_8.png"), eye9(CharacterEyesTextureLocation + "Eye_type_9.png"), eye10(CharacterEyesTextureLocation + "Eye_type_10.png"), eye11(CharacterEyesTextureLocation + "Eye_type_11.png"), eye12(CharacterEyesTextureLocation + "Eye_type_12.png"), eye13(CharacterEyesTextureLocation + "Eye_type_13.png"),
-hair1(CharacterHairTextureLocation + "Hair_1.png"), hair2(CharacterHairTextureLocation + "Hair_2.png"), hair3(CharacterHairTextureLocation + "Hair_3.png"), hair4(CharacterHairTextureLocation + "Hair_4.png"), hair5(CharacterHairTextureLocation + "Hair_5.png"), hair6(CharacterHairTextureLocation + "Hair_6.png"), hair7(CharacterHairTextureLocation + "Hair_7.png"), hair8(CharacterHairTextureLocation + "Hair_8.png")
+hair1(CharacterHairTextureLocation + "Hair_1.png"), hair2(CharacterHairTextureLocation + "Hair_2.png"), hair3(CharacterHairTextureLocation + "Hair_3.png"), hair4(CharacterHairTextureLocation + "Hair_4.png"), hair5(CharacterHairTextureLocation + "Hair_5.png"), hair6(CharacterHairTextureLocation + "Hair_6.png"), hair7(CharacterHairTextureLocation + "Hair_7.png"), hair8(CharacterHairTextureLocation + "Hair_8.png"),
+femaleTop1(clothesTextureLocation + "\\Female\\Tops\\Female_top_1.png"), femaleTop2(clothesTextureLocation + "\\Female\\Tops\\Female_top_2.png"), femaleBottom1(clothesTextureLocation + "\\Female\\Bottoms\\Female_Bottoms_1.png"), femaleBottom2(clothesTextureLocation + "\\Female\\Bottoms\\Female_Bottoms_2.png")
 {
 	walkHorizontalAnimation.maxFrames = 4;
 	walkVerticalAnimation.maxFrames = 6;
@@ -58,8 +58,7 @@ void Player::RenderPlayer(SDL_Renderer* renderer, Camera& camera)
 	// Alter clothes colors
 	shortHairTexture.alterTextureColour(hairColour.r, hairColour.g, hairColour.b);
 	longHairTexture.alterTextureColour(hairColour.r, hairColour.g, hairColour.b);
-	jacketTexture.alterTextureColour(jacketColour.r, jacketColour.g, jacketColour.b);
-	jeansTexture.alterTextureColour(jeansColour.r, jeansColour.g, jeansColour.b);
+
 	eyesTexture.alterTextureColour(eyeColour, 100);
 	sideBlinkTexture.alterTextureColour(eyeColour.r, eyeColour.g, eyeColour.b);
 	male.alterTextureColour(bodyColour.r, bodyColour.g, bodyColour.b);
@@ -77,13 +76,13 @@ void Player::RenderPlayer(SDL_Renderer* renderer, Camera& camera)
 		if (isPlayerMoving())
 		{
 			renderCharacterBody(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize * 2, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
-			//renderCharacterClothes(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize * 2, renderOffset.x, renderOffset.y, pixelSize, getSize());
+			renderCharacterClothes(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize * 2, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
 		}
 
 		else
 		{
 			renderCharacterBody(renderer, 0, pixelSize * 5, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
-			//renderCharacterClothes(renderer, 0, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize());
+			renderCharacterClothes(renderer, 0, pixelSize * 5, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
 		}
 	}
 
@@ -91,31 +90,52 @@ void Player::RenderPlayer(SDL_Renderer* renderer, Camera& camera)
 	// Walk Left (A)
 	else if (getTargetRotation() == 90)
 	{
-		if(isPlayerMoving())
+		if (isPlayerMoving())
+		{
 			renderCharacterBody(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, 0, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
+			renderCharacterClothes(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, pixelSize, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
+		}
 		else
+		{
 			renderCharacterBody(renderer, 0, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
-		//renderCharacterClothes(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, pixelSize, renderOffset.x, renderOffset.y, pixelSize, getSize());
+			renderCharacterClothes(renderer, 0, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
+		}
+			
 	}
 	// Walk Right (D)
 	else if (getTargetRotation() == 270)
 	{
 		if (isPlayerMoving())
+		{
 			renderCharacterBody(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, 0, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+			renderCharacterClothes(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, 0, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+
+		}
+
 		else
+		{
+
 			renderCharacterBody(renderer, idleAnimation.getCurrentFrame() * pixelSize + 380, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
-		//renderCharacterClothes(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, 0, renderOffset.x, renderOffset.y, pixelSize, getSize());
+			renderCharacterClothes(renderer, idleAnimation.getCurrentFrame() * pixelSize + 380, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+		}
+	
 	}
 	// Walk Up (W)
 	else if (getTargetRotation() == 180)
 	{
 		if (walkVerticalAnimation.getCurrentFrame() == 4)
 			walkVerticalAnimation.setCurrentFrame(0);
-		if(isPlayerMoving())
+		if (isPlayerMoving())
+		{
 			renderCharacterBody(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+			renderCharacterClothes(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+
+		}
 		else
+		{
 			renderCharacterBody(renderer, 0, pixelSize * 4, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
-		//renderCharacterClothes(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize());
+			renderCharacterClothes(renderer, 0, pixelSize * 4, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+		}
 	}
 }
 
@@ -277,52 +297,45 @@ void Player::renderCharacterBody(SDL_Renderer* renderer, int frameX, int frameY,
 		
 }
 
-void Player::renderCharacterClothes(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize)
+void Player::renderCharacterClothes(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize, bool flipSprite)
 {
 
 
 	//Render leg wear
 	switch (PlayerClothes.leg)
 	{
-	case Clothing::chinos:
+	case Clothing::noBottoms:
 
 		break;
 
-	case Clothing::jeans:
-		jeansTexture.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize);
+	case Clothing::femaleBottom1:
+		femaleBottom1.alterTextureColour(bottomColour.r, bottomColour.g, bottomColour.b);
+		femaleBottom1.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize, flipSprite);
 		break;
 
-	case Clothing::skirt:
-
+	case Clothing::femaleBottom2:
+		femaleBottom2.alterTextureColour(bottomColour.r, bottomColour.g, bottomColour.b);
+		femaleBottom2.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize, flipSprite);
 		break;
 	}
 
 	//Render body
 	switch (PlayerClothes.body)
 	{
-	case Clothing::jacket:
-		jacketTexture.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize);
+	case Clothing::noTop:
+		
 		break;
-	case Clothing::dress:
-
+	case Clothing::femaleTop1:
+		femaleTop1.alterTextureColour(topColour.r, topColour.g, topColour.b);
+		femaleTop1.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize, flipSprite);
 		break;
 
-	case Clothing::tshirt:
-		jacketTexture.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize);
-
+	case Clothing::femaleTop2:
+		femaleTop2.alterTextureColour(topColour.r, topColour.g, topColour.b);
+		femaleTop2.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize, flipSprite);
 		break;
 	}
 
-	//Render head wear texture
-	switch (PlayerClothes.head)
-	{
-	case Clothing::shortHair:
-		shortHairTexture.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize);
-		break;
-	case Clothing::longHair:
-		longHairTexture.renderAnim(renderer, frameX, frameY, x, y, pixelSize, characterSize);
-		break;
-	}
 }
 
 // Modify this data aswell as in gameSettings.getPlayerFromSave()
@@ -334,7 +347,7 @@ json Player::getPlayerJson()
 	playerData["PlayerData"]["X"] = getX();
 	playerData["PlayerData"]["Y"] = getY();
 	playerData["PlayerData"]["isMoving"] = isPlayerMoving();
-	playerData["PlayerData"]["headWear"] = PlayerClothes.head;
+	playerData["PlayerData"]["headWear"] = PlayerClothes.hat;
 	playerData["PlayerData"]["hairColour"]["r"] = gethairColour().r;
 	playerData["PlayerData"]["hairColour"]["g"] = gethairColour().g;
 	playerData["PlayerData"]["hairColour"]["b"] = gethairColour().b;

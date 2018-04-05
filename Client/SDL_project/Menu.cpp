@@ -31,7 +31,7 @@ void Menu::MainMenu(GameSettings& gameSettings,Level& level, Camera& camera, Pla
 	Button Fullscreen("FullScreen");
 	Button loadFromSave("Load Save Game");
 	Button play("New Game");
-	auto& justPlay = get_instance(play);
+
 	
 	// Scale mouse correctly depending on resolution
 	menuCursorSize = gameSettings.WINDOW_WIDTH / 25;
@@ -68,8 +68,8 @@ void Menu::MainMenu(GameSettings& gameSettings,Level& level, Camera& camera, Pla
 		exit.render(renderer, 50, 25, 100, 50);
 
 		// New Game
-		justPlay->render(renderer, menuX, menuY - menuSeperationDistance * 2, buttonWidth, buttonHeight);
-		if (justPlay->isPressed())
+		play.render(renderer, menuX, menuY - menuSeperationDistance * 2, buttonWidth, buttonHeight);
+		if (play.isPressed())
 		{
 			displayCharacterMenu = true;
 			CharacterCustomisationMenu(gameSettings, camera, player, renderer, level);
@@ -94,16 +94,8 @@ void Menu::MainMenu(GameSettings& gameSettings,Level& level, Camera& camera, Pla
 			gameSettings.savePlayerOnExit = false;
 			displayMainMenu = false;
 		}
-
-		// Toggle fullscreen
-		Fullscreen.render(renderer, menuX, menuY + menuSeperationDistance, buttonWidth, buttonHeight);
-		if (Fullscreen.isPressed())
-		{
-
-			// TODO: restart the game in full screen
-		}
 		// Character Screen
-		characterScreen.render(renderer, menuX, menuY + menuSeperationDistance * 2, buttonWidth * 3, buttonHeight * 1.5);
+		characterScreen.render(renderer, menuX, menuY + menuSeperationDistance + buttonHeight, buttonWidth * 3, buttonHeight * 1.5);
 		if (characterScreen.isPressed())
 		{
 			CharacterCustomisationMenu(gameSettings, camera, player, renderer, level);
@@ -142,30 +134,28 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 	//Ear
 	Button ChangeEarTypeL("", "L_Button");
 	Button ChangeEarTypeR("", "R_Button");
-
+	// Colours
 	Button ChangeBodyColour("Body Colour");
 	Button ChangeEyeColour("Eye Colour");
 	Button ChangeHairColour("Hair Colour");
 
 	// Right Side ( CLOTHES)
-	// Hair / Hat
-	// Tshit/ jacket
-	// Trousers
-	// Shoes
 
-	Button changeHead("Change Hair");
-	Button changeBody("Change Body");
-	Button changeLegs("Change Trousers");
+	//Top 
+	Button changeTopL("", "L_Button");
+	Button changeTopR("", "R_Button");
+	// Bottom
+	Button changeBottomL("", "L_Button");
+	Button changeBottomR("", "R_Button");
+	//Colour
+	Button ChangeTopColour("Top Colour");
+	Button ChangeBottomColour("Bottom Colour");
 
 
-	
 
 	Button randomiseAll("Random");
 	
 	Player playerCreation = gameSettings.getPlayerFromSave();
-	playerCreation.PlayerClothes.leg = Player::Clothing::jeans;
-	playerCreation.PlayerClothes.body = Player::Clothing::jacket;
-	playerCreation.PlayerClothes.head = Player::Clothing::longHair;
 
 	// Load player from file
 	playerCreation = gameSettings.getPlayerFromSave();
@@ -190,31 +180,46 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 		menuBackground.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 2, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT);
 
 		/////// Organic customisation buttons //////
-		int buttonsX = playerCreation.getX() - playerCreation.getSize();
-		int buttonsY = playerCreation.getY() - 200;
-		int buttonSize = 100;
+		
+		int buttonSize = 50;
+		int bSize2 = buttonSize * 2;
+		int ObuttonsX = playerCreation.getX() - playerCreation.getSize();
+		int ObuttonsY = playerCreation.getY() - buttonSize * 4;
+		int CbuttonsX = playerCreation.getX() + playerCreation.getSize() + bSize2;
+		int CbuttonsY = playerCreation.getY() - buttonSize * 4;
 
 		femaleGender.getButtonBackgroundTexture().alterTextureColour(200, 150, 20);
-		maleGender.render(renderer, buttonsX, buttonsY, buttonSize, buttonSize);
-		femaleGender.render(renderer, buttonsX - 100, buttonsY, buttonSize, buttonSize);
+		maleGender.render(renderer, ObuttonsX, ObuttonsY, buttonSize, buttonSize);
+		femaleGender.render(renderer, ObuttonsX - bSize2, ObuttonsY, buttonSize, buttonSize);
 
-		ChangeHairTypeL.render(renderer, buttonsX - 100, buttonsY + 100, buttonSize, buttonSize);
-		ChangeHairTypeR.render(renderer, buttonsX, buttonsY + 100, buttonSize, buttonSize);
+		ChangeHairTypeL.render(renderer, ObuttonsX - bSize2, ObuttonsY + buttonSize * 2, buttonSize, buttonSize);
+		ChangeHairTypeR.render(renderer, ObuttonsX, ObuttonsY + buttonSize * 2, buttonSize, buttonSize);
 
-		ChangeEyeTypeL.render(renderer, buttonsX - 100, buttonsY +200, buttonSize, buttonSize);
-		ChangeEyeTypeR.render(renderer, buttonsX, buttonsY + 200, buttonSize, buttonSize);
+		ChangeEyeTypeL.render(renderer, ObuttonsX - bSize2, ObuttonsY + buttonSize * 3, buttonSize, buttonSize);
+		ChangeEyeTypeR.render(renderer, ObuttonsX, ObuttonsY + buttonSize * 3, buttonSize, buttonSize);
 
-		ChangeEarTypeL.render(renderer, buttonsX - 100, buttonsY + 300, buttonSize, buttonSize);
-		ChangeEarTypeR.render(renderer, buttonsX, buttonsY + 300, buttonSize, buttonSize);
+		ChangeEarTypeL.render(renderer, ObuttonsX - bSize2, ObuttonsY + buttonSize * 4, buttonSize, buttonSize);
+		ChangeEarTypeR.render(renderer, ObuttonsX, ObuttonsY + buttonSize * 4, buttonSize, buttonSize);
 
-		ChangeBodyColour.render(renderer, buttonsX - 50, buttonsY + 400, 200, 50);
-		ChangeEyeColour.render(renderer, buttonsX - 50, buttonsY + 460, 200, 50);
-		ChangeHairColour.render(renderer, buttonsX - 50, buttonsY + 510, 200, 50);
-		// Clothes Customisation buttons
-		changeHead.render(renderer, playerCreation.getX() + playerCreation.getSize(), playerCreation.getY() - 100, 100, 50);
-		changeBody.render(renderer, playerCreation.getX() + playerCreation.getSize(), playerCreation.getY(), 100, 50);
-		changeLegs.render(renderer, playerCreation.getX() + playerCreation.getSize(), playerCreation.getY() + 100, 100, 50);
-		randomiseAll.render(renderer, playerCreation.getX() + playerCreation.getSize() + 150, playerCreation.getY() - 150, 150, 50);
+		ChangeBodyColour.render(renderer, ObuttonsX - buttonSize, ObuttonsY + buttonSize * 5, 200, 50);
+		ChangeEyeColour.render(renderer, ObuttonsX - buttonSize, ObuttonsY + buttonSize * 6, 200, 50);
+		ChangeHairColour.render(renderer, ObuttonsX - buttonSize, ObuttonsY + buttonSize * 7, 200, 50);
+
+
+		// Clothes Customisation buttons ( RIGHT SIDE)
+		changeTopL.render(renderer, CbuttonsX - bSize2, CbuttonsY + buttonSize * 2, buttonSize, buttonSize);
+		changeTopR.render(renderer, CbuttonsX, CbuttonsY + buttonSize * 2, buttonSize, buttonSize);
+
+		changeBottomL.render(renderer, CbuttonsX - bSize2, CbuttonsY + buttonSize * 3, buttonSize, buttonSize);
+		changeBottomR.render(renderer, CbuttonsX, CbuttonsY + buttonSize * 3, buttonSize, buttonSize);
+
+		ChangeTopColour.render(renderer, CbuttonsX - buttonSize, ObuttonsY + buttonSize * 4, buttonSize * 4, buttonSize);
+		ChangeBottomColour.render(renderer, CbuttonsX - buttonSize, ObuttonsY + buttonSize * 5, buttonSize * 4, buttonSize);
+
+		//changeBottom.render(renderer, playerCreation.getX() + playerCreation.getSize(), playerCreation.getY() + 100, 100, 50);
+
+
+		randomiseAll.render(renderer, playerCreation.getX(), gameSettings.WINDOW_HEIGHT - buttonSize, buttonSize * 3, buttonSize);
 
 		
 
@@ -259,35 +264,24 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 
 		// Button functionality
 		//Legs
-		if (changeLegs.isPressed())
+		if (changeBottomL.isPressed())
 		{
-			if (playerCreation.PlayerClothes.leg == Player::Clothing::noLeg)
-				playerCreation.PlayerClothes.leg = Player::Clothing::chinos;
-			else if (playerCreation.PlayerClothes.leg == Player::Clothing::chinos)
-				playerCreation.PlayerClothes.leg = Player::Clothing::jeans;
-			else if (playerCreation.PlayerClothes.leg == Player::Clothing::jeans)
-				playerCreation.PlayerClothes.leg = Player::Clothing::chinos;
+			changeBottomType(playerCreation, false);
+		}
+		else if (changeBottomR.isPressed())
+		{
+			changeBottomType(playerCreation, true);
 		}
 		// Body
-		if (changeBody.isPressed())
+		if (changeTopL.isPressed())
 		{
-			if (playerCreation.PlayerClothes.body == Player::Clothing::noShirt)
-				playerCreation.PlayerClothes.body = Player::Clothing::jacket;
-			else if (playerCreation.PlayerClothes.body == Player::Clothing::jacket)
-				playerCreation.PlayerClothes.body = Player::Clothing::dress;
-			else if (playerCreation.PlayerClothes.body == Player::Clothing::dress)
-				playerCreation.PlayerClothes.body = Player::Clothing::jacket;
+			changeTopType(playerCreation, false);
 		}
-		// Head
-		if (changeHead.isPressed())
+		else if (changeTopR.isPressed())
 		{
-			if (playerCreation.PlayerClothes.head == Player::Clothing::shortHair)
-				playerCreation.PlayerClothes.head = Player::Clothing::longHair;
-			else if (playerCreation.PlayerClothes.head == Player::Clothing::longHair)
-				playerCreation.PlayerClothes.head = Player::Clothing::shortHair;
-			else if (playerCreation.PlayerClothes.head == Player::Clothing::noHeadWear)
-				playerCreation.PlayerClothes.head = Player::Clothing::shortHair;
+			changeTopType(playerCreation, true);
 		}
+
 
 
 		// Body Colour
@@ -295,6 +289,8 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 		{
 			hairColourSlider.Disable();
 			eyeColourSlider.Disable();
+			topColourSlider.Disable();
+			bottomColourSlider.Disable();
 			if (bodyColourSlider.isEnabled())
 				bodyColourSlider.Disable();
 			else
@@ -306,6 +302,8 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 		{
 			bodyColourSlider.Disable();
 			eyeColourSlider.Disable();
+			topColourSlider.Disable();
+			bottomColourSlider.Disable();
 			if (hairColourSlider.isEnabled())
 				hairColourSlider.Disable();
 			else
@@ -316,11 +314,38 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 		{
 			hairColourSlider.Disable();
 			bodyColourSlider.Disable();
+			topColourSlider.Disable();
+			bottomColourSlider.Disable();
 			if (eyeColourSlider.isEnabled())
 				eyeColourSlider.Disable();
 			else
 				eyeColourSlider.Enable();
 		}
+
+		// Clothes colours
+		if (ChangeTopColour.isPressed())
+		{
+			hairColourSlider.Disable();
+			bodyColourSlider.Disable();
+			bottomColourSlider.Disable();
+			eyeColourSlider.Disable();
+			if (topColourSlider.isEnabled())
+				topColourSlider.Disable();
+			else
+				topColourSlider.Enable();
+		}
+		if (ChangeBottomColour.isPressed())
+		{
+			hairColourSlider.Disable();
+			bodyColourSlider.Disable();
+			eyeColourSlider.Disable();
+			topColourSlider.Disable();
+			if (bottomColourSlider.isEnabled())
+				bottomColourSlider.Disable();
+			else
+				bottomColourSlider.Enable();
+		}
+		// Random button
 		if (randomiseAll.isPressed())
 		{
 			playerCreation.setHairColour(rand() % 255, rand() % 255, rand() % 255);
@@ -363,6 +388,27 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 			eyeColourSlider.Render(renderer);
 			playerCreation.setEyeColour(eyeColourSlider.getColour());
 		}
+
+		// If top colour slider is enabled 
+		if (topColourSlider.isEnabled())
+		{
+			ChangeTopColour.getButtonBackgroundTexture().alterTextureColour(topColourSlider.getColour());
+			topColourSlider.setPosition(gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 6);
+			topColourSlider.setWidth(360);
+			topColourSlider.setHeight(50);
+			topColourSlider.Render(renderer);
+			playerCreation.setTopColour(topColourSlider.getColour());
+		}
+		// if bottom colour slider is enabled
+		if (bottomColourSlider.isEnabled())
+		{
+			ChangeBottomColour.getButtonBackgroundTexture().alterTextureColour(bottomColourSlider.getColour());
+			bottomColourSlider.setPosition(gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT / 6);
+			bottomColourSlider.setWidth(360);
+			bottomColourSlider.setHeight(50);
+			bottomColourSlider.Render(renderer);
+			playerCreation.setBottomColour(bottomColourSlider.getColour());
+		}
 		
 		// Render player
 		playerCreation.RenderPlayer(renderer, camera);
@@ -377,7 +423,7 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 		}
 
 		// Start
-		singlePlayer.render(renderer, gameSettings.WINDOW_WIDTH / 2 + 200, gameSettings.WINDOW_HEIGHT - 100, 100, 50);
+		singlePlayer.render(renderer, gameSettings.WINDOW_WIDTH / 2 + 200, gameSettings.WINDOW_HEIGHT - 100, buttonSize * 2, buttonSize);
 		if (singlePlayer.isPressed())
 		{
 			gameSettings.running = true;
@@ -385,7 +431,8 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 			displayCharacterMenu = false;
 			displayMainMenu = false;
 		}
-		loadSave.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT - 100, 100, 50);
+		/*
+		loadSave.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT - 100 - buttonSize * 2, buttonSize * 2, buttonSize);
 		if (loadSave.isPressed())
 		{
 			displayCharacterMenu = false;
@@ -393,7 +440,8 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 			player = gameSettings.getPlayerFromSave();
 			displayMainMenu = false;
 		}
-		rotatePlayer.render(renderer, gameSettings.WINDOW_WIDTH / 2, gameSettings.WINDOW_HEIGHT - 150, 100, 50);
+		*/
+		rotatePlayer.render(renderer, gameSettings.WINDOW_WIDTH / 2, playerCreation.getY() + playerCreation.getSize() / 2 + buttonSize, buttonSize * 2, buttonSize);
 		if (rotatePlayer.isPressed())
 		{
 			int rotation = playerCreation.getTargetRotation() + 90;
@@ -401,6 +449,8 @@ void Menu::CharacterCustomisationMenu(GameSettings& gameSettings, Camera& camera
 				rotation = 0;
 			playerCreation.setTargetRotation(rotation);
 		}
+
+		
 
 
 		//Render the mouse cursor last
@@ -651,4 +701,47 @@ void Menu::changeHairType(Player& player, bool increment)
 		
 		}
 
+}
+
+void Menu::changeBottomType(Player& player, bool increment)
+{
+	if (increment)
+	{
+		if (player.PlayerClothes.leg == Player::Clothing::noBottoms)
+			player.PlayerClothes.leg = Player::Clothing::femaleBottom1;
+		else if (player.PlayerClothes.leg == Player::Clothing::femaleBottom1)
+			player.PlayerClothes.leg = Player::Clothing::femaleBottom2;
+		else if (player.PlayerClothes.leg == Player::Clothing::femaleBottom2)
+			player.PlayerClothes.leg = Player::Clothing::noBottoms;
+	}
+	else
+	{
+		if (player.PlayerClothes.leg == Player::Clothing::noBottoms)
+			player.PlayerClothes.leg = Player::Clothing::femaleBottom2;
+		else if (player.PlayerClothes.leg == Player::Clothing::femaleBottom2)
+			player.PlayerClothes.leg = Player::Clothing::femaleBottom1;
+		else if (player.PlayerClothes.leg == Player::Clothing::femaleBottom1)
+			player.PlayerClothes.leg = Player::Clothing::noBottoms;
+	}
+}
+void Menu::changeTopType(Player& player, bool increment)
+{
+	if (increment)
+	{
+		if (player.PlayerClothes.body == Player::Clothing::noTop)
+			player.PlayerClothes.body = Player::Clothing::femaleTop1;
+		else if (player.PlayerClothes.body == Player::Clothing::femaleTop1)
+			player.PlayerClothes.body = Player::Clothing::femaleTop2;
+		else if (player.PlayerClothes.body == Player::Clothing::femaleTop2)
+			player.PlayerClothes.body = Player::Clothing::noTop;
+	}
+	else
+	{
+		if (player.PlayerClothes.body == Player::Clothing::noTop)
+			player.PlayerClothes.body = Player::Clothing::femaleTop2;
+		else if (player.PlayerClothes.body == Player::Clothing::femaleTop2)
+			player.PlayerClothes.body = Player::Clothing::femaleTop1;
+		else if (player.PlayerClothes.body == Player::Clothing::femaleTop1)
+			player.PlayerClothes.body = Player::Clothing::noTop;
+	}
 }

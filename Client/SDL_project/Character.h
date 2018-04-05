@@ -79,28 +79,33 @@ public:
 	//! Enum for chacter customisation
 	typedef struct
 	{
-		enum HeadWear {
+		enum HeadWear 
+		{
 			noHeadWear,
-			shortHair,
-			longHair,
-			hat
-		}head;
+			hat1,
+			ha2
+		}hat;
 
-		enum BodyWear {
-			noShirt,
-			tshirt,
-			jacket,
-			dress
+		enum BodyWear 
+		{
+			noTop,
+			femaleTop1,
+			femaleTop2
+
 		}body;
-		enum LegWear {
-			noLeg,
-			jeans,
-			chinos,
-			skirt
+
+		enum LegWear 
+		{
+			noBottoms,
+			femaleBottom1,
+			femaleBottom2
+
 		}leg;
+
 	} Clothing;
 
-	typedef struct {
+	typedef struct 
+	{
 		enum Gender
 		{
 			male,

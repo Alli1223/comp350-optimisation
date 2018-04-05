@@ -15,7 +15,7 @@ public:
 	void RenderPlayer(SDL_Renderer* renderer, Camera& camera);
 	void RenderPlayerNew(SDL_Renderer* renderer, Camera& camera);
 	//! Renders the characters clothes
-	void renderCharacterClothes(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize);
+	void renderCharacterClothes(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize, bool flipSprite);
 	void renderCharacterBody(SDL_Renderer* renderer, int frameX, int frameY, int x, int y, int pixelSize, int characterSize, bool flipSprite);
 	//! Move the player to the position
 	void Player::Move();
@@ -37,18 +37,19 @@ public:
 	Animation getWalkAnimation() { return walkHorizontalAnimation; }
 	SDL_Color gethairColour() { return hairColour; }
 	SDL_Color getEyeColour() { return eyeColour; }
-	SDL_Color getJacketColour() { return jacketColour; }
-	SDL_Color getJeansColour() { return jeansColour; }
+	SDL_Color getJacketColour() { return topColour; }
+	SDL_Color getJeansColour() { return bottomColour; }
 	SDL_Color getBodyColour() { return bodyColour; }
 	int setHairColour(int r, int g, int b) { return hairColour.r = r, hairColour.g = g, hairColour.b = b; }
 	int setEyeColour(int r, int g, int b) { return eyeColour.r = r, eyeColour.g = g, eyeColour.b = b; }
-	int setJacketColour(int r, int g, int b) { return jacketColour.r = r, jacketColour.g = g, jacketColour.b = b; }
-	int setJeansColour(int r, int g, int b) { return jeansColour.r = r, jeansColour.g = g, jeansColour.b = b; }
+	int setJacketColour(int r, int g, int b) { return topColour.r = r, topColour.g = g, topColour.b = b; }
+	int setJeansColour(int r, int g, int b) { return bottomColour.r = r, bottomColour.g = g, bottomColour.b = b; }
 	int setBodyColour(int r, int g, int b) { return bodyColour.r = r, bodyColour.g = g, bodyColour.b = b; }
 	SDL_Color setBodyColour(SDL_Color colour) { return bodyColour = colour; }
 	SDL_Color setEyeColour(SDL_Color colour) { return eyeColour = colour; }
 	SDL_Color setHairColour(SDL_Color colour) { return hairColour = colour; }
-
+	SDL_Color setTopColour(SDL_Color colour) { return topColour = colour; }
+	SDL_Color setBottomColour(SDL_Color colour) { return bottomColour = colour; }
 	Inventory inventory;
 	Pathfinder pathFinder;
 	
@@ -62,13 +63,13 @@ private:
 	//! Default colours
 	SDL_Color hairColour = { 255,255,255 };
 	SDL_Color eyeColour = { 255,255,255 };
-	SDL_Color jacketColour = { 255,255,255 };
-	SDL_Color jeansColour = { 255,255,255 };
+	SDL_Color topColour = { 255,255,255 };
+	SDL_Color bottomColour = { 255,255,255 };
 
 	SDL_Color bodyColour = { 255,224,189 };
 	//! Texture locations
 	std::string characterTextureLocation = "Resources\\Sprites\\Character\\";
-	std::string clothesTextureLocation = "Resources\\Sprites\\Character\\Clothes\\";
+	std::string clothesTextureLocation = "Resources\\Characters\\Accessories\\Clothing\\";
 
 	std::string CharacterTextureLocation = "Resources\\Characters\\";
 	std::string CharacterEarsTextureLocation = "Resources\\Characters\\Accessories\\Ears\\";
@@ -127,9 +128,10 @@ private:
 	Texture eyesTexture;
 	
 	//! Texture for the clothes
-	Texture jacketTexture;
-	Texture jeansTexture;
-	
+	Texture femaleTop1;
+	Texture femaleTop2;
+	Texture femaleBottom1;
+	Texture femaleBottom2;
 	//! Animations
 	Animation walkHorizontalAnimation;
 	Animation walkVerticalAnimation;

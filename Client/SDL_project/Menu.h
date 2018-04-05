@@ -29,6 +29,8 @@ private:
 	void changeEarType(Player& player, bool increment);
 	void changeEyeType(Player& player, bool increment);
 	void changeHairType(Player& player, bool increment);
+	void changeTopType(Player& player, bool increment);
+	void changeBottomType(Player& player, bool increment);
 	//! To end main menu while loop
 	bool displayMainMenu = true;
 	//! To end character menu while loop
@@ -47,6 +49,8 @@ private:
 	ColourSlider bodyColourSlider;
 	ColourSlider eyeColourSlider;
 	ColourSlider hairColourSlider;
+	ColourSlider topColourSlider;
+	ColourSlider bottomColourSlider;
 	//! Stores the menus background texture
 	Texture menuBackground;
 

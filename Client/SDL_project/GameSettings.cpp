@@ -197,7 +197,7 @@ Player GameSettings::getPlayerFromSave()
 				existingPlayer.body.gender = (Player::Body::Gender)gender;
 				existingPlayer.body.earType = (Player::Body::EarType)EarType;
 				existingPlayer.body.eyeType = (Player::Body::EyeType)EyeType;
-				existingPlayer.PlayerClothes.head = (Player::Clothing::HeadWear)headWear;
+				existingPlayer.PlayerClothes.hat = (Player::Clothing::HeadWear)headWear;
 				existingPlayer.PlayerClothes.body = (Player::Clothing::BodyWear)bodyWear;
 				existingPlayer.PlayerClothes.leg = (Player::Clothing::LegWear)legWear;
 				existingPlayer.setPlayerMoving(isMoving);

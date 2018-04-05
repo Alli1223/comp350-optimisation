@@ -48,7 +48,7 @@ public:
 	UINT32 plantGrowSpeed = 10000;
 
 	//! Whether the game is fullscreen
-	bool fullscreen = true;
+	bool fullscreen = false;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
 
