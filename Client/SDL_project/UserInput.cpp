@@ -277,10 +277,11 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	if (SDL_GetMouseState(&mouseX, &mouseY) & SDL_BUTTON(SDL_BUTTON_RIGHT))
 	{
 
+		
 		Point startPoint(player.getCellX(), player.getCellY());
 		Point endPoint(gameSettings.mouseCellPos.x, gameSettings.mouseCellPos.y);
-		// add negative offset
 		player.pathFinder.findPath(level, startPoint, endPoint);
+		
 	}
 
 

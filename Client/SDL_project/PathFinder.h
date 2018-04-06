@@ -67,6 +67,7 @@ private:
 	Point startNode;
 
 	int searchSize = 100;
+	int minSearchSize = 10;
 
 	bool debugPathfinderArea = true;
 
