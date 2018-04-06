@@ -514,7 +514,7 @@ void UserInput::UseItemFromToolbar(int xPos, int yPos, ToolBar& toolbar, Player&
 	if (toolbar.getSelectedItem().type.Resource == Item::ItemType::isWOOD)
 	{
 		//PlaceItemTexture.render(renderer, gameSettings.mouseCellPos.x, gameSettings.mouseCellPos.y, level.getCellSize(), level.getCellSize());
-		if (level.getCell(xPos, yPos)->isWood == false)
+		if (!level.getCell(xPos, yPos)->isWood)
 		{
 			level.getCell(xPos, yPos)->isWood = true;
 			

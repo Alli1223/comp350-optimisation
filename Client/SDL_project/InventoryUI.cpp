@@ -16,37 +16,27 @@ void InventoryUI::RenderInventory(SDL_Renderer* renderer, Inventory& inventory)
 	int mX, mY = 0;
 	if (displayInventory)
 	{
-		if (SDL_GetMouseState(&mX, &mY))
-		{
-		}
+		SDL_GetMouseState(&mX, &mY);
 
-		/*
-		if (numOfInventoryIcons != inventory.getCurrentSize())
-		{
-			inventoryIcons.erase(inventoryIcons.begin(), inventoryIcons.end());
-			CreateInventory(renderer, inventory);
-			numOfInventoryIcons = inventory.getCurrentSize();
-		}
-		*/
 
-			backgroundTexture.alterTransparency(150);
-			backgroundTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
+		backgroundTexture.alterTransparency(150);
+		backgroundTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
 
 
 		// Render all the icons in inventory
-			for (int i = 0; i < inventory.getCurrentSize(); i++)
-			{
-				// Check if null before accessing
-				if (inventoryIcons[i]->getIconItem().type.Resource == NULL)
-					inventoryIcons[i]->setIconItem(inventory.get(i));
-				// Set to same as inventorys item
-				if (inventoryIcons[i]->getIconItem().type.Resource != inventory.get(i).type.Resource)
-					inventoryIcons[i]->setIconItem(inventory.get(i));
-				//Render the icon
-				inventoryIcons[i]->RenderIcon(renderer);
-			}
+		for (int i = 0; i < inventory.getCurrentSize(); i++)
+		{
+			// Check if null before accessing
+			if (inventoryIcons[i]->getIconItem().type.Resource == NULL)
+				inventoryIcons[i]->setIconItem(inventory.get(i));
+			// Set to same as inventorys item
+			if (inventoryIcons[i]->getIconItem().type.Resource != inventory.get(i).type.Resource)
+				inventoryIcons[i]->setIconItem(inventory.get(i));
+			//Render the icon
+			inventoryIcons[i]->RenderIcon(renderer);
+		}
 
-		/*
+		/* old code
 		for each (auto &icon in inventoryIcons)
 		{
 			icon->RenderIcon(renderer);
