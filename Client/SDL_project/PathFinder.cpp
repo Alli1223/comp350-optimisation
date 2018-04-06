@@ -108,22 +108,8 @@ std::shared_ptr<Node> Pathfinder::getOpenSetElementWithLowestScore()
 	return result;
 }
 
-typedef struct {
-	Level& level;
-	Point& start;
-	Point& end;
-} ThreadData;
 
-std::vector<Point> Pathfinder::findThreadedPath(Level& level, Point& start, Point& goal)
-{
-	
-	ThreadData *data;
-	data->level = level;
-	data->start = start;
-	data->end = goal;
 
-	//SDL_Thread* threadID = SDL_CreateThread(findPath, "PathThread", (void*)data);
-}
 std::vector<Point> Pathfinder::findPath(Level& level, Point& start, Point& goal)
 {
 	// Clear all the node for fresh pathfind

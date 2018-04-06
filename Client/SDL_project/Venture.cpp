@@ -200,6 +200,13 @@ Menu:
 			mousePointer.render(renderer, mouseX + (gameSettings.mousePointerSize / 2), mouseY + (gameSettings.mousePointerSize / 2), gameSettings.mousePointerSize, gameSettings.mousePointerSize * 1.5);
 		SDL_RenderPresent(renderer);
 
+		// If the level needs to be saved
+		if (gameSettings.saveGame)
+		{
+			gameSettings.saveLevelData(level);
+			gameSettings.saveGame = false;
+		}
+
 		gameSettings.deltaTime = gameSettings.elapsedTime - gameSettings.lastFrameTimeElapsed;
 		gameSettings.lastFrameTimeElapsed = gameSettings.elapsedTime;
 		// End while running

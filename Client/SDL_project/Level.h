@@ -41,7 +41,7 @@ public:
 
 	//! Sets the cells value (NOT USED)
 	void Level::SetCell(int x, int y, Cell& newcell);
-	Cell& Level::GetCellFromJson(json& newcell);
+	Cell Level::GetCellFromJson(json& newcell);
 
 	//! Generates the world around the camera
 	void Level::GenerateWorld(Camera& camera);

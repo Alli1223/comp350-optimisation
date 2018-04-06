@@ -81,7 +81,7 @@ void Menu::MainMenu(GameSettings& gameSettings,Level& level, Camera& camera, Pla
 		// Load from save
 		if (loadFromSave.isPressed())
 		{
-			gameSettings.loadGameFromSave(level);
+			level = gameSettings.loadGameFromSave();
 			player = gameSettings.getPlayerFromSave();
 			displayMainMenu = false;
 		}

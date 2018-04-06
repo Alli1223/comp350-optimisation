@@ -17,7 +17,7 @@ public:
 	Player getPlayerFromSave();
 	//! Save the level
 	void saveLevelData(Level& level);
-	Level loadGameFromSave(Level& level);
+	Level loadGameFromSave();
 	
 
 	//! Whether the game will save the game when it closes
@@ -25,6 +25,7 @@ public:
 	bool savePlayerOnExit = true;
 
 	bool restartGame = false;
+	bool saveGame = false;
 	//! Get screen resolution
 	void getScreenResolution();
 	//! Calculate FPS

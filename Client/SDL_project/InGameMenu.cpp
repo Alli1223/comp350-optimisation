@@ -33,7 +33,7 @@ void InGameMenu::render(SDL_Renderer* renderer, GameSettings& gameSettings)
 	if (Save.isPressed())
 	{
 		gameSettings.saveLevelOnExit = true;
-		gameSettings.running = false;
+		gameSettings.saveGame = true;
 	}
 
 	if (Fullscreen.isPressed())

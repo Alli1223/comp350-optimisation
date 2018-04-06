@@ -81,7 +81,7 @@ void GameSettings::saveLevelData(Level& level)
 }
 
 //TODO: Load game from save
-Level GameSettings::loadGameFromSave(Level& level)
+Level GameSettings::loadGameFromSave()
 {
 	Level levelToReturn;
 	std::string line;
@@ -100,8 +100,9 @@ Level GameSettings::loadGameFromSave(Level& level)
 
 
 				Cell newCell;
-				newCell = level.GetCellFromJson(element);
-				level.SetCell(newCell.getX(), newCell.getY(), newCell);
+				
+				newCell = levelToReturn.GetCellFromJson(element);
+				levelToReturn.SetCell(newCell.getX(), newCell.getY(), newCell);
 			}
 		}
 	}
