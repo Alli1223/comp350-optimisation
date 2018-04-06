@@ -57,6 +57,7 @@ public:
 
 	//! The wold contains key value pairs of chunks
 	std::map<int, std::map<int, std::shared_ptr<Chunk>>> World;
+	std::map<std::pair<int, int>, std::shared_ptr<Chunk>> World2;
 
 	bool Level::isCellInChunk(int x, int y);
 

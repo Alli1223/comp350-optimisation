@@ -19,24 +19,39 @@ void InventoryUI::RenderInventory(SDL_Renderer* renderer, Inventory& inventory)
 		if (SDL_GetMouseState(&mX, &mY))
 		{
 		}
+
+		/*
 		if (numOfInventoryIcons != inventory.getCurrentSize())
 		{
 			inventoryIcons.erase(inventoryIcons.begin(), inventoryIcons.end());
 			CreateInventory(renderer, inventory);
 			numOfInventoryIcons = inventory.getCurrentSize();
 		}
-		else
-		{
+		*/
+
 			backgroundTexture.alterTransparency(150);
 			backgroundTexture.render(renderer, getX(), getY(), getWidth(), getHeight());
 
-		}
-		// Render icons then selection texture over
-		const Uint8 *state = SDL_GetKeyboardState(NULL);
 
+		// Render all the icons in inventory
+			for (int i = 0; i < inventory.getCurrentSize(); i++)
+			{
+				// Check if null before accessing
+				if (inventoryIcons[i]->getIconItem().type.Resource == NULL)
+					inventoryIcons[i]->setIconItem(inventory.get(i));
+				// Set to same as inventorys item
+				if (inventoryIcons[i]->getIconItem().type.Resource != inventory.get(i).type.Resource)
+					inventoryIcons[i]->setIconItem(inventory.get(i));
+				//Render the icon
+				inventoryIcons[i]->RenderIcon(renderer);
+			}
+
+		/*
 		for each (auto &icon in inventoryIcons)
 		{
 			icon->RenderIcon(renderer);
+
+			// mouse over icons
 			if (mX > icon->getX() - (icon->getWidth() / 2) && mX < icon->getX() + (icon->getWidth() / 2))
 				if (mY > icon->getY() - (icon->getHeight() / 2) && mY < icon->getY() + (icon->getHeight() / 2))
 				{
@@ -52,12 +67,18 @@ void InventoryUI::RenderInventory(SDL_Renderer* renderer, Inventory& inventory)
 					}
 				}
 		}
+		*/
 	}
 }
+
+// Creates and populates the inventory UI
 void InventoryUI::CreateInventory(SDL_Renderer* renderer, Inventory& inventory)
 {
+	// Set the starting position for the icons to render
 	int x = getX() - getWidth() / 2 + iconSize;
 	int y = getY() - getHeight() / 2 + iconSize * 2;
+
+	// loop through all the inventory items and create the icons
 	for (int i = 0; i < inventory.getCapacity(); i++)
 	{
 		Icon icon;
@@ -76,7 +97,8 @@ void InventoryUI::CreateInventory(SDL_Renderer* renderer, Inventory& inventory)
 		inventoryIcons.push_back(sharedIcon);
 		x += iconSize;
 	}
-
+	
+	// Set the icons
 	for (int i = 0; i < inventory.getCurrentSize(); i++)
 		inventoryIcons[i]->setIconItem(inventory.get(i));
 }

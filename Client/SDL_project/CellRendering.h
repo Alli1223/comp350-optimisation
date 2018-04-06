@@ -13,7 +13,8 @@ public:
 	//! Render all game objects
 	void RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers);
 	//! Render a chunk of the level
-	void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer);
+	void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk);
+	void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk);
 	//! Alter textures, i.e. transparency
 	void CellRendering::AlterTextures(Level& level);
 	//! Render player
@@ -26,12 +27,16 @@ public:
 	bool renderStats = false;
 	//! If the game has darkness
 	bool isThereDarkness = true;
+
+	
 	
 private:
 	//Target Darkness
 	float Tdarkness;
 	float darkness = 255;
 	float time = 0;
+
+	
 
 	const std::string SpriteSheets = "Resources\\Sprites\\SpriteSheets\\";
 	const std::string RoomSpriteTextureLocation = "Resources\\Sprites\\roomSprites\\texturePack\\";
@@ -63,9 +68,11 @@ private:
 	int redFlower = 542;
 	int whiteFlower = 573;
 	int blueFlower = 541;
+	int bushID = 527;
 	int redBerryBush = 528;
 	int longGrass1 = 638;
 	int longWood = 179;
+	int stoneWall = 18;
 
 	int woodFence = 1358;
 	int woodHalfFence = 1415;

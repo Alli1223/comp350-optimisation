@@ -24,6 +24,7 @@ CellRendering::CellRendering() :
 
 }
 
+
 //! Destructor
 CellRendering::~CellRendering()
 {
@@ -66,7 +67,7 @@ void CellRendering::AlterTextures(Level& level)
 		
 }
 
-void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk, SDL_Renderer* renderer)
+void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk)
 {
 	int newX = 0, newY = 0;
 	int xPos = 0, yPos = 0;
@@ -78,11 +79,10 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 			newX = chunk->tiles[x][y]->getX();
 			newY = chunk->tiles[x][y]->getY();
 
-			xPos = newX * cellSize + cellSize / 2;
-			yPos = newY * cellSize + cellSize / 2;
+			xPos = (newX * cellSize + cellSize / 2) - camera.getX();
+			yPos = (newY * cellSize + cellSize / 2) - camera.getY();
 
-			xPos -= camera.getX();
-			yPos -= camera.getY();
+
 
 
 			if (chunk->tiles[x][y]->isWater)
@@ -139,7 +139,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 
 
 			if (chunk->tiles[x][y]->isStoneWall)
-				AddToBatchRendering(18, xPos, yPos, cellSize, onGround);
+				AddToBatchRendering(stoneWall, xPos, yPos, cellSize, onGround);
 			else if (chunk->tiles[x][y]->isFlower1)
 				AddToBatchRendering(blueFlower, xPos, yPos, cellSize, onGround);
 			else if (chunk->tiles[x][y]->isFlower2)
@@ -147,7 +147,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 			else if (chunk->tiles[x][y]->isBerryPlant)
 				AddToBatchRendering(redBerryBush, xPos, yPos, cellSize, onGround);
 			else if (chunk->tiles[x][y]->isBush)
-				AddToBatchRendering(525, xPos, yPos, cellSize, onGround);
+				AddToBatchRendering(bushID, xPos, yPos, cellSize, onGround);
 			else if (chunk->tiles[x][y]->isLongGrass)
 				AddToBatchRendering(sandID, xPos, yPos, cellSize, onGround);
 			else if (chunk->tiles[x][y]->isLongGrass2)
@@ -272,6 +272,11 @@ void CellRendering::renderCellsAroundObject(SDL_Renderer* renderer, Level& level
 	
 }
 
+void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk)
+{
+	
+}
+
 //! Renders the chunks of cells
 void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers)
 {	
@@ -281,7 +286,7 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	// Render all the cells in the chunks
 	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
 		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
-				RenderChunk(level,camera, gameSettings, player, level.World[i][j], renderer);
+				RenderChunk(level,camera, gameSettings, player, level.World[i][j]);
 
 
 	// Batch render all the textures
