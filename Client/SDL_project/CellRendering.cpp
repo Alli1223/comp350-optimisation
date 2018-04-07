@@ -3,6 +3,7 @@
 
 //! Constructor that initalises all the texture file locations
 CellRendering::CellRendering() :
+
 	healthBarTexture(playerStatsTextureLocation + "PlayerHealth.png"), oxygenBarTexture(playerStatsTextureLocation + "PlayerOxygen.png"),
 	hungerBarTexture(playerStatsTextureLocation + "PlayerHunger.png"), tiredBarTexture(playerStatsTextureLocation + "PlayerTiredness.png"),
 	light(playerStatsTextureLocation + "light.png"), lightsBackground(playerStatsTextureLocation + "black.png"),
@@ -22,6 +23,9 @@ CellRendering::CellRendering() :
 	cropsAtlas.setAtlasType(0);
 
 
+	//std::thread t(&CellRendering::RenderObjects, this);
+
+	//t.detach();
 }
 
 
@@ -30,8 +34,9 @@ CellRendering::~CellRendering()
 {
 }
 
-void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char layer)
+ void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char layer)
 {
+	 /*
 	textureID texture;
 	texture.index = ID;
 	texture.x = x;
@@ -40,6 +45,7 @@ void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char la
 	texture.height = size;
 	texture.layer = layer;
 	allTextures.push_back(texture);
+	*/
 }
 
 
@@ -64,7 +70,33 @@ void CellRendering::AlterTextures(Level& level)
 			darkness--;
 		
 		roguelikeAtlas.alterTextureColour(darkness, darkness, darkness);
-		
+}
+
+static int t_RenderChunk(void *data)
+{
+	std::shared_ptr<Chunk>* tmpChunk = (std::shared_ptr<Chunk>*)data;
+	std::shared_ptr<Chunk> chunk;
+	chunk = *tmpChunk;
+	int newX = 0, newY = 0;
+	int xPos = 0, yPos = 0;
+
+	for (int x = 0; x < chunk->getChunkSize(); x++)
+		for (int y = 0; y < chunk->getChunkSize(); y++)
+		{
+			chunk->tiles[x][y]->isSand = true;
+			
+				if (chunk->tiles[x][y]->isGrass)
+					chunk->AddToBatchRendering(0, xPos, yPos, 50, 1);
+				if (chunk->tiles[x][y]->isDirt)
+					chunk->AddToBatchRendering(5, xPos, yPos, 50, 1);
+				if (chunk->tiles[x][y]->isSand)
+					chunk->AddToBatchRendering(10, xPos, yPos, 50, 1);
+			
+			
+			//printf("Concurrent chunk");
+		}
+
+	return 0;
 }
 
 void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk)
@@ -272,24 +304,89 @@ void CellRendering::renderCellsAroundObject(SDL_Renderer* renderer, Level& level
 	
 }
 
+typedef struct Data
+{
+	Level& level;
+	std::shared_ptr<Chunk>& chunk;
+	Camera& camera;
+};
 void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk)
 {
 	
+	Data* data;
+	data->level = level;
+	data->chunk = chunk;
+
+	SDL_Thread* thread = SDL_CreateThread(RenderObjects2, "LazyThread", (void *)&data);
+}
+
+static int RenderObjects2(void *data)
+{
+	Data* d = (Data*)data;
+	d->level;
+	d->chunk;
+	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
+		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
+		{
+
+			RenderChunk(level, camera, gameSettings, player, level.World[i][j]);
+			//SDL_Thread* thread = SDL_CreateThread(t_RenderChunk, "LazyThread", (void *)&level.World[i][j]);
+			//threads.push_back(thread);
+		}
 }
 
 //! Renders the chunks of cells
 void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers)
 {	
+	//std::thread t(&t_RenderChunk, &level.World[0][0]);
+	
+	
+	int data = 0;
+
+
+	//SDL_Thread* thread = SDL_CreateThread(t_RenderChunk, "LazyThread", (void *)&c);
+
 	// Alter the textures
 	AlterTextures(level);
-	int x, y;
+
+	std::vector<SDL_Thread*> threads;
 	// Render all the cells in the chunks
 	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
 		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
-				RenderChunk(level,camera, gameSettings, player, level.World[i][j]);
+		{
+			
+			SDL_Thread* thread = SDL_CreateThread(t_RenderChunk, "Chunk Thread", (void *)&level.World[i][j]);
+			threads.push_back(thread);
+		}
+				
 
-
-	// Batch render all the textures
+			//RenderChunk(level, camera, gameSettings, player, level.World[i][j]);
+	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
+		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
+		{
+			for each(auto &texture in level.World[i][j]->allTextures)
+			{
+				switch (texture.layer)
+				{
+				case seaLevel:
+					roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+					break;
+				case ground:
+					roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+					break;
+				case onGround:
+					roguelikeAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+					break;
+				case isCrops:
+					cropsAtlas.renderAtlas(renderer, texture.index, texture.x, texture.y, texture.width, texture.height);
+					break;
+				}
+			}
+		
+		}
+	//SDL_WaitThread(thread, NULL);
+	
+	/* Batch render all the textures
 	for each(auto &texture in allTextures)
 	{
 		switch (texture.layer)
@@ -308,7 +405,12 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 			break;
 		}
 	}
-	
+	*/
+
+	for each (auto& thread in threads)
+	{
+			SDL_WaitThread(thread, NULL);
+	}
 
 
 

@@ -28,7 +28,7 @@ public:
 	//! If the game has darkness
 	bool isThereDarkness = true;
 
-	
+	bool mFirstRun;
 	
 private:
 	//Target Darkness
@@ -98,19 +98,6 @@ private:
 	Texture roguelikeAtlas;
 	Texture cropsAtlas;
 
-	//! Contains the data for texture positions and layers
-	struct textureID
-	{
-		int index;
-		int x, y;
-		int width, height;
-		//! texture transparency
-		char transparency;
-		//! Layer to be rendered on -- 0 = Ground -- 1 = Items on ground -- 2 = Player -- 3 = Above player
-		char layer;
-		//! Atlas to render texture from
-		char atlasID;
-	};
 
 	enum layers
 	{
@@ -121,7 +108,7 @@ private:
 		abovePlayer
 	};
 	//! A vector of all textures
-	std::vector<textureID> allTextures;
+	std::vector<Chunk::textureID> allTextures;
 	
 };
 

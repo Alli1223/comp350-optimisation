@@ -13,6 +13,11 @@ Chunk::Chunk(int initX, int initY)
 	chunkID = "X:" + std::to_string(x) + ",Y:" + std::to_string(y);
 }
 
+void Chunk::AddToBatchRendering(int ID, int x, int y, int size, char layer)
+{
+
+}
+
 
 
 Chunk::~Chunk()

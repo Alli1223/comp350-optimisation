@@ -188,6 +188,10 @@ Menu:
 		// Renders all the cells and players
 		//std::thread renderThread(&CellRendering::RenderObjects, level, renderer, camera, player, gameSettings, allPlayers);
 		
+		struct data
+		{
+
+		};
 
 		cellrenderer.RenderObjects(level, renderer, camera, player, gameSettings, allPlayers);
 
