@@ -12,9 +12,10 @@ public:
 	~CellRendering();
 	//! Render all game objects
 	void RenderObjects(Level& level, SDL_Renderer* renderer, Camera& camera, Player& player, GameSettings& gameSettings, std::vector<std::shared_ptr<Player>>& allPlayers);
+	static int CellRendering::RenderObjects2(void *data);
 	//! Render a chunk of the level
 	void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk);
-	void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk);
+	void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player);
 	//! Alter textures, i.e. transparency
 	void CellRendering::AlterTextures(Level& level);
 	//! Render player

@@ -105,8 +105,8 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 	int xPos = 0, yPos = 0;
 	int cellSize = level.getCellSize();
 
-	for (int x = 0; x < level.getChunkSize(); x++)
-		for (int y = 0; y < level.getChunkSize(); y++)
+	for (int x = 0; x < level.getChunkSize() - 1; x++)
+		for (int y = 0; y < level.getChunkSize() - 1; y++)
 		{
 			newX = chunk->tiles[x][y]->getX();
 			newY = chunk->tiles[x][y]->getY();
@@ -168,7 +168,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 			if (chunk->tiles[x][y]->isDirt)
 				AddToBatchRendering(dirtID, xPos, yPos, cellSize, ground);
 
-
+			/*
 
 			if (chunk->tiles[x][y]->isStoneWall)
 				AddToBatchRendering(stoneWall, xPos, yPos, cellSize, onGround);
@@ -192,7 +192,7 @@ void CellRendering::RenderChunk(Level& level, Camera& camera, GameSettings& game
 				AddToBatchRendering(longWood, xPos, yPos, cellSize, onGround);
 			else if (chunk->tiles[x][y]->isStone)
 				AddToBatchRendering(stoneID, xPos, yPos, cellSize, onGround);
-
+				*/
 
 
 			if (chunk->tiles[x][y]->isWheat)
@@ -306,33 +306,44 @@ void CellRendering::renderCellsAroundObject(SDL_Renderer* renderer, Level& level
 
 typedef struct Data
 {
-	Level& level;
-	std::shared_ptr<Chunk>& chunk;
-	Camera& camera;
+	Level level;
+	Camera camera;
+	GameSettings gs;
+	Player player;
+	CellRendering* renderer;
 };
-void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player, std::shared_ptr<Chunk>& chunk)
+
+void CellRendering::threadededChunkrenderer(Level& level, Camera& camera, GameSettings& gameSettings, Player& player)
 {
-	
-	Data* data;
-	data->level = level;
-	data->chunk = chunk;
+	Data data;
+
+	data.level = level;
+	data.camera = camera;
+	//da.->gs = gameSettings;>	VentureGame.exe!CellRendering::RenderObjects2(void * data) Line 332	C++	Symbols loaded.
+
+	data.player = player;
+	data.renderer = this;
 
 	SDL_Thread* thread = SDL_CreateThread(RenderObjects2, "LazyThread", (void *)&data);
 }
 
-static int RenderObjects2(void *data)
+int CellRendering::RenderObjects2(void *data)
 {
 	Data* d = (Data*)data;
-	d->level;
-	d->chunk;
+	Level& level = d->level;
+	Player player = d->player;
+	GameSettings gameSettings;
+	Camera camera = d->camera;
+	CellRendering renderer = *d->renderer;
 	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
 		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
 		{
-
-			RenderChunk(level, camera, gameSettings, player, level.World[i][j]);
+			renderer.RenderChunk(level, camera, gameSettings, player, level.World[i][j]);
+			//RenderChunk(level, camera, gameSettings, player, level.World[i][j]);
 			//SDL_Thread* thread = SDL_CreateThread(t_RenderChunk, "LazyThread", (void *)&level.World[i][j]);
 			//threads.push_back(thread);
 		}
+	return 0;
 }
 
 //! Renders the chunks of cells

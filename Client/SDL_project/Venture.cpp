@@ -187,6 +187,7 @@ Menu:
 
 		// Renders all the cells and players
 		//std::thread renderThread(&CellRendering::RenderObjects, level, renderer, camera, player, gameSettings, allPlayers);
+		cellrenderer.threadededChunkrenderer(level, camera, gameSettings, player);
 		
 		struct data
 		{
