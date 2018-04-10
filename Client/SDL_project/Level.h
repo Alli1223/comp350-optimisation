@@ -48,7 +48,7 @@ public:
 
 	//! Creates a vector of vectors to store cells in
 	void Level::CreateChunk(int initX, int initY);
-
+	void Level::ReplaceChunk(int newX, int newY);
 	//! Stores the area the player explored out to
 	int xMinExplored = 0;
 	int xMaxExplored = 0;
@@ -65,16 +65,22 @@ protected:
 	//! Create an instance of procedural terrain for the world
 	ProceduralTerrain proceduralTerrain;
 
+	std::vector<std::pair<int, int>> unusedChunks;
+
 	//! The size that the cell will be rendered at
-	int cellSize = 25;
+	int cellSize = 50;
 	//! chunkSizes value is set when level is constructed and is used for ease of access for the rest of the game to use
 	int chunkSize;
+
+	//! Chunk timeout in ms
+	Uint32 chunkTimeout = 10000;
+	bool populateChunks = true;
 
 	//! Time of day (24 hour)
 	float timeOfDay = 12.0;
 
 	//! The extra chunks that are generated at the screens border and beyond
-	int levelGenerationRadius = 2;
+	int levelGenerationRadius = 5;
 
 	int levelWidth, levelHeight;
 };

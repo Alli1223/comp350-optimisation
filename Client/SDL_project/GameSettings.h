@@ -42,8 +42,8 @@ public:
 	float deltaTime = 0;
 
 	//! amount of items in items
-	int amountOfWoodInTrees = 3;
-	int amountOfStoneInRocks = 3;
+	const int amountOfWoodInTrees = 3;
+	const int amountOfStoneInRocks = 3;
 
 	//! Time it takes for plants to grow in ms
 	UINT32 plantGrowSpeed = 10000;
@@ -52,6 +52,7 @@ public:
 	bool fullscreen = false;
 	bool displayMouse = false;
 	int mousePointerSize = 25;
+
 
 	//! Main Menu toggle
 	bool mainMenu = true;

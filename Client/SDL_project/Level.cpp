@@ -4,22 +4,68 @@
 // Creates a grid of cells at a specified location
 void Level::CreateChunk(int initX, int initY)
 {
-	Chunk chunktemp(initX, initY);
-	auto& chunk = std::make_shared<Chunk>(chunktemp);
+		//auto chunk = (World[unusedChunks[0].first][unusedChunks[0].second]);
+		//unusedChunks.erase(unusedChunks.begin());
+
+		Chunk chunktemp(initX, initY);
+		auto chunk = std::make_shared<Chunk>(chunktemp);
+		for (int x = 0; x < chunkSize; x++)
+		{
+			std::vector<std::shared_ptr<Cell>> column;
+
+			chunk->tiles.push_back(column);
+			for (int y = 0; y < chunkSize; y++)
+			{
+				// Populates the column with pointers to cells
+				Cell cell(x + (initX * chunkSize), y + (initY * chunkSize));
+				//if (x == 0 || x == chunkSize || y == 0 || y == chunkSize)
+				//cell.isWater = true;
+				cell.isWalkable = true;
+				if (cell.getX() < xMinExplored)
+					xMinExplored = cell.getX();
+				if (cell.getX() > xMaxExplored)
+					xMaxExplored = cell.getX();
+				if (cell.getY() < yMinExplored)
+					yMinExplored = cell.getY();
+				if (cell.getY() > yMaxExplored)
+					yMaxExplored = cell.getY();
+
+				//cell.isLongGrass = true;
+
+
+				auto sharedCell = std::make_shared<Cell>(cell);
+				chunk->tiles[x].push_back(sharedCell);
+			}
+		}
+		chunk->activeTime.start();
+		World[initX][initY] = chunk;
+}
+
+// Creates a grid of cells at a specified location
+void Level::ReplaceChunk(int newX, int newY)
+{
+	// Erase the old tiles
+	World[unusedChunks[0].first][unusedChunks[0].second]->tiles.erase(World[unusedChunks[0].first][unusedChunks[0].second]->tiles.begin(), World[unusedChunks[0].first][unusedChunks[0].second]->tiles.end());
+	
+	// Create the new chunk from the memory of the old one
+	auto& chunk = (World[unusedChunks[0].first][unusedChunks[0].second]);
+	chunk->setNewPosition(newX, newY);
+	unusedChunks.erase(unusedChunks.begin());
+
 	for (int x = 0; x < chunkSize; x++)
 	{
 		std::vector<std::shared_ptr<Cell>> column;
-		
+
 		chunk->tiles.push_back(column);
 		for (int y = 0; y < chunkSize; y++)
 		{
 			// Populates the column with pointers to cells
-			Cell cell(x + (initX * chunkSize), y + (initY * chunkSize));
+			Cell cell(x + (newX * chunkSize), y + (newY * chunkSize));
 			//if (x == 0 || x == chunkSize || y == 0 || y == chunkSize)
-				//cell.isWater = true;
+			//cell.isWater = true;
 			cell.isWalkable = true;
 			if (cell.getX() < xMinExplored)
-				xMinExplored = cell.getX() ;
+				xMinExplored = cell.getX();
 			if (cell.getX() > xMaxExplored)
 				xMaxExplored = cell.getX();
 			if (cell.getY() < yMinExplored)
@@ -29,23 +75,26 @@ void Level::CreateChunk(int initX, int initY)
 
 			//cell.isLongGrass = true;
 
-			
+
 			auto sharedCell = std::make_shared<Cell>(cell);
 			chunk->tiles[x].push_back(sharedCell);
-		}	
+		}
 	}
-	World[initX][initY] = chunk;
+	chunk->activeTime.start();
+	World[newX][newY] = chunk;
 }
 
 
 // Generates a hashmap of chunks around the camera
 void Level::GenerateWorld(Camera& camera)
 {
+	// Calcualte chunks in camera area
 	int numOfChunksWidth = ((camera.WindowWidth / cellSize) / chunkSize) + levelGenerationRadius;
 	int numOfChunksHeight = ((camera.WindowHeight /cellSize) / chunkSize) + levelGenerationRadius;
 	camera.ChunksOnScreen.x = numOfChunksWidth;
 	camera.ChunksOnScreen.y = numOfChunksHeight;
 	int numOfChunksGen = 0;
+	// loop through the chunks and create or replace the chunks
 	for (int i = ((camera.getX() / cellSize) / chunkSize) - levelGenerationRadius; i < ((camera.getX() / cellSize) / chunkSize) + numOfChunksWidth; i++)
 	{
 		for (int j = ((camera.getY() / cellSize) / chunkSize) - levelGenerationRadius; j < ((camera.getY() / cellSize) / chunkSize) + numOfChunksHeight; j++)
@@ -53,10 +102,22 @@ void Level::GenerateWorld(Camera& camera)
 			// If the chunk hasnt already been created
 			if (World[i][j] == NULL)
 			{
-				CreateChunk(i, j);
+				// Create the chunks if there are no inactive chunks
+				if (unusedChunks.size() <= 0)
+					CreateChunk(i, j);
+				// Replace an active chunk
+				else
+					ReplaceChunk(i, j);
 				proceduralTerrain.populateTerrain(World[i][j]);
 				numOfChunksGen++;
 			}
+			// If the chunk has been out of the camera area for a set time
+			if (World[i][j]->activeTime.getTicks() > chunkTimeout && World[i][j]->isActive())
+			{
+				unusedChunks.push_back(std::make_pair(World[i][j]->getX(), World[i][j]->getY()));
+				World[i][j]->setActive(false);
+			}
+			
 		}
 	}
 	
@@ -238,9 +299,7 @@ bool Level::isCellInChunk(int x, int y)
 Level::Level()
 {
 	Chunk exampleChunk;
-	chunkSize = exampleChunk.getChunkSize();
-	
-	
+	chunkSize = exampleChunk.getChunkSize();	
 	exampleChunk.~Chunk();
 }
 

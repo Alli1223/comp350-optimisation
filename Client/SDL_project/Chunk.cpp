@@ -8,6 +8,7 @@ Chunk::Chunk()
 }
 Chunk::Chunk(int initX, int initY)
 {
+	tiles.reserve(chunkSize);
 	x = initX;
 	y = initY;
 	chunkID = "X:" + std::to_string(x) + ",Y:" + std::to_string(y);

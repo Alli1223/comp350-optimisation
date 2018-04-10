@@ -135,6 +135,7 @@ void Texture::renderLight(SDL_Renderer* renderer, int sourceX, int sourceY, int 
 
 void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int width, int height)
 {
+	// Create source and destination rects
 	SDL_Rect dest;
 	SDL_Rect srcrect;
 	if (!texture)
@@ -146,9 +147,10 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int w
 			throw InitialisationError("IMG_LoadTexture failed");
 		}
 	}
+	// Atlas Without borders
 	if (atlasType == 0)
 	{
-		// Did this while very tired
+		// Get the x and y positions based on the amount of tiles in atlas
 		int sourceX = index;
 		int sourceY = 0;
 		while (index > atlasTileWidth)
@@ -158,18 +160,18 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int w
 		}
 		sourceX = index * atlasTileSize;
 
-		
+		// get source rect data
 		dest.x = x - width / 2;
 		dest.y = y - height / 2;
 		dest.w = width;
 		dest.h = height;
-		
+
 		srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
 	}
-	// With borders
+	// Atlas With borders
 	else if (atlasType == 1)
 	{
-		// Did this while very tired
+		// Get the x and y positions based on the amount of tiles in atlas
 		int sourceX = index;
 		int sourceY = 0;
 		while (index > atlasTileWidth)
@@ -186,10 +188,9 @@ void Texture::renderAtlas(SDL_Renderer* renderer, int index, int x, int y, int w
 
 		srcrect = { sourceX, sourceY, atlasTileSize, atlasTileSize };
 	}
-		
-	SDL_RenderCopy(renderer, texture, &srcrect, &dest);
 
-	//SDL_RenderCopy(renderer, texture, &srcrect, &dest);
+	// Copy source texture data into game
+	SDL_RenderCopy(renderer, texture, &srcrect, &dest);
 }
 
 void Texture::alterTransparency(int transparencyLevel)
