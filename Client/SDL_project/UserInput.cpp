@@ -98,7 +98,7 @@ void UserInput::HandleUserInput(SDL_Renderer* renderer, Level& level, Player& pl
 	const Uint8 *state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_ESCAPE])
 	{
-		if (UI.gameMenu.timeout.getTicks() > 500)
+		if (UI.gameMenu.timeout.getTicks() > UI.inGameMenuTimeout)
 		{
 			if (gameSettings.inGameMenu)
 				gameSettings.inGameMenu = false;

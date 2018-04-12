@@ -18,5 +18,7 @@ public:
 	//Function that renders all the UI elements
 	void Render(SDL_Renderer* renderer, Player& player, GameSettings& gameSettings);
 
+	Uint16 inGameMenuTimeout = 250;
+
 };
 
