@@ -121,7 +121,8 @@ private:
 		abovePlayer
 	};
 	//! A vector of all textures
-	std::vector<textureID> allTextures;
+	std::vector<textureID> texturesBelowPlayer;
+	std::vector<textureID> texturesAbovePlayer;
 	
 };
 

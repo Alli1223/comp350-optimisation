@@ -93,7 +93,7 @@ void Player::RenderPlayer(SDL_Renderer* renderer, Camera& camera)
 		if (isPlayerMoving())
 		{
 			renderCharacterBody(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, 0, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
-			renderCharacterClothes(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, pixelSize, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
+			renderCharacterClothes(renderer, walkHorizontalAnimation.getCurrentFrame() * pixelSize, 0, renderOffset.x, renderOffset.y, pixelSize, getSize(), true);
 		}
 		else
 		{
@@ -128,7 +128,7 @@ void Player::RenderPlayer(SDL_Renderer* renderer, Camera& camera)
 		if (isPlayerMoving())
 		{
 			renderCharacterBody(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
-			renderCharacterClothes(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize * 3, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
+			renderCharacterClothes(renderer, walkVerticalAnimation.getCurrentFrame() * pixelSize, pixelSize, renderOffset.x, renderOffset.y, pixelSize, getSize(), false);
 
 		}
 		else

@@ -39,7 +39,11 @@ void CellRendering::AddToBatchRendering(int ID, int x, int y, int& size, char la
 	texture.width = size;
 	texture.height = size;
 	texture.layer = layer;
-	allTextures.push_back(texture);
+
+	if(layer < layers::isCrops)
+		texturesBelowPlayer.push_back(texture);
+	else
+		texturesAbovePlayer.push_back(texture);
 }
 
 
@@ -284,13 +288,13 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	AlterTextures(level);
 	int x, y;
 	// Render all the cells in the chunks
-	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x; i++)
-		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y; j++)
+	for (int i = (camera.getX() / level.getCellSize()) / level.getChunkSize() - 1; i < ((camera.getX() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.x - 1; i++)
+		for (int j = (camera.getY() / level.getCellSize()) / level.getChunkSize() - 1; j < ((camera.getY() / level.getCellSize()) / level.getChunkSize()) + camera.ChunksOnScreen.y - 1; j++)
 				RenderChunk(level,camera, gameSettings, player, level.World[i][j]);
 
 
 	// Batch render all the textures
-	for each(auto &texture in allTextures)
+	for each(auto &texture in texturesBelowPlayer)
 	{
 		switch (texture.layer)
 		{
@@ -308,9 +312,6 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 			break;
 		}
 	}
-	
-
-
 
 	// Render the player
 	player.RenderPlayer(renderer, camera);
@@ -320,9 +321,8 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 		player->Update(level);
 		player->RenderPlayer(renderer, camera);
 	}
-
 	// Batch render all the textures
-	for each(auto &texture in allTextures)
+	for each(auto &texture in texturesAbovePlayer)
 	{
 		switch (texture.layer)
 		{
@@ -343,8 +343,8 @@ void CellRendering::RenderObjects(Level& level, SDL_Renderer* renderer, Camera& 
 	//lightsBackground.render(renderer, 0, 0, gameSettings.WINDOW_WIDTH, gameSettings.WINDOW_HEIGHT);
 	
 	
-	allTextures.erase(allTextures.begin(), allTextures.end());
-	
+	texturesAbovePlayer.erase(texturesAbovePlayer.begin(), texturesAbovePlayer.end());
+	texturesBelowPlayer.erase(texturesBelowPlayer.begin(), texturesBelowPlayer.end());
 }
 
 void CellRendering::RenderPlayer(SDL_Renderer* renderer, Player& player,  Level& level, Camera& camera)
